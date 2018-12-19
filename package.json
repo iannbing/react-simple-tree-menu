@@ -1,0 +1,56 @@
+{
+  "name": "react-simple-tree",
+  "version": "0.0.1",
+  "description": "A simple React tree menu component",
+  "main": "./dist/main.js",
+  "files": [
+    "dist/",
+    "src/"
+  ],
+  "scripts": {
+    "start": "cross-env webpack --config webpack.dev.js",
+    "build": "cross-env ANALYSIS=true webpack --config webpack.prod.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iannbing/react-simple-tree.git"
+  },
+  "author": "Huang-Ming Chang <huang.m.chang@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/iannbing/react-simple-tree/issues"
+  },
+  "homepage": "https://github.com/iannbing/react-simple-tree#readme",
+  "devDependencies": {
+    "@babel/core": "^7.1.6",
+    "@babel/preset-env": "^7.1.6",
+    "awesome-typescript-loader": "^5.2.1",
+    "babel-loader": "^8.0.4",
+    "babel-plugin-import": "^1.11.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-react-app": "^6.1.0",
+    "babel-runtime": "^6.26.0",
+    "clean-webpack-plugin": "^1.0.0",
+    "cross-env": "^5.2.0",
+    "css-loader": "^1.0.1",
+    "jest-emotion": "^9.2.11",
+    "prettier": "^1.15.2",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
+    "source-map-loader": "^0.2.4",
+    "style-loader": "^0.23.1",
+    "typescript": "^3.2.2",
+    "webpack": "^4.26.1",
+    "webpack-bundle-analyzer": "^3.0.3",
+    "webpack-cli": "^3.1.2",
+    "webpack-merge": "^4.1.4"
+  },
+  "dependencies": {
+    "@types/react": "^16.7.17",
+    "@types/react-dom": "^16.0.11",
+    "babel-polyfill": "^6.26.0",
+    "emotion": "^9.2.12",
+    "lodash": "^4.17.11",
+    "react-emotion": "^9.2.12"
+  }
+}

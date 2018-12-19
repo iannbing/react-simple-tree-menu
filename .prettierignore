@@ -1,0 +1,15 @@
+
+# irrelevant files
+public/
+
+# system generated files
+yarn.lock
+package-lock.json
+
+# not supported by prettier
+.DS_Store
+.editorconfig
+.eslintignore
+.gitignore
+.prettierignore
+*.md
