@@ -1,5 +1,5 @@
 {
-  "name": "react-simple-tree",
+  "name": "react-simple-tree-menu",
   "version": "0.0.1",
   "description": "A simple React tree menu component",
   "main": "dist/main.js",
@@ -16,14 +16,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/iannbing/react-simple-tree.git"
+    "url": "git+https://github.com/iannbing/react-simple-tree-menu.git"
   },
   "author": "Huang-Ming Chang <huang.m.chang@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/iannbing/react-simple-tree/issues"
+    "url": "https://github.com/iannbing/react-simple-tree-menu/issues"
   },
-  "homepage": "https://github.com/iannbing/react-simple-tree#readme",
+  "homepage": "https://github.com/iannbing/react-simple-tree-menu#readme",
   "devDependencies": {
     "@babel/core": "^7.1.6",
     "@babel/preset-env": "^7.1.6",

@@ -7,7 +7,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'main.js',
-    library: 'react-simple-tree',
+    library: 'react-simple-tree-menu',
     libraryTarget: 'umd',
     publicPath: '/dist/',
     umdNamedDefine: true
