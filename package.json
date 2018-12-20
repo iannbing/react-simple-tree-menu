@@ -2,14 +2,17 @@
   "name": "react-simple-tree",
   "version": "0.0.1",
   "description": "A simple React tree menu component",
-  "main": "./dist/main.js",
+  "main": "dist/main.js",
+  "publishConfig": {
+    "access": "restricted"
+  },
   "files": [
     "dist/",
     "src/"
   ],
   "scripts": {
-    "start": "cross-env webpack --config webpack.dev.js",
-    "build": "cross-env ANALYSIS=true webpack --config webpack.prod.js"
+    "build": "cross-env ANALYSIS=true webpack --config webpack.prod.js",
+    "prepublish": "yarn build"
   },
   "repository": {
     "type": "git",
@@ -44,6 +47,10 @@
     "webpack-bundle-analyzer": "^3.0.3",
     "webpack-cli": "^3.1.2",
     "webpack-merge": "^4.1.4"
+  },
+  "peerDependencies": {
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3"
   },
   "dependencies": {
     "@types/react": "^16.7.17",

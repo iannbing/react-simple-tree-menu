@@ -1,15 +1,16 @@
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
-const dest = path.resolve(__dirname, 'dist');
-
 module.exports = {
   mode: 'none',
   entry: './src/index.tsx',
   output: {
-    path: dest,
+    path: path.resolve(__dirname, 'dist'),
     filename: 'main.js',
-    publicPath: '/'
+    library: 'react-simple-tree',
+    libraryTarget: 'umd',
+    publicPath: '/dist/',
+    umdNamedDefine: true
   },
   module: {
     rules: [
@@ -40,11 +41,26 @@ module.exports = {
   },
   resolve: {
     modules: ['node_modules'],
-    extensions: ['*', '.ts', '.tsx', '.js', '.jsx']
+    extensions: ['*', '.ts', '.tsx', '.js', '.jsx'],
+    alias: {
+      react: path.resolve(__dirname, './node_modules/react'),
+      'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
+      assets: path.resolve(__dirname, 'assets')
+    }
   },
   plugins: [new CleanWebpackPlugin(['dist'])],
   externals: {
-    react: 'React',
-    'react-dom': 'ReactDOM'
+    react: {
+      commonjs: 'react',
+      commonjs2: 'react',
+      amd: 'React',
+      root: 'React'
+    },
+    'react-dom': {
+      commonjs: 'react-dom',
+      commonjs2: 'react-dom',
+      amd: 'ReactDOM',
+      root: 'ReactDOM'
+    }
   }
 };
