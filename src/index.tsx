@@ -1,1 +1,3 @@
-export { default as Hello } from './Hello';
+import TreeMenu from './TreeMenu';
+
+export default TreeMenu;

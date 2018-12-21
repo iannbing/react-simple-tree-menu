@@ -3,6 +3,7 @@
     "outDir": "./dist/",
     "sourceMap": true,
     "strictNullChecks": true,
+    "lib": ["es6", "dom", "es2017"],
     "module": "es6",
     "jsx": "react",
     "target": "es5",
