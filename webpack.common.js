@@ -10,7 +10,7 @@ module.exports = {
     library: 'react-simple-tree-menu',
     libraryTarget: 'umd',
     publicPath: '/dist/',
-    umdNamedDefine: true
+    umdNamedDefine: true,
   },
   module: {
     rules: [
@@ -22,22 +22,23 @@ module.exports = {
           silent: true,
           configFileName: './tsconfig.json',
           useBabel: true,
-          babelCore: '@babel/core'
-        }
+          babelCore: '@babel/core',
+        },
       },
+      { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.svg$/,
-        loader: 'svg-inline-loader'
+        loader: 'svg-inline-loader',
       },
       {
         test: /\.(jpe?g|png|gif|ico)$/i,
-        loader: 'file?name=[name].[ext]'
-      }
-    ]
+        loader: 'file?name=[name].[ext]',
+      },
+    ],
   },
   resolve: {
     modules: ['node_modules'],
@@ -45,8 +46,8 @@ module.exports = {
     alias: {
       react: path.resolve(__dirname, './node_modules/react'),
       'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
-      assets: path.resolve(__dirname, 'assets')
-    }
+      assets: path.resolve(__dirname, 'assets'),
+    },
   },
   plugins: [new CleanWebpackPlugin(['dist'])],
   externals: {
@@ -54,13 +55,14 @@ module.exports = {
       commonjs: 'react',
       commonjs2: 'react',
       amd: 'React',
-      root: 'React'
+      root: 'React',
     },
     'react-dom': {
       commonjs: 'react-dom',
       commonjs2: 'react-dom',
       amd: 'ReactDOM',
-      root: 'ReactDOM'
-    }
-  }
+      root: 'ReactDOM',
+    },
+  },
+  devtool: 'source-map',
 };
