@@ -10,7 +10,7 @@ import {
 const defaultOnClick = props => console.log(props); // eslint-disable-line no-console
 
 type TreeMenuProps = {
-  data: null | { [name: string]: TreeNode };
+  data: { [name: string]: TreeNode };
   activeKey: string;
   onClickItem: Function;
   debounceTime: number;
@@ -25,7 +25,7 @@ type TreeMenuState = {
 
 class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
   static defaultProps: TreeMenuProps = {
-    data: null,
+    data: {},
     activeKey: '',
     onClickItem: defaultOnClick,
     debounceTime: 125,
@@ -65,7 +65,7 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
     const { data, activeKey, renderItem } = this.props;
     const { openNodes, searchTerm } = this.state;
 
-    const items: Item[] = walk({ data, openNodes, searchTerm });
+    const items: Item[] = walk(data, { openNodes, searchTerm });
 
     return items.map(({ isOpen, nodes, key, level, nodePath, label }) => {
       const onClick = this.getOnClickItem({ nodePath, label, key });
