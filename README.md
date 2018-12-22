@@ -8,11 +8,10 @@ To generate a `TreeViewMenu`, you need to provide data in the following structur
 
 ```javascript
 const treeData = {
-  releasenotes: {
-    // node name
-    label: 'Release Notes', // label of this menu item
-    key: 'releasenotes', // use url as unique key for the node, removing leading and trailing slashes
-    index: 0, // decide the rendering order on the same level
+  releasenotes: {             // node name
+    label: 'Release Notes',   // label of this menu item
+    key: 'releasenotes',      // use url as unique key for the node, removing leading and trailing slashes
+    index: 0,                 // decide the rendering order on the same level
     nodes: {
       'desktop-modeler': {
         label: 'Desktop Modeler',

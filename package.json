@@ -3,16 +3,12 @@
   "version": "0.0.1",
   "description": "A simple React tree menu component",
   "main": "dist/main.js",
-  "publishConfig": {
-    "access": "restricted"
-  },
   "files": [
     "dist/",
     "src/"
   ],
   "scripts": {
-    "build": "cross-env ANALYSIS=true webpack --config webpack.prod.js",
-    "prepublish": "yarn build"
+    "build": "cross-env ANALYSIS=true webpack --config webpack.prod.js"
   },
   "repository": {
     "type": "git",
