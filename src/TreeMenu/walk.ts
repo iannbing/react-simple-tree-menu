@@ -16,8 +16,8 @@ type WalkProps = {
 type BranchProps = {
   node: TreeNode;
   nodeName: string;
-  parent?: string;
-  level?: number;
+  parent: string;
+  level: number;
   openNodes: string[];
   searchTerm: string;
 };
@@ -31,28 +31,30 @@ export type Item = {
   label: string;
 };
 
-const walk = ({ data, ...props }: WalkProps) =>
+const walk = ({ data, parent = '', level = 0, ...props }: WalkProps): Item[] =>
   data
     ? Object.entries(data)
         .sort((a, b) => a[1].index - b[1].index)
         .reduce(
           (all: Item[], [nodeName, node]: [string, TreeNode]) => [
             ...all,
-            ...(node.key ? generateBranch({ node, nodeName, ...props }) : []),
+            ...(node.key
+              ? generateBranch({ node, nodeName, parent, level, ...props })
+              : []),
           ],
           []
         )
     : [];
 
-const generateBranch = (props: BranchProps) => {
-  const { node, nodeName, parent = '', level = 0, openNodes, searchTerm } = props;
+const generateBranch = (props: BranchProps): Item[] => {
+  const { node, nodeName, parent, level, openNodes, searchTerm } = props;
   const { nodes, label } = node;
   const nodePath = [parent, nodeName].filter(x => x).join('/');
   const isOpen = !!nodes && (openNodes.includes(nodePath) || !!searchTerm);
-  const isVisible =
-    !searchTerm || label.toLowerCase().includes(searchTerm.trim().toLowerCase());
+  const isMatchingSearchTerm =
+    !searchTerm && label.toLowerCase().includes(searchTerm.trim().toLowerCase());
 
-  const currentItem = isVisible && {
+  const currentItem = {
     isOpen,
     nodePath,
     ...props,
@@ -62,7 +64,7 @@ const generateBranch = (props: BranchProps) => {
     ? walk({ data: nodes, ...props, parent: nodePath, level: level + 1 })
     : [];
 
-  return [currentItem, ...nextLevelItems].filter(x => x);
+  return isMatchingSearchTerm ? [currentItem, ...nextLevelItems] : nextLevelItems;
 };
 
 export default walk;
