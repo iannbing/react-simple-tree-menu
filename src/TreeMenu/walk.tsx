@@ -7,15 +7,18 @@ export type TreeNode = {
 };
 
 type WalkProps = {
+  data: TreeNodeObject;
   parent?: string;
   level?: number;
   openNodes: string[];
   searchTerm: string;
 };
 
-type BranchProps = WalkProps & {
+type BranchProps = {
   parent: string;
   level: number;
+  openNodes: string[];
+  searchTerm: string;
   node: TreeNode;
   nodeName: string;
 };
@@ -29,10 +32,7 @@ export type Item = {
   label: string;
 };
 
-const walk = (
-  data: TreeNodeObject = {},
-  { parent = '', level = 0, ...props }: WalkProps
-): Item[] =>
+const walk = ({ data = {}, parent = '', level = 0, ...props }: WalkProps): Item[] =>
   Object.entries(data)
     .sort((a, b) => a[1].index - b[1].index)
     .reduce(
@@ -66,7 +66,7 @@ const generateBranch = (props: BranchProps): Item[] => {
     ...node,
   };
   const nextLevelItems = isOpen
-    ? walk(nodes, { ...props, parent: nodePath, level: level + 1 })
+    ? walk({ data: nodes, ...props, parent: nodePath, level: level + 1 })
     : [];
 
   return isVisible ? [currentItem, ...nextLevelItems] : nextLevelItems;

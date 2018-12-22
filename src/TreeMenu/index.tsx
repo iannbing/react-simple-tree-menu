@@ -65,7 +65,7 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
     const { data, activeKey, renderItem } = this.props;
     const { openNodes, searchTerm } = this.state;
 
-    const items: Item[] = walk(data, { openNodes, searchTerm });
+    const items: Item[] = walk({ data, openNodes, searchTerm });
 
     return items.map(({ isOpen, nodes, key, level, nodePath, label }) => {
       const onClick = this.getOnClickItem({ nodePath, label, key });
