@@ -51,8 +51,9 @@ const walk = ({ data = {}, parent = '', level = 0, ...props }: WalkProps): Item[
       []
     );
 
-const generateBranch = (props: BranchProps): Item[] => {
-  const { node, nodeName, parent, level, openNodes, searchTerm } = props;
+const generateBranch = ({ node, nodeName, ...props }: BranchProps): Item[] => {
+  const { parent, level, openNodes, searchTerm } = props;
+
   const { nodes, label } = node;
   const nodePath = [parent, nodeName].filter(x => x).join('/');
   const isOpen = !!nodes && (openNodes.includes(nodePath) || !!searchTerm);
