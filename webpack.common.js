@@ -25,7 +25,6 @@ module.exports = {
           babelCore: '@babel/core',
         },
       },
-      { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' },
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader'],
@@ -64,5 +63,4 @@ module.exports = {
       root: 'ReactDOM',
     },
   },
-  devtool: 'source-map',
 };
