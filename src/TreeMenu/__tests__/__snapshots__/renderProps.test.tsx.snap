@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renderItem should render the toggle icon with "on" equals to false 1`] = `
+<li
+  className="css-vbr247"
+>
+  <Styled(div)
+    level={1}
+  >
+    <ToggleIcon
+      on={false}
+    />
+  </Styled(div)>
+  foo
+</li>
+`;
+
+exports[`renderItem should render the toggle icon with "on" equals to true 1`] = `
+<li
+  className="css-vbr247"
+>
+  <Styled(div)
+    level={1}
+  >
+    <ToggleIcon
+      on={true}
+    />
+  </Styled(div)>
+  foo
+</li>
+`;
+
+exports[`renderItem should render with level 3 1`] = `
+<li
+  className="css-1we6nb"
+>
+  <Styled(div)
+    level={3}
+  >
+    <ToggleIcon
+      on={false}
+    />
+  </Styled(div)>
+  foo
+</li>
+`;
+
+exports[`renderItem should render without the toggle icon 1`] = `
+<li
+  className="css-1iuaiu9"
+>
+  foo
+</li>
+`;

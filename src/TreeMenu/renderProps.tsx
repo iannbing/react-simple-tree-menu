@@ -15,7 +15,7 @@ const ToggleIconContainer = styled('div')(({ level = 0 }: { level: number }) => 
 }));
 
 const ListItemContainer = styled('li')(
-  ({ level = 0, active }: { level: number; active: boolean }) => ({
+  ({ level = 0, active = false }: { level?: number; active?: boolean }) => ({
     paddingLeft: `${DEFAULT_PADDING + ICON_SIZE + level * LEVEL_SPACE}rem`,
     cursor: 'pointer',
     color: active ? 'white' : '#333',
@@ -47,11 +47,11 @@ export const renderList = ({ search, items }: { search: Function; items: Item[] 
 };
 
 export type RenderItemProps = {
-  hasSubItems: boolean;
-  isOpen: boolean;
-  level: number;
-  onClick: (event: React.MouseEvent<HTMLLIElement>) => void;
-  active: boolean;
+  hasSubItems?: boolean;
+  isOpen?: boolean;
+  level?: number;
+  onClick?: (event: React.MouseEvent<HTMLLIElement>) => void;
+  active?: boolean;
   key: string;
   label: string | React.ReactNode;
   [name: string]: any;
