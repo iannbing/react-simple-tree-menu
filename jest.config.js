@@ -7,4 +7,9 @@ module.exports = {
   reporters: ['default', 'jest-junit'],
   snapshotSerializers: ['enzyme-to-json/serializer'],
   setupTestFrameworkScriptFile: './jest.setup.js',
+  collectCoverageFrom: [
+    'src/**/*.{ts,tsx,js,jsx}',
+    '!<rootDir>/jest.config',
+    '!<rootDir>/jest.setup',
+  ],
 };
