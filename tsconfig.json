@@ -2,6 +2,7 @@
   "compilerOptions": {
     "outDir": "./dist/",
     "sourceMap": true,
+    "skipLibCheck": true,
     "strictNullChecks": true,
     "lib": ["es6", "dom", "es2017"],
     "module": "es6",
@@ -9,7 +10,9 @@
     "target": "es5",
     "moduleResolution": "node",
     "declaration": true,
-    "declarationDir": "dist"
+    "declarationDir": "dist",
+    "declarationMap": true
   },
-  "include": ["./src/"]
+  "include": ["./src/**/*"],
+  "exclude": ["node_modules"]
 }

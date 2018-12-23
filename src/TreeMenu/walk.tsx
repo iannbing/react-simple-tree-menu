@@ -1,13 +1,14 @@
 type TreeNodeObject = { [name: string]: TreeNode };
+
 export type TreeNode = {
   label: string;
   key: string;
   index: number;
-  nodes: TreeNodeObject;
+  nodes?: TreeNodeObject;
 };
 
 type WalkProps = {
-  data: TreeNodeObject;
+  data?: TreeNodeObject;
   parent?: string;
   level?: number;
   openNodes: string[];
@@ -25,7 +26,7 @@ type BranchProps = {
 
 export type Item = {
   isOpen: boolean;
-  nodes?: { [name: string]: TreeNode };
+  nodes?: TreeNodeObject;
   key: string;
   level: number;
   nodePath: string;
@@ -33,23 +34,25 @@ export type Item = {
 };
 
 const walk = ({ data = {}, parent = '', level = 0, ...props }: WalkProps): Item[] =>
-  Object.entries(data)
-    .sort((a, b) => a[1].index - b[1].index)
-    .reduce(
-      (all: Item[], [nodeName, node]: [string, TreeNode]) => [
-        ...all,
-        ...(node.key
-          ? generateBranch({
-              node,
-              nodeName,
-              parent,
-              level,
-              ...props,
-            })
-          : []),
-      ],
-      []
-    );
+  data
+    ? Object.entries(data)
+        .sort((a, b) => a[1].index - b[1].index)
+        .reduce(
+          (all: Item[], [nodeName, node]: [string, TreeNode]) => [
+            ...all,
+            ...(node.key
+              ? generateBranch({
+                  node,
+                  nodeName,
+                  parent,
+                  level,
+                  ...props,
+                })
+              : []),
+          ],
+          []
+        )
+    : [];
 
 const generateBranch = ({ node, nodeName, ...props }: BranchProps): Item[] => {
   const { parent, level, openNodes, searchTerm } = props;
@@ -66,10 +69,12 @@ const generateBranch = ({ node, nodeName, ...props }: BranchProps): Item[] => {
     ...props,
     ...node,
   };
-  const nextLevelItems = isOpen
-    ? walk({ data: nodes, ...props, parent: nodePath, level: level + 1 })
-    : [];
-
+  const nextLevelItems = walk({
+    data: isOpen ? nodes : {},
+    ...props,
+    parent: nodePath,
+    level: level + 1,
+  });
   return isVisible ? [currentItem, ...nextLevelItems] : nextLevelItems;
 };
 

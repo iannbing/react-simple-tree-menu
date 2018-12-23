@@ -9,6 +9,7 @@
     "src/"
   ],
   "scripts": {
+    "test": "jest",
     "build": "cross-env ANALYSIS=true webpack --config webpack.prod.js"
   },
   "repository": {
@@ -22,23 +23,31 @@
   },
   "homepage": "https://github.com/iannbing/react-simple-tree-menu#readme",
   "devDependencies": {
-    "@babel/core": "^7.1.6",
-    "@babel/preset-env": "^7.1.6",
+    "@babel/core": "^7.2.2",
+    "@babel/polyfill": "^7.2.5",
+    "@babel/preset-env": "^7.2.3",
+    "@babel/runtime": "^7.2.0",
+    "@types/enzyme": "^3.1.15",
+    "@types/jest": "^23.3.10",
     "awesome-typescript-loader": "^5.2.1",
     "babel-loader": "^8.0.4",
     "babel-plugin-import": "^1.11.0",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-react-app": "^6.1.0",
-    "babel-runtime": "^6.26.0",
     "clean-webpack-plugin": "^1.0.0",
     "cross-env": "^5.2.0",
     "css-loader": "^1.0.1",
+    "enzyme": "^3.8.0",
+    "enzyme-adapter-react-16": "^1.7.1",
+    "enzyme-to-json": "^3.3.5",
+    "jest": "^23.6.0",
     "jest-emotion": "^9.2.11",
+    "jest-junit": "^5.2.0",
     "prettier": "^1.15.2",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
+    "react-test-renderer": "^16.7.0",
     "source-map-loader": "^0.2.4",
     "style-loader": "^0.23.1",
+    "ts-jest": "^23.10.5",
     "typescript": "^3.2.2",
     "webpack": "^4.26.1",
     "webpack-bundle-analyzer": "^3.0.3",
@@ -52,7 +61,6 @@
   "dependencies": {
     "@types/react": "^16.7.17",
     "@types/react-dom": "^16.0.11",
-    "babel-polyfill": "^6.26.0",
     "emotion": "^9.2.12",
     "lodash": "^4.17.11",
     "react-emotion": "^9.2.12"
