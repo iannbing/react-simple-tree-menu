@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TreeViewMenu should render the roots only 1`] = `
+<Fragment>
+  <Styled(input)
+    onChange={[Function]}
+    placeholder="Type and search"
+  />
+  <Styled(ul)>
+    <Styled(li)
+      active={false}
+      key="releasenotes"
+      level={0}
+      onClick={[Function]}
+    >
+      <Styled(div)
+        level={0}
+      >
+        <ToggleIcon
+          on={false}
+        />
+      </Styled(div)>
+      Release Notes
+    </Styled(li)>
+    <Styled(li)
+      active={false}
+      key="atd"
+      level={0}
+      onClick={[Function]}
+    >
+      ATS Guide
+    </Styled(li)>
+  </Styled(ul)>
+</Fragment>
+`;
