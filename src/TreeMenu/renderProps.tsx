@@ -33,7 +33,11 @@ const Input = styled('input')({
   paddingLeft: '.4em',
 });
 
-export const renderList = ({ search, items }: { search: Function; items: Item[] }) => {
+export type RenderList = (
+  props: { search: Function; items: JSX.Element[] }
+) => JSX.Element;
+
+export const renderList: RenderList = ({ search, items }) => {
   const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     search(value);
@@ -46,18 +50,20 @@ export const renderList = ({ search, items }: { search: Function; items: Item[] 
   );
 };
 
-export type RenderItemProps = {
-  hasSubItems?: boolean;
-  isOpen?: boolean;
-  level?: number;
-  onClick?: (event: React.MouseEvent<HTMLLIElement>) => void;
-  active?: boolean;
-  key: string;
-  label: string | React.ReactNode;
-  [name: string]: any;
-};
+export type RenderItem = (
+  props: {
+    hasSubItems?: boolean;
+    isOpen?: boolean;
+    level?: number;
+    onClick?: (event: React.MouseEvent<HTMLLIElement>) => void;
+    active?: boolean;
+    key: string;
+    label: string | JSX.Element;
+    [name: string]: any;
+  }
+) => JSX.Element;
 
-export const renderItem = ({
+export const renderItem: RenderItem = ({
   hasSubItems = false,
   isOpen = false,
   level = 0,
@@ -66,7 +72,7 @@ export const renderItem = ({
   key,
   label,
   ...props
-}: RenderItemProps) => (
+}) => (
   <ListItemContainer level={level} onClick={onClick} active={active} key={key} {...props}>
     {hasSubItems && (
       <ToggleIconContainer level={level}>

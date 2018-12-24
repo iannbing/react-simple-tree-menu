@@ -5,11 +5,13 @@ import walk, { TreeNode, Item } from './walk';
 import {
   renderItem as defaultRenderItem,
   renderList as defaultRenderList,
+  RenderItem,
+  RenderList,
 } from './renderProps';
 
 type OnClickItemProps = {
   nodePath: string;
-  label: string | React.ReactNode;
+  label: string | JSX.Element;
   key: string;
 };
 
@@ -18,8 +20,8 @@ type TreeMenuProps = {
   activeKey: string;
   onClickItem: (props: OnClickItemProps) => void;
   debounceTime: number;
-  renderItem: Function;
-  renderList: Function;
+  renderItem: RenderItem;
+  renderList: RenderList;
 };
 
 type TreeMenuState = {
@@ -67,7 +69,7 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
     this.toggleNode(props.nodePath);
   };
 
-  loadListItems = () => {
+  loadListItems = (): JSX.Element[] => {
     const { data, activeKey, renderItem } = this.props;
     const { openNodes, searchTerm } = this.state;
 
