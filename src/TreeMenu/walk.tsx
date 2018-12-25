@@ -58,7 +58,8 @@ const generateBranch = ({ node, key, ...props }: BranchProps): Item[] => {
   const currentKey = [parentKey, key].filter(x => x).join('/');
   const isOpen = !!nodes && (openNodes.includes(currentKey) || !!searchTerm);
   const isVisible =
-    !searchTerm || label.toLowerCase().includes(searchTerm.trim().toLowerCase());
+    !searchTerm ||
+    (label && label.toLowerCase().includes(searchTerm.trim().toLowerCase()));
 
   const currentItem = {
     ...props,
