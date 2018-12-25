@@ -10,22 +10,22 @@ To generate a `TreeViewMenu`, you need to provide data in the following structur
 const treeData = {
   releasenotes: {             // node name
     label: 'Release Notes',   // label of this menu item
+    key: 'releasenotes',      // use url as unique key for the node, removing leading and trailing slashes
     index: 0,                 // decide the rendering order on the same level
-    url: 'releasenotes',      // you can pass along any props you want
     nodes: {
       'desktop-modeler': {
         label: 'Desktop Modeler',
-        url: 'releasenotes/desktop-modeler',
+        key: 'releasenotes/desktop-modeler',
         index: 0,
         nodes: {
           7: {
             label: '7',
-            url: 'releasenotes/desktop-modeler/7',
+            key: 'releasenotes/desktop-modeler/7',
             index: 0,
             nodes: {
               '7.0': {
                 label: '7.0',
-                url: 'releasenotes/desktop-modeler/7.0',
+                key: 'releasenotes/desktop-modeler/7.0', // note that the URL is not necessarily reflecting the node path
                 index: 0,
               },
             },
@@ -36,8 +36,8 @@ const treeData = {
   },
   atd: {
     label: 'ATS Guide',
+    key: 'ats',
     index: 1, // i.e. ATS Guide should be right after Release Notes (index: 0)
-    url: 'ats',
   },
 };
 ```
@@ -58,7 +58,7 @@ TreeViewMenu
 
 | props        | description                                                                                                                              | type                                 | default        |
 | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ | -------------- |
-| data         | Data that defines the structure of the tree. You can nest it as many levels as you want, but note that it might cause performance issue. | {[key:string]:TreeNode}              | -              |
+| data         | Data that defines the structure of the tree. You can nest it as many levels as you want, but note that it might cause performance issue. | {[string]:TreeNode}                  | -              |
 | activeKey    | the node matching this key will be highlighted                                                                                           | string                               | ''             |
 | onClickItem  | A callback function that defines the behavior when user clicks on an node                                                                | ({node, label, key}): void           | `console.warn` |
 | debounceTime | debounce time for searching                                                                                                              | number                               | 125            |
@@ -70,6 +70,7 @@ TreeNode
 | props | description                                                                             | type                | default |
 | ----- | --------------------------------------------------------------------------------------- | ------------------- | ------- |
 | label | the rendered text of a Node                                                             | string              | ''      |
+| key   | a unique key that represent this node                                                   | string              | -       |
 | index | a number that defines the rendering order of this node on the same level                | number              | -       |
 | nodes | \[optional\] a node without this property means that it is the last child of its branch | {[string]:TreeNode} | -       |
 
@@ -82,7 +83,7 @@ RenderItemProps
 | level       | the level of the current node (root is zero)             | number   | 0       |
 | onClick     | a callback function that is run when the node is clicked | Function | -       |
 | active      | if current node is being selected                        | boolean  | -       |
-| key         | key of the `TreeNode`                                    | string   | -       |
+| key         | `TreeNode` `key`                                         | string   | -       |
 | label       | `TreeNode` `label`                                       | string   | -       |
 
 RenderListProps

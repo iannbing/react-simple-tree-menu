@@ -9,14 +9,9 @@ exports[`TreeViewMenu should render the roots only 1`] = `
   <Styled(ul)>
     <Styled(li)
       active={false}
-      index={0}
       key="releasenotes"
       level={0}
       onClick={[Function]}
-      openNodes={Array []}
-      parentKey=""
-      searchTerm=""
-      url="releasenotes"
     >
       <Styled(div)
         level={0}
@@ -29,14 +24,9 @@ exports[`TreeViewMenu should render the roots only 1`] = `
     </Styled(li)>
     <Styled(li)
       active={false}
-      index={1}
       key="atd"
       level={0}
       onClick={[Function]}
-      openNodes={Array []}
-      parentKey=""
-      searchTerm=""
-      url="ats"
     >
       ATS Guide
     </Styled(li)>
