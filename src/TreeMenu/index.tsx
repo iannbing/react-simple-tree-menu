@@ -10,7 +10,6 @@ import {
 } from './renderProps';
 
 type OnClickItemProps = {
-  nodePath: string;
   label: string | JSX.Element;
   key: string;
 };
@@ -66,7 +65,7 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
   getOnClickItem = (props: OnClickItemProps) => () => {
     const { onClickItem } = this.props;
     onClickItem(props);
-    this.toggleNode(props.nodePath);
+    this.toggleNode(props.key);
   };
 
   loadListItems = (): JSX.Element[] => {
@@ -75,16 +74,17 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
 
     const items: Item[] = walk({ data, openNodes, searchTerm });
 
-    return items.map(({ isOpen, nodes, key, level, nodePath, label }) => {
-      const onClick = this.getOnClickItem({ nodePath, label, key });
+    return items.map(({ isOpen, nodes, key, level, label, ...props }) => {
+      const onClick = this.getOnClickItem({ label, key });
       return renderItem({
         hasSubItems: !!nodes,
         isOpen,
         level,
         onClick,
         active: key === activeKey,
-        key: nodePath,
+        key,
         label,
+        ...props,
       });
     });
   };

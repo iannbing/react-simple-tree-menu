@@ -1,27 +1,27 @@
-type TreeNodeObject = { [name: string]: TreeNode };
+type TreeNodeObject = { [key: string]: TreeNode };
 
 export type TreeNode = {
   label: string;
-  key: string;
   index: number;
   nodes?: TreeNodeObject;
+  [name: string]: any;
 };
 
 type WalkProps = {
   data?: TreeNodeObject;
-  parent?: string;
+  parentKey?: string;
   level?: number;
   openNodes: string[];
   searchTerm: string;
 };
 
 type BranchProps = {
-  parent: string;
+  parentKey: string;
   level: number;
   openNodes: string[];
   searchTerm: string;
   node: TreeNode;
-  nodeName: string;
+  key: string;
 };
 
 export type Item = {
@@ -29,50 +29,47 @@ export type Item = {
   nodes?: TreeNodeObject;
   key: string;
   level: number;
-  nodePath: string;
   label: string;
 };
 
-const walk = ({ data = {}, parent = '', level = 0, ...props }: WalkProps): Item[] =>
+const walk = ({ data = {}, parentKey = '', level = 0, ...props }: WalkProps): Item[] =>
   data
     ? Object.entries(data)
         .sort((a, b) => a[1].index - b[1].index)
         .reduce(
-          (all: Item[], [nodeName, node]: [string, TreeNode]) => [
+          (all: Item[], [key, node]: [string, TreeNode]) => [
             ...all,
-            ...(node.key
-              ? generateBranch({
-                  node,
-                  nodeName,
-                  parent,
-                  level,
-                  ...props,
-                })
-              : []),
+            ...generateBranch({
+              node,
+              key,
+              parentKey,
+              level,
+              ...props,
+            }),
           ],
           []
         )
     : [];
 
-const generateBranch = ({ node, nodeName, ...props }: BranchProps): Item[] => {
-  const { parent, level, openNodes, searchTerm } = props;
+const generateBranch = ({ node, key, ...props }: BranchProps): Item[] => {
+  const { parentKey, level, openNodes, searchTerm } = props;
 
   const { nodes, label } = node;
-  const nodePath = [parent, nodeName].filter(x => x).join('/');
-  const isOpen = !!nodes && (openNodes.includes(nodePath) || !!searchTerm);
+  const currentKey = [parentKey, key].filter(x => x).join('/');
+  const isOpen = !!nodes && (openNodes.includes(currentKey) || !!searchTerm);
   const isVisible =
     !searchTerm || label.toLowerCase().includes(searchTerm.trim().toLowerCase());
 
   const currentItem = {
-    isOpen,
-    nodePath,
     ...props,
     ...node,
+    isOpen,
+    key: currentKey,
   };
   const nextLevelItems = walk({
     data: isOpen ? nodes : {},
     ...props,
-    parent: nodePath,
+    parentKey: currentKey,
     level: level + 1,
   });
   return isVisible ? [currentItem, ...nextLevelItems] : nextLevelItems;
