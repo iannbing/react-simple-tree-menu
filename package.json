@@ -1,6 +1,6 @@
 {
   "name": "react-simple-tree-menu",
-  "version": "0.0.4-beta5",
+  "version": "0.0.4",
   "description": "A simple React tree menu component",
   "main": "dist/main.js",
   "types": "dist/index.d.ts",
