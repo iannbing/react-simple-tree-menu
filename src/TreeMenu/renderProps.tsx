@@ -71,9 +71,8 @@ export const renderItem: RenderItem = ({
   active,
   key,
   label,
-  ...props
 }) => (
-  <ListItemContainer level={level} onClick={onClick} active={active} key={key} {...props}>
+  <ListItemContainer level={level} onClick={onClick} active={active} key={key}>
     {hasSubItems && (
       <ToggleIconContainer level={level}>
         <ToggleIcon on={isOpen} />

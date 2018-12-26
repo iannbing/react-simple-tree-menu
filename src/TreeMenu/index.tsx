@@ -10,7 +10,6 @@ import {
 } from './renderProps';
 
 type OnClickItemProps = {
-  nodePath: string;
   label: string | JSX.Element;
   key: string;
   [name: string]: any;
@@ -28,6 +27,7 @@ type TreeMenuProps = {
 type TreeMenuState = {
   openNodes: string[];
   searchTerm: string;
+  activeKey: string;
 };
 
 const defaultOnClick = (props: OnClickItemProps) => console.log(props); // eslint-disable-line no-console
@@ -42,7 +42,7 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
     renderList: defaultRenderList,
   };
 
-  state: TreeMenuState = { openNodes: [], searchTerm: '' };
+  state: TreeMenuState = { openNodes: [], searchTerm: '', activeKey: '' };
 
   onSearch = (value: string) => {
     const { debounceTime } = this.props;
@@ -66,26 +66,27 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
 
   getOnClickItem = (props: OnClickItemProps) => () => {
     const { onClickItem } = this.props;
+    if (!this.props.activeKey) this.setState({ activeKey: props.key });
+    this.toggleNode(props.key);
     onClickItem(props);
-    this.toggleNode(props.nodePath);
   };
 
   loadListItems = (): JSX.Element[] => {
-    const { data, activeKey, renderItem } = this.props;
+    const { data, renderItem } = this.props;
     const { openNodes, searchTerm } = this.state;
+    const activeKey = this.props.activeKey || this.state.activeKey;
 
     const items: Item[] = walk({ data, openNodes, searchTerm });
 
-    return items.map(({ isOpen, nodes, key, level, nodePath, label, ...props }) => {
-      const onClick = this.getOnClickItem({ nodePath, label, key, ...props });
+    return items.map(({ nodes, key, ...props }) => {
+      const onClick = this.getOnClickItem({ key, ...props });
+
       return renderItem({
         hasSubItems: !!nodes,
-        isOpen,
-        level,
         onClick,
         active: key === activeKey,
-        key: nodePath,
-        label,
+        key,
+        ...props,
       });
     });
   };
