@@ -4,7 +4,7 @@ A simple React Tree Menu component
 
 ## Usage
 
-To generate a `TreeViewMenu`, you need to provide data in the following structure.
+To generate a `TreeMenu`, you need to provide data in the following structure.
 
 ```javascript
 const treeData = {
@@ -42,14 +42,10 @@ const treeData = {
 };
 ```
 
-And then import `TreeViewMenu` and use it.
+And then import `TreeMenu` and use it. By default you only need to provide `data`.
 
 ```jsx
-<TreeViewMenu
-  data={treeData}
-  activeKey="releasenotes/desktop-modeler/7.0"
-  debounceTime={500}
-/>
+<TreeMenu data={treeData} />
 ```
 
 ## API
@@ -64,14 +60,15 @@ TreeViewMenu
 | debounceTime | debounce time for searching                                                                                                              | number                               | 125            |
 | renderItem   | a render props that renders the list item per `TreeNode`                                                                                 | (RenderItemProps) => React.ReactNode | -              |
 | renderList   | a render props that renders the whole tree menu; `items` is an array of rendered `TreeNode`s                                             | (RenderListProps) => React.ReactNode | -              |
+| openNodes    | you can pass an array of node names to make the branches open                                                                            | string[]                             | null           |
 
 TreeNode
 
-| props | description                                                                             | type                | default |
-| ----- | --------------------------------------------------------------------------------------- | ------------------- | ------- |
-| label | the rendered text of a Node                                                             | string              | ''      |
-| index | a number that defines the rendering order of this node on the same level                | number              | -       |
-| nodes | \[optional\] a node without this property means that it is the last child of its branch | {[string]:TreeNode} | -       |
+| props | description                                                                | type                | default |
+| ----- | -------------------------------------------------------------------------- | ------------------- | ------- |
+| label | the rendered text of a Node                                                | string              | ''      |
+| index | a number that defines the rendering order of this node on the same level   | number              | -       |
+| nodes | a node without this property means that it is the last child of its branch | {[string]:TreeNode} | -       |
 
 RenderItemProps
 

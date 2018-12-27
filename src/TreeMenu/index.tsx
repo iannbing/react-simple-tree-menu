@@ -17,7 +17,8 @@ type OnClickItemProps = {
 
 type TreeMenuProps = {
   data: { [name: string]: TreeNode };
-  activeKey: string;
+  activeKey?: string;
+  openNodes?: string[];
   onClickItem: (props: OnClickItemProps) => void;
   debounceTime: number;
   renderItem: RenderItem;
@@ -35,7 +36,6 @@ const defaultOnClick = (props: OnClickItemProps) => console.log(props); // eslin
 class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
   static defaultProps: TreeMenuProps = {
     data: {},
-    activeKey: '',
     onClickItem: defaultOnClick,
     debounceTime: 125,
     renderItem: defaultRenderItem,
@@ -54,26 +54,25 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
   };
 
   toggleNode = (node: string) => {
-    const { openNodes } = this.state;
-    if (openNodes.includes(node)) {
-      this.setState({
-        openNodes: openNodes.filter(openNode => openNode !== node),
-      });
-    } else {
-      this.setState({ openNodes: [...openNodes, node] });
+    if (!this.props.openNodes) {
+      const { openNodes } = this.state;
+      const newOpenNodes = openNodes.includes(node)
+        ? openNodes.filter(openNode => openNode !== node)
+        : [...openNodes, node];
+      const activeKey = this.props.activeKey || node;
+      this.setState({ openNodes: newOpenNodes, activeKey });
     }
   };
 
   getOnClickItem = (props: OnClickItemProps) => () => {
-    const { onClickItem } = this.props;
-    if (!this.props.activeKey) this.setState({ activeKey: props.key });
     this.toggleNode(props.key);
-    onClickItem(props);
+    this.props.onClickItem(props);
   };
 
   loadListItems = (): JSX.Element[] => {
     const { data, renderItem } = this.props;
-    const { openNodes, searchTerm } = this.state;
+    const { searchTerm } = this.state;
+    const openNodes = this.props.openNodes || this.state.openNodes;
     const activeKey = this.props.activeKey || this.state.activeKey;
 
     const items: Item[] = walk({ data, openNodes, searchTerm });
