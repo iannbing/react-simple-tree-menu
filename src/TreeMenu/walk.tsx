@@ -41,18 +41,18 @@ export type Item = {
   label: string;
 };
 
-const walk = ({ data = {}, parent = '', level = 0, ...props }: WalkProps): Item[] =>
-  Array.isArray(data)
+const walk = ({ data = {}, ...props }: WalkProps): Item[] => {
+  const propsWithDefaultValues = { parent: '', level: 0, ...props };
+
+  return Array.isArray(data)
     ? (data as TreeNodeInArray[]).reduce(
         (all: Item[], node: TreeNodeInArray, index) => [
           ...all,
           ...generateBranch({
             node,
             nodeName: node.key,
-            parent,
-            level,
             index,
-            ...props,
+            ...propsWithDefaultValues,
           }),
         ],
         []
@@ -62,16 +62,11 @@ const walk = ({ data = {}, parent = '', level = 0, ...props }: WalkProps): Item[
         .reduce(
           (all: Item[], [nodeName, node]: [string, TreeNode]) => [
             ...all,
-            ...generateBranch({
-              node,
-              nodeName,
-              parent,
-              level,
-              ...props,
-            }),
+            ...generateBranch({ node, nodeName, ...propsWithDefaultValues }),
           ],
           []
         );
+};
 
 const matchSearch = (label: string, searchTerm: string) => {
   const processString = (text: string) => text.trim().toLowerCase();
