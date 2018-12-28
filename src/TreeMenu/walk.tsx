@@ -1,14 +1,22 @@
-type TreeNodeObject = { [name: string]: TreeNode };
+export type TreeNodeObject = { [name: string]: TreeNode };
 
-export type TreeNode = {
+type BaseTreeNode = {
   label: string;
-  index: number;
-  nodes?: TreeNodeObject;
   [name: string]: any;
 };
 
+export type TreeNode = BaseTreeNode & {
+  index: number;
+  nodes?: TreeNodeObject;
+};
+
+export type TreeNodeInArray = BaseTreeNode & {
+  key: string;
+  nodes?: TreeNodeInArray[];
+};
+
 type WalkProps = {
-  data?: TreeNodeObject;
+  data: TreeNodeObject | TreeNodeInArray[];
   parent?: string;
   level?: number;
   openNodes: string[];
@@ -20,8 +28,9 @@ type BranchProps = {
   level: number;
   openNodes: string[];
   searchTerm: string;
-  node: TreeNode;
+  node: TreeNode | TreeNodeInArray;
   nodeName: string;
+  index?: number;
 };
 
 export type Item = {
@@ -33,8 +42,22 @@ export type Item = {
 };
 
 const walk = ({ data = {}, parent = '', level = 0, ...props }: WalkProps): Item[] =>
-  data
-    ? Object.entries(data)
+  Array.isArray(data)
+    ? (data as TreeNodeInArray[]).reduce(
+        (all: Item[], node: TreeNodeInArray, index) => [
+          ...all,
+          ...generateBranch({
+            node,
+            nodeName: node.key,
+            parent,
+            level,
+            index,
+            ...props,
+          }),
+        ],
+        []
+      )
+    : Object.entries(data as TreeNodeObject)
         .sort((a, b) => a[1].index - b[1].index)
         .reduce(
           (all: Item[], [nodeName, node]: [string, TreeNode]) => [
@@ -48,8 +71,7 @@ const walk = ({ data = {}, parent = '', level = 0, ...props }: WalkProps): Item[
             }),
           ],
           []
-        )
-    : [];
+        );
 
 const matchSearch = (label: string, searchTerm: string) => {
   const processString = (text: string) => text.trim().toLowerCase();
@@ -72,12 +94,12 @@ const generateBranch = ({ node, nodeName, ...props }: BranchProps): Item[] => {
     isOpen,
     key,
   };
-  const nextLevelItems = walk({
-    data: isOpen ? nodes : {},
-    ...props,
-    parent: key,
-    level: level + 1,
-  });
+  const data = Array.isArray(nodes)
+    ? (nodes as TreeNodeInArray[])
+    : (nodes as TreeNodeObject);
+  const nextLevelItems = isOpen
+    ? walk({ data, ...props, parent: key, level: level + 1 })
+    : [];
   return isVisible ? [currentItem, ...nextLevelItems] : nextLevelItems;
 };
 
