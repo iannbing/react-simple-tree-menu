@@ -58,7 +58,7 @@ export type RenderItem = (
     onClick?: (event: React.MouseEvent<HTMLLIElement>) => void;
     active?: boolean;
     key: string;
-    label: string | JSX.Element;
+    label: string;
     [name: string]: any;
   }
 ) => JSX.Element;
@@ -70,7 +70,7 @@ export const renderItem: RenderItem = ({
   onClick,
   active,
   key,
-  label,
+  label = 'unknown',
 }) => (
   <ListItemContainer level={level} onClick={onClick} active={active} key={key}>
     {hasSubItems && (

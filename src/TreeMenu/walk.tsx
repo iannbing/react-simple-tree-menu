@@ -59,10 +59,11 @@ const matchSearch = (label: string, searchTerm: string) => {
 const generateBranch = ({ node, nodeName, ...props }: BranchProps): Item[] => {
   const { parent, level, openNodes, searchTerm } = props;
 
-  const { nodes, label } = node;
+  const { nodes } = node;
   const key = [parent, nodeName].filter(x => x).join('/');
   const isOpen = !!nodes && (openNodes.includes(key) || !!searchTerm);
-  const isVisible = !searchTerm || (label && matchSearch(label, searchTerm));
+  const label = node.label || 'unknown';
+  const isVisible = !searchTerm || matchSearch(label, searchTerm);
 
   const currentItem = {
     ...props,
