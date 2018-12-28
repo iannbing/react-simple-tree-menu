@@ -72,15 +72,15 @@ TreeNode
 
 RenderItemProps
 
-| props       | description                                              | type     | default |
-| ----------- | -------------------------------------------------------- | -------- | ------- |
-| hasSubItems | if a `TreeNode` is the last node of its branch           | boolean  | false   |
-| isOpen      | if it is showing its children                            | boolean  | false   |
-| level       | the level of the current node (root is zero)             | number   | 0       |
-| onClick     | a callback function that is run when the node is clicked | Function | -       |
-| active      | if current node is being selected                        | boolean  | -       |
-| key         | key of a `TreeNode`                                      | string   | -       |
-| label       | `TreeNode` `label`                                       | string   | -       |
+| props    | description                                              | type     | default |
+| -------- | -------------------------------------------------------- | -------- | ------- |
+| hasNodes | if a `TreeNode` is the last node of its branch           | boolean  | false   |
+| isOpen   | if it is showing its children                            | boolean  | false   |
+| level    | the level of the current node (root is zero)             | number   | 0       |
+| onClick  | a callback function that is run when the node is clicked | Function | -       |
+| active   | if current node is being selected                        | boolean  | -       |
+| key      | key of a `TreeNode`                                      | string   | -       |
+| label    | `TreeNode` `label`                                       | string   | -       |
 
 RenderListProps
 
