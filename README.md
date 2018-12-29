@@ -7,11 +7,46 @@ A simple React Tree Menu component
 To generate a `TreeMenu`, you need to provide data in the following structure.
 
 ```javascript
+// as an array
+const treeData = [
+  {
+    key: 'releasenotes',
+    label: 'Release Notes',
+    url: 'releasenotes', // you can pass along any props you need
+    nodes: [
+      {
+        key: 'desktop-modeler',
+        label: 'Desktop Modeler',
+        url: 'releasenotes/desktop-modeler',
+        nodes: [
+          {
+            key: '7',
+            label: '7',
+            url: 'releasenotes/desktop-modeler/7',
+            nodes: [
+              {
+                key: '7.0',
+                label: '7.0',
+                url: 'releasenotes/desktop-modeler/7.0',
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'atd',
+    label: 'ATS Guide',
+    url: 'ats',
+  },
+];
+// or as an object
 const treeData = {
-  releasenotes: {             // node name
-    label: 'Release Notes',   // label of this menu item
+  releasenotes: {             // key
+    label: 'Release Notes',
     index: 0,                 // decide the rendering order on the same level
-    url: 'releasenotes',      // you can pass any props you need
+    url: 'releasenotes',
     nodes: {
       'desktop-modeler': {
         label: 'Desktop Modeler',
@@ -26,7 +61,7 @@ const treeData = {
               '7.0': {
                 label: '7.0',
                 index: 0,
-                url: 'releasenotes/desktop-modeler/7.0', // note that the URL is not necessarily reflecting the node path
+                url: 'releasenotes/desktop-modeler/7.0',
               },
             },
           },
@@ -36,13 +71,14 @@ const treeData = {
   },
   atd: {
     label: 'ATS Guide',
-    index: 1, // i.e. ATS Guide should be right after Release Notes (index: 0)
+    index: 1,
     url: 'ats',
   },
 };
+
 ```
 
-And then import `TreeMenu` and use it. By default you only need to provide `data`.
+And then import `TreeMenu` and use it. By default you only need to provide `data`. You can have more control over the behaviors of the components using the provided API.
 
 ```jsx
 <TreeMenu data={treeData} />
@@ -52,23 +88,24 @@ And then import `TreeMenu` and use it. By default you only need to provide `data
 
 TreeViewMenu
 
-| props        | description                                                                                                                              | type                                 | default        |
-| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ | -------------- |
-| data         | Data that defines the structure of the tree. You can nest it as many levels as you want, but note that it might cause performance issue. | {[key: string]:TreeNode}             | -              |
-| activeKey    | the node matching this key will be highlighted                                                                                           | string                               | ''             |
-| onClickItem  | A callback function that defines the behavior when user clicks on an node                                                                | ({node, label, key}): void           | `console.warn` |
-| debounceTime | debounce time for searching                                                                                                              | number                               | 125            |
-| renderItem   | a render props that renders the list item per `TreeNode`                                                                                 | (RenderItemProps) => React.ReactNode | -              |
-| renderList   | a render props that renders the whole tree menu; `items` is an array of rendered `TreeNode`s                                             | (RenderListProps) => React.ReactNode | -              |
-| openNodes    | you can pass an array of node names to make the branches open                                                                            | string[]                             | null           |
+| props        | description                                                                                                                              | type                                   | default        |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------- | -------------- |
+| data         | Data that defines the structure of the tree. You can nest it as many levels as you want, but note that it might cause performance issue. | {[key: string]:TreeNode} \| TreeNode[] | -              |
+| activeKey    | the node matching this key will be highlighted                                                                                           | string                                 | ''             |
+| onClickItem  | A callback function that defines the behavior when user clicks on an node                                                                | ({node, label, key}): void             | `console.warn` |
+| debounceTime | debounce time for searching                                                                                                              | number                                 | 125            |
+| renderItem   | a render props that renders the list item per `TreeNode`                                                                                 | (RenderItemProps) => React.ReactNode   | -              |
+| renderList   | a render props that renders the whole tree menu; `items` is an array of rendered `TreeNode`s                                             | (RenderListProps) => React.ReactNode   | -              |
+| openNodes    | you can pass an array of node names to make the branches open                                                                            | string[]                               | null           |
 
 TreeNode
 
-| props | description                                                                | type                | default |
-| ----- | -------------------------------------------------------------------------- | ------------------- | ------- |
-| label | the rendered text of a Node                                                | string              | ''      |
-| index | a number that defines the rendering order of this node on the same level   | number              | -       |
-| nodes | a node without this property means that it is the last child of its branch | {[string]:TreeNode} | -       |
+| props | description                                                                                                            | type                              | default |
+| ----- | ---------------------------------------------------------------------------------------------------------------------- | --------------------------------- | ------- |
+| key   | Node name                                                                                                              | string                            | -       |
+| label | the rendered text of a Node                                                                                            | string                            | ''      |
+| index | a number that defines the rendering order of this node on the same level; this is not needed if `data` is `TreeNode[]` | number                            | -       |
+| nodes | a node without this property means that it is the last child of its branch                                             | {[string]:TreeNode} \| TreeNode[] | -       |
 
 RenderItemProps
 
