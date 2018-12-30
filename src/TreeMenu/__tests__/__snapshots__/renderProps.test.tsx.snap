@@ -2,52 +2,75 @@
 
 exports[`renderItem should render the toggle icon with "on" equals to false 1`] = `
 <li
-  className="css-vbr247"
+  key="key"
+  style={
+    Object {
+      "background": "none",
+      "color": "#333",
+      "cursor": "pointer",
+      "paddingLeft": "3.5rem",
+    }
+  }
 >
-  <Styled(div)
-    level={1}
+  <div
+    style={
+      Object {
+        "height": "1rem",
+        "left": "2.25rem",
+        "position": "absolute",
+        "width": "1rem",
+      }
+    }
   >
     <ToggleIcon
       on={false}
     />
-  </Styled(div)>
+  </div>
   foo
 </li>
 `;
 
 exports[`renderItem should render the toggle icon with "on" equals to true 1`] = `
 <li
-  className="css-vbr247"
+  key="key"
+  style={
+    Object {
+      "background": "none",
+      "color": "#333",
+      "cursor": "pointer",
+      "paddingLeft": "3.5rem",
+    }
+  }
 >
-  <Styled(div)
-    level={1}
+  <div
+    style={
+      Object {
+        "height": "1rem",
+        "left": "2.25rem",
+        "position": "absolute",
+        "width": "1rem",
+      }
+    }
   >
     <ToggleIcon
       on={true}
     />
-  </Styled(div)>
-  foo
-</li>
-`;
-
-exports[`renderItem should render with level 3 1`] = `
-<li
-  className="css-1we6nb"
->
-  <Styled(div)
-    level={3}
-  >
-    <ToggleIcon
-      on={false}
-    />
-  </Styled(div)>
+  </div>
   foo
 </li>
 `;
 
 exports[`renderItem should render without the toggle icon 1`] = `
 <li
-  className="css-1iuaiu9"
+  key="key"
+  style={
+    Object {
+      "background": "none",
+      "color": "#333",
+      "cursor": "pointer",
+      "paddingLeft": "2.25rem",
+    }
+  }
 >
   foo
 </li>

@@ -28,12 +28,4 @@ describe('renderItem', () => {
     expect(wrapper.find('ToggleIcon').prop('on')).toEqual(false);
     expect(wrapper.children().length).toBe(2);
   });
-  it('should render with level 3', () => {
-    const wrapper = shallow(
-      renderItem({ hasNodes: true, isOpen: false, level: 3, label: 'foo', key: 'key' })
-    );
-
-    expect(wrapper).toMatchSnapshot();
-    expect(wrapper.childAt(0).prop('level')).toEqual(3);
-  });
 });

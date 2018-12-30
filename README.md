@@ -1,78 +1,72 @@
 # react-simple-tree-view-menu
 
-A simple React Tree Menu component
+A simple, light-weight React Tree Menu component that:
+
+- does not depend on any UI framework
+- fully customizable
+- allows search
 
 ## Usage
 
+Install with the following command in your React app:
+
+```bash
+npm i react-simple-tree-menu
+// or
+yarn add react-simple-tree-menu
+```
+
 To generate a `TreeMenu`, you need to provide data in the following structure.
 
-```javascript
+```js
 // as an array
 const treeData = [
   {
-    key: 'releasenotes',
-    label: 'Release Notes',
-    url: 'releasenotes', // you can pass along any props you need
+    key: 'first-level-node-1',
+    label: 'Node 1 at the first level',
+    ..., // any other props you need, e.g. url
     nodes: [
       {
-        key: 'desktop-modeler',
-        label: 'Desktop Modeler',
-        url: 'releasenotes/desktop-modeler',
+        key: 'second-level-node-1',
+        label: 'Node 1 at the second level',
         nodes: [
           {
-            key: '7',
-            label: '7',
-            url: 'releasenotes/desktop-modeler/7',
-            nodes: [
-              {
-                key: '7.0',
-                label: '7.0',
-                url: 'releasenotes/desktop-modeler/7.0',
-              },
-            ],
+            key: 'third-level-node-1',
+            label: 'Last node of the branch',
+            nodes: [] // you can remove the nodes property or leave it as an empty array
           },
         ],
       },
     ],
   },
   {
-    key: 'atd',
-    label: 'ATS Guide',
-    url: 'ats',
+    key: 'first-level-node-2',
+    label: 'Node 2 at the first level',
   },
 ];
 // or as an object
 const treeData = {
-  releasenotes: {             // key
-    label: 'Release Notes',
-    index: 0,                 // decide the rendering order on the same level
-    url: 'releasenotes',
+  'first-level-node-1': {               // key
+    label: 'Node 1 at the first level',
+    index: 0, // decide the rendering order on the same level
+    ...,      // any other props you need, e.g. url
     nodes: {
-      'desktop-modeler': {
-        label: 'Desktop Modeler',
+      'second-level-node-1': {
+        label: 'Node 1 at the second level',
         index: 0,
-        url: 'releasenotes/desktop-modeler',
         nodes: {
-          7: {
-            label: '7',
+          'third-level-node-1': {
+            label: 'Node 1 at the third level',
             index: 0,
-            url: 'releasenotes/desktop-modeler/7',
-            nodes: {
-              '7.0': {
-                label: '7.0',
-                index: 0,
-                url: 'releasenotes/desktop-modeler/7.0',
-              },
-            },
+            nodes: {} // you can remove the nodes property or leave it as an empty array
           },
         },
       },
     },
   },
-  atd: {
-    label: 'ATS Guide',
+  'first-level-node-2': {
+    label: 'Node 2 at the first level',
     index: 1,
-    url: 'ats',
   },
 };
 
@@ -81,12 +75,14 @@ const treeData = {
 And then import `TreeMenu` and use it. By default you only need to provide `data`. You can have more control over the behaviors of the components using the provided API.
 
 ```jsx
+import TreeMenu from 'react-simple-tree-menu'
+...
 <TreeMenu data={treeData} />
 ```
 
 ## API
 
-TreeViewMenu
+### TreeViewMenu
 
 | props        | description                                                                                                                              | type                                   | default        |
 | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------- | -------------- |
@@ -98,7 +94,7 @@ TreeViewMenu
 | renderList   | a render props that renders the whole tree menu; `items` is an array of rendered `TreeNode`s                                             | (RenderListProps) => React.ReactNode   | -              |
 | openNodes    | you can pass an array of node names to make the branches open                                                                            | string[]                               | null           |
 
-TreeNode
+### TreeNode
 
 | props | description                                                                                                            | type                              | default |
 | ----- | ---------------------------------------------------------------------------------------------------------------------- | --------------------------------- | ------- |
@@ -107,7 +103,7 @@ TreeNode
 | index | a number that defines the rendering order of this node on the same level; this is not needed if `data` is `TreeNode[]` | number                            | -       |
 | nodes | a node without this property means that it is the last child of its branch                                             | {[string]:TreeNode} \| TreeNode[] | -       |
 
-RenderItemProps
+### RenderItemProps
 
 | props    | description                                              | type     | default |
 | -------- | -------------------------------------------------------- | -------- | ------- |
@@ -119,7 +115,7 @@ RenderItemProps
 | key      | key of a `TreeNode`                                      | string   | -       |
 | label    | `TreeNode` `label`                                       | string   | -       |
 
-RenderListProps
+### RenderListProps
 
 | props  | description                                                    | type                    | default |
 | ------ | -------------------------------------------------------------- | ----------------------- | ------- |
@@ -128,11 +124,7 @@ RenderListProps
 
 ## Dependencies
 
-- [emotion](https://emotion.sh/): for adding stylings to the default DOM elements (i.e. default `renderItem`, `renderSearch` and `renderGroup`).
-
-This Demo application is built with [Create React App](https://github.com/facebook/create-react-app) version 2. [react-app-rewired](https://github.com/timarney/react-app-rewired) and [customize-cra](https://github.com/arackaf/customize-cra) are used in order to configure `babel` without ejection. [babel-plugin-import](https://github.com/ant-design/babel-plugin-import) is used for only importing used modules to reduce bundle size, this allows using `Lodash` when you only want to use light-weight functions like `get` and `merge`.
-
-NOTE: configure `REACT_APP_BUNDLE_VISUALIZE=true` in `.env` and then run `yarn build` to see the actual bundle size.
+- [lodash](https://lodash.com/): some light-weight utility functions are used, e.g. `get`, `isEmpty`, and `merge`. [babel-plugin-import](https://github.com/ant-design/babel-plugin-import) is used for only importing used modules to reduce bundle size; only the used functions are bundled.
 
 ## Code conventions
 

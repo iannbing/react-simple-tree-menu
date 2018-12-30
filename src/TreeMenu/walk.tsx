@@ -1,3 +1,5 @@
+import { isEmpty } from 'lodash';
+
 export type TreeNodeObject = { [name: string]: TreeNode };
 
 type BaseTreeNode = {
@@ -78,17 +80,12 @@ const generateBranch = ({ node, nodeName, ...props }: BranchProps): Item[] => {
 
   const { nodes, ...nodeProps } = node;
   const key = [parent, nodeName].filter(x => x).join('/');
-  const isOpen = !!nodes && (openNodes.includes(key) || !!searchTerm);
+  const hasNodes = !!nodes && !isEmpty(nodes);
+  const isOpen = hasNodes && (openNodes.includes(key) || !!searchTerm);
   const label = node.label || 'unknown';
   const isVisible = !searchTerm || matchSearch(label, searchTerm);
 
-  const currentItem = {
-    ...props,
-    ...nodeProps,
-    hasNodes: !!nodes,
-    isOpen,
-    key,
-  };
+  const currentItem = { ...props, ...nodeProps, hasNodes, isOpen, key };
   const data = Array.isArray(nodes)
     ? (nodes as TreeNodeInArray[])
     : (nodes as TreeNodeObject);
