@@ -124,7 +124,6 @@ import TreeMenu from 'react-simple-tree-menu'
 
 ## Dependencies
 
-- [emotion](https://emotion.sh/): for adding stylings to the default DOM elements (i.e. default `renderItem`, `renderSearch` and `renderGroup`).
 - [lodash](https://lodash.com/): some light-weight utility functions are used, e.g. `get`, `isEmpty`, and `merge`. [babel-plugin-import](https://github.com/ant-design/babel-plugin-import) is used for only importing used modules to reduce bundle size; only the used functions are bundled.
 
 ## Code conventions

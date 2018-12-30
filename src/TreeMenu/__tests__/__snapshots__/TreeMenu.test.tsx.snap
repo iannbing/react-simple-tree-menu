@@ -2,34 +2,66 @@
 
 exports[`TreeViewMenu should render the roots only 1`] = `
 <Fragment>
-  <Styled(input)
+  <input
     onChange={[Function]}
     placeholder="Type and search"
+    style={
+      Object {
+        "margin": ".5em",
+        "paddingLeft": ".4em",
+      }
+    }
   />
-  <Styled(ul)>
-    <Styled(li)
-      active={false}
+  <ul
+    style={
+      Object {
+        "listStyleType": "none",
+        "paddingLeft": 0,
+      }
+    }
+  >
+    <li
       key="releasenotes"
-      level={0}
       onClick={[Function]}
+      style={
+        Object {
+          "background": "none",
+          "color": "#333",
+          "cursor": "pointer",
+          "paddingLeft": "2.25rem",
+        }
+      }
     >
-      <Styled(div)
-        level={0}
+      <div
+        style={
+          Object {
+            "height": "1rem",
+            "left": "1rem",
+            "position": "absolute",
+            "width": "1rem",
+          }
+        }
       >
         <ToggleIcon
           on={false}
         />
-      </Styled(div)>
+      </div>
       Release Notes
-    </Styled(li)>
-    <Styled(li)
-      active={false}
+    </li>
+    <li
       key="atd"
-      level={0}
       onClick={[Function]}
+      style={
+        Object {
+          "background": "none",
+          "color": "#333",
+          "cursor": "pointer",
+          "paddingLeft": "2.25rem",
+        }
+      }
     >
       ATS Guide
-    </Styled(li)>
-  </Styled(ul)>
+    </li>
+  </ul>
 </Fragment>
 `;

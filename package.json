@@ -1,6 +1,6 @@
 {
   "name": "react-simple-tree-menu",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A simple React tree menu component",
   "main": "dist/main.js",
   "types": "dist/index.d.ts",
@@ -43,7 +43,6 @@
     "enzyme-adapter-react-16": "^1.7.1",
     "enzyme-to-json": "^3.3.5",
     "jest": "^23.6.0",
-    "jest-emotion": "^9.2.11",
     "jest-junit": "^5.2.0",
     "prettier": "^1.15.2",
     "prop-types": "^15.6.2",
@@ -64,8 +63,6 @@
     "react-dom": "^16.6.3"
   },
   "dependencies": {
-    "emotion": "^9.2.12",
-    "lodash": "^4.17.11",
-    "react-emotion": "^9.2.12"
+    "lodash": "^4.17.11"
   }
 }
