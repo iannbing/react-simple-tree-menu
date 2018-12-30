@@ -77,11 +77,10 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
 
     const items: Item[] = walk({ data, openNodes, searchTerm });
 
-    return items.map(({ nodes, key, ...props }) => {
+    return items.map(({ key, ...props }) => {
       const onClick = this.getOnClickItem({ key, ...props });
 
       return renderItem({
-        hasSubItems: !!nodes,
         onClick,
         active: key === activeKey,
         key,

@@ -8,7 +8,6 @@
 # testing
 /coverage
 /reports
-junit.xml
 
 # production
 /build

@@ -4,7 +4,20 @@ module.exports = {
   collectCoverage: true,
   coverageDirectory: 'reports',
   coverageReporters: ['lcov', 'text'],
-  reporters: ['default', 'jest-junit'],
+  reporters: [
+    'default',
+    [
+      'jest-junit',
+      {
+        suiteName: 'jest tests',
+        suiteNameTemplate: '{filepath}',
+        output: 'reports/junit.xml',
+        classNameTemplate: '{filename}',
+        titleTemplate: '{title}',
+        ancestorSeparator: ' > ',
+      },
+    ],
+  ],
   snapshotSerializers: ['enzyme-to-json/serializer'],
   setupTestFrameworkScriptFile: './jest.setup.js',
   collectCoverageFrom: [

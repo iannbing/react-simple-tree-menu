@@ -1,29 +1,29 @@
-import walk from '../walk';
+import walk, { TreeNode, TreeNodeObject, TreeNodeInArray } from '../walk';
 
-const mockData = {
+const mockDataInObject: TreeNodeObject = {
   atd: {
     label: 'ATS Guide',
-    key: 'ats',
+    url: 'ats',
     index: 1, // ATS Guide should be after Release Notes
   },
   releasenotes: {
     label: 'Release Notes',
-    key: 'releasenotes',
+    url: 'releasenotes',
     index: 0, // Release Notes should be first
     nodes: {
       'desktop-modeler': {
         label: 'Desktop Modeler',
-        key: 'releasenotes/desktop-modeler',
+        url: 'releasenotes/desktop-modeler',
         index: 0,
         nodes: {
           7: {
             label: '7',
-            key: 'releasenotes/desktop-modeler/7',
+            url: 'releasenotes/desktop-modeler/7',
             index: 0,
             nodes: {
               '7.0': {
                 label: '7.0',
-                key: 'releasenotes/desktop-modeler/7.0',
+                url: 'releasenotes/desktop-modeler/7.0',
                 index: 0,
               },
             },
@@ -34,40 +34,74 @@ const mockData = {
   },
 };
 
-describe('walk', () => {
-  it('should transpose data to a desired shape', () => {
-    const result = walk({ data: mockData, openNodes: [], searchTerm: '7' });
-
-    const expected = [
+const mockDataInArray: TreeNodeInArray[] = [
+  {
+    key: 'releasenotes',
+    label: 'Release Notes',
+    url: 'releasenotes',
+    nodes: [
       {
-        index: 0,
-        isOpen: true,
-        key: 'releasenotes/desktop-modeler/7',
-        label: '7',
-        level: 2,
-        nodes: {
-          '7.0': {
-            index: 0,
-            key: 'releasenotes/desktop-modeler/7.0',
-            label: '7.0',
+        key: 'desktop-modeler',
+        label: 'Desktop Modeler',
+        url: 'releasenotes/desktop-modeler',
+        nodes: [
+          {
+            key: '7',
+            label: '7',
+            url: 'releasenotes/desktop-modeler/7',
+            nodes: [
+              {
+                key: '7.0',
+                label: '7.0',
+                url: 'releasenotes/desktop-modeler/7.0',
+              },
+            ],
           },
-        },
-        openNodes: [],
-        parent: 'releasenotes/desktop-modeler',
-        searchTerm: '7',
+        ],
       },
-      {
-        index: 0,
-        isOpen: false,
-        key: 'releasenotes/desktop-modeler/7/7.0',
-        label: '7.0',
-        level: 3,
-        openNodes: [],
-        parent: 'releasenotes/desktop-modeler/7',
-        searchTerm: '7',
-      },
-    ];
+    ],
+  },
+  {
+    key: 'atd',
+    label: 'ATS Guide',
+    url: 'ats',
+  },
+];
 
-    expect(result).toEqual(expected);
+const expectedOutcome = [
+  {
+    index: 0,
+    isOpen: true,
+    key: 'releasenotes/desktop-modeler/7',
+    url: 'releasenotes/desktop-modeler/7',
+    label: '7',
+    level: 2,
+    hasNodes: true,
+    openNodes: [],
+    parent: 'releasenotes/desktop-modeler',
+    searchTerm: '7',
+  },
+  {
+    index: 0,
+    isOpen: false,
+    key: 'releasenotes/desktop-modeler/7/7.0',
+    url: 'releasenotes/desktop-modeler/7.0',
+    label: '7.0',
+    level: 3,
+    hasNodes: false,
+    openNodes: [],
+    parent: 'releasenotes/desktop-modeler/7',
+    searchTerm: '7',
+  },
+];
+
+describe('walk', () => {
+  it('should transpose the data object to a desired shape', () => {
+    const result = walk({ data: mockDataInObject, openNodes: [], searchTerm: '7' });
+    expect(result).toEqual(expectedOutcome);
+  });
+  it('should transpose the data array to a desired shape', () => {
+    const result = walk({ data: mockDataInArray, openNodes: [], searchTerm: '7' });
+    expect(result).toEqual(expectedOutcome);
   });
 });

@@ -1,14 +1,22 @@
-type TreeNodeObject = { [name: string]: TreeNode };
+export type TreeNodeObject = { [name: string]: TreeNode };
 
-export type TreeNode = {
+type BaseTreeNode = {
   label: string;
-  index: number;
-  nodes?: TreeNodeObject;
   [name: string]: any;
 };
 
+export type TreeNode = BaseTreeNode & {
+  index: number;
+  nodes?: TreeNodeObject;
+};
+
+export type TreeNodeInArray = BaseTreeNode & {
+  key: string;
+  nodes?: TreeNodeInArray[];
+};
+
 type WalkProps = {
-  data?: TreeNodeObject;
+  data: TreeNodeObject | TreeNodeInArray[];
   parent?: string;
   level?: number;
   openNodes: string[];
@@ -20,8 +28,9 @@ type BranchProps = {
   level: number;
   openNodes: string[];
   searchTerm: string;
-  node: TreeNode;
+  node: TreeNode | TreeNodeInArray;
   nodeName: string;
+  index?: number;
 };
 
 export type Item = {
@@ -32,24 +41,32 @@ export type Item = {
   label: string;
 };
 
-const walk = ({ data = {}, parent = '', level = 0, ...props }: WalkProps): Item[] =>
-  data
-    ? Object.entries(data)
+const walk = ({ data = {}, ...props }: WalkProps): Item[] => {
+  const propsWithDefaultValues = { parent: '', level: 0, ...props };
+
+  return Array.isArray(data)
+    ? (data as TreeNodeInArray[]).reduce(
+        (all: Item[], node: TreeNodeInArray, index) => [
+          ...all,
+          ...generateBranch({
+            node,
+            nodeName: node.key,
+            index,
+            ...propsWithDefaultValues,
+          }),
+        ],
+        []
+      )
+    : Object.entries(data as TreeNodeObject)
         .sort((a, b) => a[1].index - b[1].index)
         .reduce(
           (all: Item[], [nodeName, node]: [string, TreeNode]) => [
             ...all,
-            ...generateBranch({
-              node,
-              nodeName,
-              parent,
-              level,
-              ...props,
-            }),
+            ...generateBranch({ node, nodeName, ...propsWithDefaultValues }),
           ],
           []
-        )
-    : [];
+        );
+};
 
 const matchSearch = (label: string, searchTerm: string) => {
   const processString = (text: string) => text.trim().toLowerCase();
@@ -59,7 +76,7 @@ const matchSearch = (label: string, searchTerm: string) => {
 const generateBranch = ({ node, nodeName, ...props }: BranchProps): Item[] => {
   const { parent, level, openNodes, searchTerm } = props;
 
-  const { nodes } = node;
+  const { nodes, ...nodeProps } = node;
   const key = [parent, nodeName].filter(x => x).join('/');
   const isOpen = !!nodes && (openNodes.includes(key) || !!searchTerm);
   const label = node.label || 'unknown';
@@ -67,16 +84,17 @@ const generateBranch = ({ node, nodeName, ...props }: BranchProps): Item[] => {
 
   const currentItem = {
     ...props,
-    ...node,
+    ...nodeProps,
+    hasNodes: !!nodes,
     isOpen,
     key,
   };
-  const nextLevelItems = walk({
-    data: isOpen ? nodes : {},
-    ...props,
-    parent: key,
-    level: level + 1,
-  });
+  const data = Array.isArray(nodes)
+    ? (nodes as TreeNodeInArray[])
+    : (nodes as TreeNodeObject);
+  const nextLevelItems = isOpen
+    ? walk({ data, ...props, parent: key, level: level + 1 })
+    : [];
   return isVisible ? [currentItem, ...nextLevelItems] : nextLevelItems;
 };
 

@@ -52,7 +52,7 @@ export const renderList: RenderList = ({ search, items }) => {
 
 export type RenderItem = (
   props: {
-    hasSubItems?: boolean;
+    hasNodes?: boolean;
     isOpen?: boolean;
     level?: number;
     onClick?: (event: React.MouseEvent<HTMLLIElement>) => void;
@@ -64,7 +64,7 @@ export type RenderItem = (
 ) => JSX.Element;
 
 export const renderItem: RenderItem = ({
-  hasSubItems = false,
+  hasNodes = false,
   isOpen = false,
   level = 0,
   onClick,
@@ -73,7 +73,7 @@ export const renderItem: RenderItem = ({
   label = 'unknown',
 }) => (
   <ListItemContainer level={level} onClick={onClick} active={active} key={key}>
-    {hasSubItems && (
+    {hasNodes && (
       <ToggleIconContainer level={level}>
         <ToggleIcon on={isOpen} />
       </ToggleIconContainer>
