@@ -1,6 +1,6 @@
-# react-simple-tree-view-menu
+# react-simple-tree-menu
 
-A simple, light-weight React Tree Menu component that:
+A simple, data-driven, light-weight React Tree Menu component that:
 
 - does not depend on any UI framework
 - fully customizable
@@ -77,43 +77,91 @@ And then import `TreeMenu` and use it. By default you only need to provide `data
 ```jsx
 import TreeMenu from 'react-simple-tree-menu'
 ...
+// Use the default minimal UI
 <TreeMenu data={treeData} />
+
+// Use any third-party UI framework
+<TreeViewMenu
+  data={treeData}
+  onClickItem={({ key, label, ...props }) => {
+    this.navigate(props.url); // user defined prop
+  }}
+  debounceTime={125}
+  renderItem={({
+    hasNodes,
+    isOpen,
+    level,
+    label,
+    key,
+    active,
+    onClick,
+  }) => (
+    <ListItem
+      level={level}
+      key={key}
+      onClick={onClick}
+      active={active}
+    >
+      {hasNodes && <ToggleIcon on={isOpen} />}
+      {label}
+    </ListItem>
+  )}
+  renderList={({ search, items }) => (
+    <>
+      <Input onChange={e => search(e.target.value)} />
+      <ListGroup>{items}</ListGroup>
+    </>)}
+  />
+
+
 ```
 
 ## API
 
 ### TreeViewMenu
 
-| props        | description                                                                                                                              | type                                   | default        |
-| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------- | -------------- |
-| data         | Data that defines the structure of the tree. You can nest it as many levels as you want, but note that it might cause performance issue. | {[key: string]:TreeNode} \| TreeNode[] | -              |
-| activeKey    | the node matching this key will be highlighted                                                                                           | string                                 | ''             |
-| onClickItem  | A callback function that defines the behavior when user clicks on an node                                                                | ({node, label, key}): void             | `console.warn` |
-| debounceTime | debounce time for searching                                                                                                              | number                                 | 125            |
-| renderItem   | a render props that renders the list item per `TreeNode`                                                                                 | (RenderItemProps) => React.ReactNode   | -              |
-| renderList   | a render props that renders the whole tree menu; `items` is an array of rendered `TreeNode`s                                             | (RenderListProps) => React.ReactNode   | -              |
-| openNodes    | you can pass an array of node names to make the branches open                                                                            | string[]                               | null           |
+| props        | description                                                                                                                              | type                                 | default        |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ | -------------- |
+| data         | Data that defines the structure of the tree. You can nest it as many levels as you want, but note that it might cause performance issue. | {[string]:TreeNode} \| TreeNode[]    | -              |
+| activeKey    | the node matching this key will be highlighted                                                                                           | string                               | ''             |
+| onClickItem  | A callback function that defines the behavior when user clicks on an node                                                                | (Item): void                         | `console.warn` |
+| debounceTime | debounce time for searching                                                                                                              | number                               | 125            |
+| renderItem   | a render props that renders the list item per `TreeNode`                                                                                 | (RenderItemProps) => React.ReactNode | -              |
+| renderList   | a render props that renders the whole tree menu; `items` is an array of rendered `TreeNode`s                                             | (RenderListProps) => React.ReactNode | -              |
+| openNodes    | you can pass an array of node names to make the branches open                                                                            | string[]                             | null           |
 
 ### TreeNode
 
 | props | description                                                                                                            | type                              | default |
 | ----- | ---------------------------------------------------------------------------------------------------------------------- | --------------------------------- | ------- |
 | key   | Node name                                                                                                              | string                            | -       |
-| label | the rendered text of a Node                                                                                            | string                            | ''      |
+| label | the rendered text of a Node                                                                                            | string \| React.ReactNode         | ''      |
 | index | a number that defines the rendering order of this node on the same level; this is not needed if `data` is `TreeNode[]` | number                            | -       |
 | nodes | a node without this property means that it is the last child of its branch                                             | {[string]:TreeNode} \| TreeNode[] | -       |
 
+### Item
+
+| props    | description                                    | type                      | default |
+| -------- | ---------------------------------------------- | ------------------------- | ------- |
+| hasNodes | if a `TreeNode` is the last node of its branch | boolean                   | false   |
+| isOpen   | if it is showing its children                  | boolean                   | false   |
+| level    | the level of the current node (root is zero)   | number                    | 0       |
+| key      | key of a `TreeNode`                            | string                    | -       |
+| label    | `TreeNode` `label`                             | string \| React.ReactNode | -       |
+| ...other | User defined props                             | {[string]: any}           | -       |
+
 ### RenderItemProps
 
-| props    | description                                              | type     | default |
-| -------- | -------------------------------------------------------- | -------- | ------- |
-| hasNodes | if a `TreeNode` is the last node of its branch           | boolean  | false   |
-| isOpen   | if it is showing its children                            | boolean  | false   |
-| level    | the level of the current node (root is zero)             | number   | 0       |
-| onClick  | a callback function that is run when the node is clicked | Function | -       |
-| active   | if current node is being selected                        | boolean  | -       |
-| key      | key of a `TreeNode`                                      | string   | -       |
-| label    | `TreeNode` `label`                                       | string   | -       |
+| props    | description                                              | type                      | default |
+| -------- | -------------------------------------------------------- | ------------------------- | ------- |
+| hasNodes | if a `TreeNode` is the last node of its branch           | boolean                   | false   |
+| isOpen   | if it is showing its children                            | boolean                   | false   |
+| level    | the level of the current node (root is zero)             | number                    | 0       |
+| key      | key of a `TreeNode`                                      | string                    | -       |
+| label    | `TreeNode` `label`                                       | string \| React.ReactNode | -       |
+| active   | if current node is being selected                        | boolean                   | -       |
+| onClick  | a callback function that is run when the node is clicked | Function                  | -       |
+| ...other | User defined props                                       | {[string]: any}           | -       |
 
 ### RenderListProps
 

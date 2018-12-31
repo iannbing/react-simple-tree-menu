@@ -36,11 +36,12 @@ type BranchProps = {
 };
 
 export type Item = {
+  hasNodes: boolean;
   isOpen: boolean;
-  nodes?: TreeNodeObject;
-  key: string;
   level: number;
-  label: string;
+  key: string;
+  label: string | JSX.Element;
+  [name: string]: any;
 };
 
 const walk = ({ data = {}, ...props }: WalkProps): Item[] => {

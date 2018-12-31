@@ -9,17 +9,11 @@ import {
   RenderList,
 } from './renderProps';
 
-type OnClickItemProps = {
-  label: string | JSX.Element;
-  key: string;
-  [name: string]: any;
-};
-
 type TreeMenuProps = {
   data: { [name: string]: TreeNode };
   activeKey?: string;
   openNodes?: string[];
-  onClickItem: (props: OnClickItemProps) => void;
+  onClickItem: (props: Item) => void;
   debounceTime: number;
   renderItem: RenderItem;
   renderList: RenderList;
@@ -31,7 +25,7 @@ type TreeMenuState = {
   activeKey: string;
 };
 
-const defaultOnClick = (props: OnClickItemProps) => console.log(props); // eslint-disable-line no-console
+const defaultOnClick = (props: Item) => console.log(props); // eslint-disable-line no-console
 
 class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
   static defaultProps: TreeMenuProps = {
@@ -64,7 +58,7 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
     }
   };
 
-  getOnClickItem = (props: OnClickItemProps) => () => {
+  getOnClickItem = (props: Item) => () => {
     this.toggleNode(props.key);
     this.props.onClickItem(props);
   };
