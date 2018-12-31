@@ -41,10 +41,10 @@ export type RenderItem = (
     hasNodes?: boolean;
     isOpen?: boolean;
     level?: number;
-    onClick?: (event: React.MouseEvent<HTMLLIElement>) => void;
     active?: boolean;
     key: string;
-    label: string;
+    label: string | JSX.Element;
+    onClick?: (event: React.MouseEvent<HTMLLIElement>) => void;
     [name: string]: any;
   }
 ) => JSX.Element;
