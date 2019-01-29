@@ -17,7 +17,9 @@
   ],
   "scripts": {
     "test": "jest",
-    "build": "cross-env ANALYSIS=true webpack --config webpack.prod.js"
+    "build": "cross-env ANALYSIS=true webpack --config webpack.prod.js",
+    "storybook": "start-storybook -p 9001 -c .storybook",
+    "build-storybook": "build-storybook"
   },
   "repository": {
     "type": "git",
@@ -63,7 +65,11 @@
     "webpack": "^4.26.1",
     "webpack-bundle-analyzer": "^3.0.3",
     "webpack-cli": "^3.1.2",
-    "webpack-merge": "^4.1.4"
+    "webpack-merge": "^4.1.4",
+    "@storybook/react": "^4.1.11",
+    "@storybook/addon-actions": "^4.1.11",
+    "@storybook/addon-links": "^4.1.11",
+    "@storybook/addons": "^4.1.11"
   },
   "peerDependencies": {
     "react": "^16.6.3",
