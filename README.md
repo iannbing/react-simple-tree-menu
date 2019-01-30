@@ -6,7 +6,7 @@ A simple, data-driven, light-weight React Tree Menu component that:
 - fully customizable
 - allows search
 
-[Story Demo](https://iannbing.github.io/react-simple-tree-menu/)
+[Storybook Demo](https://iannbing.github.io/react-simple-tree-menu/)
 
 ## Usage
 
