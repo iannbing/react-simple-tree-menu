@@ -19,7 +19,8 @@
     "test": "jest",
     "build": "cross-env ANALYSIS=true webpack --config webpack.prod.js",
     "storybook": "start-storybook -p 9001 -c .storybook",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "deploy-storybook": "storybook-to-ghpages"
   },
   "repository": {
     "type": "git",
@@ -42,6 +43,7 @@
     "@storybook/addon-links": "^4.1.11",
     "@storybook/addons": "^4.1.11",
     "@storybook/react": "^4.1.11",
+    "@storybook/storybook-deployer": "^2.8.1",
     "@types/enzyme": "^3.1.15",
     "@types/jest": "^23.3.10",
     "@types/lodash": "^4.14.119",
