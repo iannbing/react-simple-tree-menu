@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { storiesOf } from '@storybook/react';
-import { action } from '@storybook/addon-actions';
+import { action, withActions } from '@storybook/addon-actions';
 import { linkTo } from '@storybook/addon-links';
 import { withInfo } from '@storybook/addon-info';
 
@@ -90,13 +90,13 @@ const dataInArray = [
 
 storiesOf('TreeMenu', module)
   .addDecorator(withInfo)
-  .add('default usage', () => <TreeMenu data={dataInArray} />)
+  .add('default usage', () => (
+    <TreeMenu data={dataInArray} onClickItem={action(`on click node`)} />
+  ))
   .add('apply bootstrap', () => (
     <TreeMenu
       data={dataInArray}
-      onClickItem={({ key, label, ...props }) => {
-        console.log(props);
-      }}
+      onClickItem={action(`on click node`)}
       debounceTime={125}
       renderItem={({ hasNodes, isOpen, level, label, key, active, onClick }) => (
         <ListItem level={level} key={key} onClick={onClick} active={active}>
@@ -106,7 +106,7 @@ storiesOf('TreeMenu', module)
       )}
       renderList={({ search, items }) => (
         <>
-          <Input onChange={e => search(e.target.value)} placeholder="Search" />
+          <Input onChange={e => search(e.target.value)} placeholder="Type and search" />
           <ListGroup>{items}</ListGroup>
         </>
       )}
