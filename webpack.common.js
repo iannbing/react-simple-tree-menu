@@ -10,7 +10,7 @@ module.exports = {
     library: 'react-simple-tree-menu',
     libraryTarget: 'umd',
     publicPath: '/dist/',
-    umdNamedDefine: true,
+    umdNamedDefine: false,
   },
   module: {
     rules: [
@@ -50,19 +50,6 @@ module.exports = {
     },
   },
   plugins: [new CleanWebpackPlugin(['dist'])],
-  externals: {
-    react: {
-      commonjs: 'react',
-      commonjs2: 'react',
-      amd: 'React',
-      root: 'React',
-    },
-    'react-dom': {
-      commonjs: 'react-dom',
-      commonjs2: 'react-dom',
-      amd: 'ReactDOM',
-      root: 'ReactDOM',
-    },
-  },
-  devtool: 'source-map',
+  externals: ['react', 'react-dom'],
+  devtool: 'eval-source-map',
 };
