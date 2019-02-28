@@ -7,4 +7,4 @@ webpack.prod.js
 .prettier
 .pretterignore
 tsconfig.json
-__test__
+__tests__
