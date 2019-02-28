@@ -4,7 +4,7 @@
 #
 version: 2
 jobs:
-  test:
+  build:
     docker:
       # specify the version you desire here
       - image: circleci/node:10.15
@@ -46,17 +46,9 @@ jobs:
           path: reports/junit
       - store_artifacts:
           path: reports/junit
-  build:
-    steps:
-      - attach_workspace:
-          at: ~/repo
       - run:
           name: Build
           command: yarn build:dev
-  publish:
-    steps:
-      - attach_workspace:
-          at: ~/repo
       - run:
           name: Authenticate with registry
           command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
