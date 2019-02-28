@@ -4,7 +4,7 @@
 #
 version: 2
 jobs:
-  build:
+  test:
     docker:
       # specify the version you desire here
       - image: circleci/node:10.15
@@ -38,7 +38,7 @@ jobs:
           key: dependencies-{{ checksum "package.json" }}
 
       - run:
-          name: 'JavaScript Test Suite'
+          name: JavaScript Test Suite
           command: yarn test:ci
           environment:
             JEST_JUNIT_OUTPUT: 'reports/junit/js-test-results.xml'
@@ -46,3 +46,20 @@ jobs:
           path: reports/junit
       - store_artifacts:
           path: reports/junit
+  build:
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Build
+          command: yarn build:dev
+  publish:
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Authenticate with registry
+          command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
+      - run:
+          name: Publish package
+          command: yarn publish:dev
