@@ -37,5 +37,12 @@ jobs:
             - node_modules
           key: dependencies-{{ checksum "package.json" }}
 
-      # run tests!
-      - run: yarn test
+      - run:
+          name: 'JavaScript Test Suite'
+          command: yarn test:ci
+          environment:
+            JEST_JUNIT_OUTPUT: 'reports/junit/js-test-results.xml'
+      - store_test_results:
+          path: reports/junit
+      - store_artifacts:
+          path: reports/junit

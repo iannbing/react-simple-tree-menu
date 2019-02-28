@@ -17,6 +17,7 @@
   ],
   "scripts": {
     "test": "jest",
+    "test:ci": "jest --ci",
     "build": "cross-env ANALYSIS=true webpack --config webpack.prod.js",
     "storybook": "start-storybook -p 9001 -c .storybook",
     "build-storybook": "build-storybook",
