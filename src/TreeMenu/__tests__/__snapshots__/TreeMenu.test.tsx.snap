@@ -1,6 +1,250 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`TreeViewMenu should render the roots only 1`] = `
+exports[`TreeViewMenu should highlight the active node 1`] = `
+<Fragment>
+  <input
+    onChange={[Function]}
+    placeholder="Type and search"
+    style={
+      Object {
+        "margin": ".5em",
+        "paddingLeft": ".4em",
+      }
+    }
+  />
+  <ul
+    style={
+      Object {
+        "listStyleType": "none",
+        "paddingLeft": 0,
+      }
+    }
+  >
+    <li
+      key="releasenotes"
+      onClick={[Function]}
+      style={
+        Object {
+          "background": "none",
+          "color": "#333",
+          "cursor": "pointer",
+          "paddingLeft": "2.25rem",
+        }
+      }
+    >
+      <div
+        style={
+          Object {
+            "height": "1rem",
+            "left": "1rem",
+            "position": "absolute",
+            "width": "1rem",
+          }
+        }
+      >
+        <ToggleIcon
+          on={true}
+        />
+      </div>
+      Release Notes
+    </li>
+    <li
+      key="releasenotes/desktop-modeler"
+      onClick={[Function]}
+      style={
+        Object {
+          "background": "none",
+          "color": "#333",
+          "cursor": "pointer",
+          "paddingLeft": "3.5rem",
+        }
+      }
+    >
+      <div
+        style={
+          Object {
+            "height": "1rem",
+            "left": "2.25rem",
+            "position": "absolute",
+            "width": "1rem",
+          }
+        }
+      >
+        <ToggleIcon
+          on={true}
+        />
+      </div>
+      Desktop Modeler
+    </li>
+    <li
+      key="releasenotes/desktop-modeler/7"
+      onClick={[Function]}
+      style={
+        Object {
+          "background": "#179ed3",
+          "color": "white",
+          "cursor": "pointer",
+          "paddingLeft": "4.75rem",
+        }
+      }
+    >
+      <div
+        style={
+          Object {
+            "height": "1rem",
+            "left": "3.5rem",
+            "position": "absolute",
+            "width": "1rem",
+          }
+        }
+      >
+        <ToggleIcon
+          on={false}
+        />
+      </div>
+      7
+    </li>
+    <li
+      key="atd"
+      onClick={[Function]}
+      style={
+        Object {
+          "background": "none",
+          "color": "#333",
+          "cursor": "pointer",
+          "paddingLeft": "2.25rem",
+        }
+      }
+    >
+      ATS Guide
+    </li>
+  </ul>
+</Fragment>
+`;
+
+exports[`TreeViewMenu should open specified nodes 1`] = `
+<Fragment>
+  <input
+    onChange={[Function]}
+    placeholder="Type and search"
+    style={
+      Object {
+        "margin": ".5em",
+        "paddingLeft": ".4em",
+      }
+    }
+  />
+  <ul
+    style={
+      Object {
+        "listStyleType": "none",
+        "paddingLeft": 0,
+      }
+    }
+  >
+    <li
+      key="releasenotes"
+      onClick={[Function]}
+      style={
+        Object {
+          "background": "none",
+          "color": "#333",
+          "cursor": "pointer",
+          "paddingLeft": "2.25rem",
+        }
+      }
+    >
+      <div
+        style={
+          Object {
+            "height": "1rem",
+            "left": "1rem",
+            "position": "absolute",
+            "width": "1rem",
+          }
+        }
+      >
+        <ToggleIcon
+          on={true}
+        />
+      </div>
+      Release Notes
+    </li>
+    <li
+      key="releasenotes/desktop-modeler"
+      onClick={[Function]}
+      style={
+        Object {
+          "background": "none",
+          "color": "#333",
+          "cursor": "pointer",
+          "paddingLeft": "3.5rem",
+        }
+      }
+    >
+      <div
+        style={
+          Object {
+            "height": "1rem",
+            "left": "2.25rem",
+            "position": "absolute",
+            "width": "1rem",
+          }
+        }
+      >
+        <ToggleIcon
+          on={true}
+        />
+      </div>
+      Desktop Modeler
+    </li>
+    <li
+      key="releasenotes/desktop-modeler/7"
+      onClick={[Function]}
+      style={
+        Object {
+          "background": "none",
+          "color": "#333",
+          "cursor": "pointer",
+          "paddingLeft": "4.75rem",
+        }
+      }
+    >
+      <div
+        style={
+          Object {
+            "height": "1rem",
+            "left": "3.5rem",
+            "position": "absolute",
+            "width": "1rem",
+          }
+        }
+      >
+        <ToggleIcon
+          on={false}
+        />
+      </div>
+      7
+    </li>
+    <li
+      key="atd"
+      onClick={[Function]}
+      style={
+        Object {
+          "background": "none",
+          "color": "#333",
+          "cursor": "pointer",
+          "paddingLeft": "2.25rem",
+        }
+      }
+    >
+      ATS Guide
+    </li>
+  </ul>
+</Fragment>
+`;
+
+exports[`TreeViewMenu should render the level-1 nodes by default 1`] = `
 <Fragment>
   <input
     onChange={[Function]}
