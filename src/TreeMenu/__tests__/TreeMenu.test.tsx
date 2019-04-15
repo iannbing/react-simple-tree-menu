@@ -70,4 +70,25 @@ describe('TreeViewMenu', () => {
     expect(wrapper).toMatchSnapshot();
     expect(highlightedElement.props.style.color).toEqual(highLightColor);
   });
+  it('should trigger onClickItem when a node is clicked', () => {
+    const mockOnClickItem = jest.fn();
+    const wrapper = shallow(
+      <TreeViewMenu data={mockData} onClickItem={mockOnClickItem} />
+    );
+
+    const targetNode = wrapper.findWhere(node => node.key() === 'releasenotes');
+    targetNode.simulate('click');
+    expect(mockOnClickItem.mock.calls.length).toEqual(1);
+    expect(mockOnClickItem).toHaveBeenCalledWith({
+      hasNodes: true,
+      index: 0,
+      isOpen: false,
+      key: 'releasenotes',
+      label: 'Release Notes',
+      level: 0,
+      openNodes: [],
+      parent: '',
+      searchTerm: '',
+    });
+  });
 });

@@ -79,6 +79,7 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
     const search = this.onSearch;
     const items = data ? this.generateItems() : [];
     const renderedChildren = children || defaultChildren;
+
     return renderedChildren({ search, items });
   }
 }
