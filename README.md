@@ -128,9 +128,8 @@ import TreeMenu from 'react-simple-tree-menu'
 | activeKey    | the node matching this key will be highlighted                                                                                           | string                               | ''             |
 | onClickItem  | A callback function that defines the behavior when user clicks on an node                                                                | (Item): void                         | `console.warn` |
 | debounceTime | debounce time for searching                                                                                                              | number                               | 125            |
-| renderItem   | a render props that renders the list item per `TreeNode`                                                                                 | (RenderItemProps) => React.ReactNode | -              |
-| renderList   | a render props that renders the whole tree menu; `items` is an array of rendered `TreeNode`s                                             | (RenderListProps) => React.ReactNode | -              |
 | openNodes    | you can pass an array of node names to make the branches open                                                                            | string[]                             | null           |
+| children     | a render props that provdes two props: `search` and `items`                                                                              | (ChildrenProps) => React.ReactNode | -              |
 
 ### TreeNode
 
@@ -152,7 +151,14 @@ import TreeMenu from 'react-simple-tree-menu'
 | label    | `TreeNode` `label`                             | string \| React.ReactNode | -       |
 | ...other | User defined props                             | {[string]: any}           | -       |
 
-### RenderItemProps
+### ChildrenProps
+
+| props  | description                                                    | type                    | default |
+| ------ | -------------------------------------------------------------- | ----------------------- | ------- |
+| search | A function that takes a string to filter the label of the item | (value: string) => void | -       |
+| items  | An array of `TreeMenuItem`                                     | TreeMenuItem[]          | []      |
+
+### TreeMenuItem
 
 | props    | description                                              | type                      | default |
 | -------- | -------------------------------------------------------- | ------------------------- | ------- |
@@ -165,12 +171,6 @@ import TreeMenu from 'react-simple-tree-menu'
 | onClick  | a callback function that is run when the node is clicked | Function                  | -       |
 | ...other | User defined props                                       | {[string]: any}           | -       |
 
-### RenderListProps
-
-| props  | description                                                    | type                    | default |
-| ------ | -------------------------------------------------------------- | ----------------------- | ------- |
-| search | A function that takes a string to filter the label of the item | (value: string) => void | -       |
-| items  | The rendered Item from the renderItem function                 | ReactNode[]             | []      |
 
 ## Dependencies
 
