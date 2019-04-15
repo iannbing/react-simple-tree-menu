@@ -1,77 +1,174 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renderItem should render the toggle icon with "on" equals to false 1`] = `
-<li
-  key="key"
-  style={
-    Object {
-      "background": "none",
-      "color": "#333",
-      "cursor": "pointer",
-      "paddingLeft": "3.5rem",
-    }
-  }
->
-  <div
+exports[`defaultChildren should render the toggle icon with "on" equals to false 1`] = `
+Array [
+  <input
+    onChange={[Function]}
+    placeholder="Type and search"
     style={
       Object {
-        "height": "1rem",
-        "left": "2.25rem",
-        "position": "absolute",
-        "width": "1rem",
+        "margin": ".5em",
+        "paddingLeft": ".4em",
+      }
+    }
+  />,
+  <ul
+    style={
+      Object {
+        "listStyleType": "none",
+        "paddingLeft": 0,
       }
     }
   >
-    <ToggleIcon
-      on={false}
-    />
-  </div>
-  foo
-</li>
+    <li
+      key="key"
+      style={
+        Object {
+          "background": "none",
+          "color": "#333",
+          "cursor": "pointer",
+          "paddingLeft": "3.5rem",
+        }
+      }
+    >
+      <div
+        style={
+          Object {
+            "height": "1rem",
+            "left": "2.25rem",
+            "position": "absolute",
+            "width": "1rem",
+          }
+        }
+      >
+        <ToggleIcon
+          on={false}
+        >
+          <div>
+            +
+          </div>
+        </ToggleIcon>
+      </div>
+      foo
+    </li>
+  </ul>,
+]
 `;
 
-exports[`renderItem should render the toggle icon with "on" equals to true 1`] = `
-<li
-  key="key"
-  style={
-    Object {
-      "background": "none",
-      "color": "#333",
-      "cursor": "pointer",
-      "paddingLeft": "3.5rem",
-    }
-  }
->
-  <div
+exports[`defaultChildren should render the toggle icon with "on" equals to true 1`] = `
+Array [
+  <input
+    onChange={[Function]}
+    placeholder="Type and search"
     style={
       Object {
-        "height": "1rem",
-        "left": "2.25rem",
-        "position": "absolute",
-        "width": "1rem",
+        "margin": ".5em",
+        "paddingLeft": ".4em",
+      }
+    }
+  />,
+  <ul
+    style={
+      Object {
+        "listStyleType": "none",
+        "paddingLeft": 0,
       }
     }
   >
-    <ToggleIcon
-      on={true}
-    />
-  </div>
-  foo
-</li>
+    <li
+      key="foo"
+      style={
+        Object {
+          "background": "none",
+          "color": "#333",
+          "cursor": "pointer",
+          "paddingLeft": "3.5rem",
+        }
+      }
+    >
+      <div
+        style={
+          Object {
+            "height": "1rem",
+            "left": "2.25rem",
+            "position": "absolute",
+            "width": "1rem",
+          }
+        }
+      >
+        <ToggleIcon
+          on={true}
+        >
+          <div>
+            -
+          </div>
+        </ToggleIcon>
+      </div>
+      foo
+    </li>
+    <li
+      key="bar"
+      style={
+        Object {
+          "background": "none",
+          "color": "#333",
+          "cursor": "pointer",
+          "paddingLeft": "4.75rem",
+        }
+      }
+    >
+      bar
+    </li>
+    <li
+      key="zoo"
+      style={
+        Object {
+          "background": "none",
+          "color": "#333",
+          "cursor": "pointer",
+          "paddingLeft": "4.75rem",
+        }
+      }
+    >
+      zoo
+    </li>
+  </ul>,
+]
 `;
 
-exports[`renderItem should render without the toggle icon 1`] = `
-<li
-  key="key"
-  style={
-    Object {
-      "background": "none",
-      "color": "#333",
-      "cursor": "pointer",
-      "paddingLeft": "2.25rem",
+exports[`defaultChildren should render without the toggle icon 1`] = `
+Array [
+  <input
+    onChange={[Function]}
+    placeholder="Type and search"
+    style={
+      Object {
+        "margin": ".5em",
+        "paddingLeft": ".4em",
+      }
     }
-  }
->
-  foo
-</li>
+  />,
+  <ul
+    style={
+      Object {
+        "listStyleType": "none",
+        "paddingLeft": 0,
+      }
+    }
+  >
+    <li
+      key="key"
+      style={
+        Object {
+          "background": "none",
+          "color": "#333",
+          "cursor": "pointer",
+          "paddingLeft": "2.25rem",
+        }
+      }
+    >
+      foo
+    </li>
+  </ul>,
+]
 `;

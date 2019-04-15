@@ -5,51 +5,24 @@ const LEVEL_SPACE = 1.25;
 const ICON_SIZE = 1;
 const ToggleIcon = ({ on }: { on: boolean }) => <div>{on ? '-' : '+'}</div>;
 
-export type RenderList = (
-  props: { search: Function; items: JSX.Element[] }
+export interface TreeMenuItem {
+  hasNodes?: boolean;
+  isOpen?: boolean;
+  level?: number;
+  active?: boolean;
+  key: string;
+  label: string | JSX.Element;
+  onClick?: (event: React.MouseEvent<HTMLLIElement>) => void;
+  [name: string]: any;
+}
+
+export type TreeMenuChildren = (
+  props: { search: Function; items: TreeMenuItem[] }
 ) => JSX.Element;
 
-export const renderList: RenderList = ({ search, items }) => {
-  const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    search(value);
-  };
-  return (
-    <>
-      <input
-        style={{
-          margin: '.5em',
-          paddingLeft: '.4em',
-        }}
-        placeholder="Type and search"
-        onChange={onSearch}
-      />
-      <ul
-        style={{
-          listStyleType: 'none',
-          paddingLeft: 0,
-        }}
-      >
-        {items}
-      </ul>
-    </>
-  );
-};
+type RenderItem = (props: TreeMenuItem) => JSX.Element;
 
-export type RenderItem = (
-  props: {
-    hasNodes?: boolean;
-    isOpen?: boolean;
-    level?: number;
-    active?: boolean;
-    key: string;
-    label: string | JSX.Element;
-    onClick?: (event: React.MouseEvent<HTMLLIElement>) => void;
-    [name: string]: any;
-  }
-) => JSX.Element;
-
-export const renderItem: RenderItem = ({
+const renderItem: RenderItem = ({
   hasNodes = false,
   isOpen = false,
   level = 0,
@@ -83,3 +56,20 @@ export const renderItem: RenderItem = ({
     {label}
   </li>
 );
+
+export const defaultChildren: TreeMenuChildren = ({ search, items }) => {
+  const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    search(value);
+  };
+  return (
+    <>
+      <input
+        style={{ margin: '.5em', paddingLeft: '.4em' }}
+        placeholder="Type and search"
+        onChange={onSearch}
+      />
+      <ul style={{ listStyleType: 'none', paddingLeft: 0 }}>{items.map(renderItem)}</ul>
+    </>
+  );
+};
