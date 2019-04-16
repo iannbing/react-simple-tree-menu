@@ -57,6 +57,21 @@ commands:
       - run:
           name: 'Publish package'
           command: npm run publish:<< parameters.environment >>
+  build_story:
+    description: 'Build the story'
+    steps:
+      - run:
+          name: 'build storybook'
+          command: npm run build-storybook
+  deploy_story:
+    description: 'Deploy the story'
+    steps:
+      - run:
+          name: 'build storybook'
+          command: npm run build-storybook
+      - run:
+          name: 'Deploy the story to the github page'
+          command: npm run deploy-storybook
 
 jobs:
   build:
@@ -66,6 +81,7 @@ jobs:
     steps:
       - install
       - run_tests
+      - build_story
       - build:
         environment: 'prod'
   release_rc:
@@ -75,6 +91,7 @@ jobs:
     steps:
       - install
       - run_tests
+      - build_story
       - build:
         environment: 'dev'
       - publish:
@@ -91,6 +108,7 @@ jobs:
         environment: 'prod'
       - publish:
         environment: 'prod'
+      - deploy_story
 
 workflows:
   version: 2
