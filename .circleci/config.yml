@@ -50,24 +50,13 @@ jobs:
           path: reports/junit
 
       - run:
-          name: Build
+          name: build
           command: npm run build:dev
 
-  publish:
-    docker:
-        # specify the version you desire here
-      - image: circleci/node:10.15
-
-        # Specify service dependencies here if necessary
-        # CircleCI maintains a library of pre-built images
-        # documented at https://circleci.com/docs/2.0/circleci-images/
-        # - image: circleci/mongo:3.4.4
-
-    working_directory: ~/repo
-      - checkout
       - run:
           name: authenticate-with-registry
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
+
       - run:
           name: publish-package
           command: npm run publish:dev
