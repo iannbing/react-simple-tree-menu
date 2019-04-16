@@ -4,7 +4,7 @@
 #
 version: 2
 jobs:
-  publish-rc:
+  build:
     docker:
       # specify the version you desire here
       - image: circleci/node:10.15
@@ -65,7 +65,7 @@ jobs:
           name: publish-package
           command: npm run publish:dev
 
-  publish-prod:
+  publish:
     docker:
       # specify the version you desire here
       - image: circleci/node:10.15
