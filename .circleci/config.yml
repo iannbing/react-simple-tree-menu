@@ -25,8 +25,7 @@ jobs:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - node_modules
-
-  build:
+  run-tests:
     docker:
       - image: circleci/node:10.15
 
@@ -43,6 +42,15 @@ jobs:
           path: reports/junit
       - store_artifacts:
           path: reports/junit
+
+  build:
+    docker:
+      - image: circleci/node:10.15
+
+    working_directory: ~/react-simple-tree-menu
+
+    steps:
+      - checkout
       - run:
           name: 'Build prod'
           command: npm run build:prod
@@ -55,15 +63,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: 'Run tests'
-          command: npm run test:ci
-          environment:
-            JEST_JUNIT_OUTPUT: 'reports/junit/js-test-results.xml'
-      - store_test_results:
-          path: reports/junit
-      - store_artifacts:
-          path: reports/junit
-      - run:
           name: 'Build dev'
           command: npm run build:dev
 
@@ -72,9 +71,12 @@ workflows:
   release-rc:
     jobs:
       - install
-      - build-rc:
+      - run-tests:
           requires:
             - install
+      - build-rc:
+          requires:
+            - run-tests
   # build:
   #   docker:
   #     - image: circleci/node:10.15
