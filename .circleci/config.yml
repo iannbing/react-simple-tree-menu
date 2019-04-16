@@ -100,12 +100,22 @@ jobs:
 workflows:
   version: 2
   release-rc:
+    - schedule:
+      filters:
+        branches:
+          only:
+            - /rc-.*/
     jobs:
       - install-and-test
       - build-rc
       - publish-rc
 
   release:
+    - schedule:
+      filters:
+        branches:
+          only:
+            - master
     jobs:
       - install-and-test
       - build
