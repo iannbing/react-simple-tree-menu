@@ -59,6 +59,15 @@ commands:
           command: npm run publish:<< parameters.environment >>
 
 jobs:
+  build:
+    docker:
+      - image: circleci/node:10.15
+    working_directory: ~/react-simple-tree-menu
+    steps:
+      - install
+      - run_tests
+      - build:
+        environment: 'prod'
   release_rc:
     docker:
       - image: circleci/node:10.15
@@ -87,6 +96,12 @@ workflows:
   version: 2
   release-rc:
     jobs:
+      - build:
+          filters:
+            branches:
+              ignore:
+                - /^(\*|\d+(\.\d+){0,2}(\.\*)?)-rc\.\d+$/
+                - master
       - release_rc:
           filters:
             branches:
