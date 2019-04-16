@@ -4,7 +4,7 @@
 #
 version: 2
 jobs:
-  install-and-test:
+  install:
     docker:
       - image: circleci/node:10.15
 
@@ -62,10 +62,10 @@ workflows:
   version: 2
   release-rc:
     jobs:
-      - install-and-test
+      - install
       - build-rc:
           requires:
-            - install-and-test
+            - install
   # build:
   #   docker:
   #     - image: circleci/node:10.15
