@@ -39,6 +39,7 @@ jobs:
           command: npm run build:dev
 
 workflows:
+  version: 2
   release-rc:
     jobs:
       - build
