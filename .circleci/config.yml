@@ -13,20 +13,20 @@ jobs:
     steps:
       - checkout
       - run:
-          name: update-npm
+          name: 'Update NPM'
           command: 'sudo npm install -g npm@latest'
       - restore_cache:
           keys:
             - dependencies-cache-{{ checksum "package.json" }}
       - run:
-          name: install-npm
+          name: 'Install NPM'
           command: npm install
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - node_modules
       - run:
-          name: test
+          name: 'Run tests'
           command: npm run test:ci
           environment:
             JEST_JUNIT_OUTPUT: 'reports/junit/js-test-results.xml'
@@ -35,14 +35,47 @@ jobs:
       - store_artifacts:
           path: reports/junit
       - run:
-          name: build
+          name: 'Build prod'
+          command: npm run build:prod
+  build-rc:
+    docker:
+      - image: circleci/node:10.15
+
+    working_directory: ~/react-simple-tree-menu
+
+    steps:
+      - checkout
+      - run:
+          name: 'Update NPM'
+          command: 'sudo npm install -g npm@latest'
+      - restore_cache:
+          keys:
+            - dependencies-cache-{{ checksum "package.json" }}
+      - run:
+          name: 'Install NPM'
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+      - run:
+          name: 'Run tests'
+          command: npm run test:ci
+          environment:
+            JEST_JUNIT_OUTPUT: 'reports/junit/js-test-results.xml'
+      - store_test_results:
+          path: reports/junit
+      - store_artifacts:
+          path: reports/junit
+      - run:
+          name: 'Build dev'
           command: npm run build:dev
 
 workflows:
   version: 2
   release-rc:
     jobs:
-      - build
+      - build-rc
   # build:
   #   docker:
   #     - image: circleci/node:10.15
