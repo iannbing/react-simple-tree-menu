@@ -30,7 +30,7 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - dependencies-
 
-      - run: yarn install
+      - run: npm install
 
       - save_cache:
           paths:
@@ -39,7 +39,7 @@ jobs:
 
       - run:
           name: JavaScript Test Suite
-          command: yarn test:ci
+          command: npm run test:ci
           environment:
             JEST_JUNIT_OUTPUT: 'reports/junit/js-test-results.xml'
       - store_test_results:
@@ -48,7 +48,7 @@ jobs:
           path: reports/junit
       - run:
           name: Build
-          command: yarn build:dev
+          command: npm run build:dev
       - run:
           name: Authenticate with registry
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
