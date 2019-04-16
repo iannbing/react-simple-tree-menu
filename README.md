@@ -1,9 +1,9 @@
 # react-simple-tree-menu
 
-A simple, data-driven, light-weight React Tree Menu component that:
+Inspired by [Downshift](https://github.com/downshift-js/downshift), a simple, data-driven, light-weight React Tree Menu component that:
 
 - does not depend on any UI framework
-- fully customizable
+- fully customizable with `render props` and `control props`
 - allows search
 
 [Storybook Demo](https://iannbing.github.io/react-simple-tree-menu/)

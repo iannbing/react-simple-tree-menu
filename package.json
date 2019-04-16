@@ -7,7 +7,10 @@
     "tree",
     "menu",
     "react-component",
-    "tree menu"
+    "tree menu",
+    "render-props",
+    "control-props",
+    "downshift"
   ],
   "main": "dist/main.js",
   "types": "dist/index.d.ts",
