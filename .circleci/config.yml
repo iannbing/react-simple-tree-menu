@@ -2,12 +2,11 @@
 #
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
-version: 2
-jobs:
-  install_and_test:
-    docker:
-      - image: circleci/node:10.15
-    working_directory: ~/react-simple-tree-menu
+version: 2.1
+
+commands:
+  install:
+    description: 'Install packages'
     steps:
       - checkout
       - run:
@@ -23,35 +22,9 @@ jobs:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - node_modules
-      - run:
-          name: 'Run tests'
-          command: npm run test:ci
-          environment:
-            JEST_JUNIT_OUTPUT: 'reports/junit/js-test-results.xml'
-      - store_test_results:
-          path: reports/junit
-      - store_artifacts:
-          path: reports/junit
-
-  build_rc:
-    docker:
-      - image: circleci/node:10.15
-    working_directory: ~/react-simple-tree-menu
+  run_tests:
+    description: 'Run tests'
     steps:
-      - checkout
-      - run:
-          name: 'Update NPM'
-          command: 'sudo npm install -g npm@latest'
-      - restore_cache:
-          keys:
-            - dependency-cache-{{ checksum "package.json" }}
-      - run:
-          name: 'Install NPM'
-          command: npm install
-      - save_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-          paths:
-            - node_modules
       - run:
           name: 'Run tests'
           command: npm run test:ci
@@ -61,57 +34,60 @@ jobs:
           path: reports/junit
       - store_artifacts:
           path: reports/junit
-      - run:
-          name: 'Build dev'
-          command: npm run build:dev
-
   build:
-    docker:
-      - image: circleci/node:10.15
-    working_directory: ~/react-simple-tree-menu
+    description: 'Build the bundle'
+    parameters:
+      environment:
+        type: string
+        default: 'dev'
     steps:
-      - checkout
       - run:
-          name: 'Build prod'
-          command: npm run build:prod
-
-  publish_rc:
-    docker:
-      - image: circleci/node:10.15
-    working_directory: ~/react-simple-tree-menu
-    steps:
-      - checkout
-      - run:
-          name: authenticate-with-registry
-          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
-      - run:
-          name: publish-package
-          command: npm run publish:dev
-
+          name: 'Build'
+          command: npm run build:<< parameters.environment >>
   publish:
+    description: 'Publish to npmjs'
+    parameters:
+      environment:
+        type: string
+        default: 'dev'
+    steps:
+      - run:
+          name: 'Authenticate with registry'
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
+      - run:
+          name: 'Publish package'
+          command: npm run publish:<< parameters.environment >>
+
+jobs:
+  release_rc:
     docker:
       - image: circleci/node:10.15
     working_directory: ~/react-simple-tree-menu
     steps:
-      - checkout
-      - run:
-          name: authenticate-with-registry
-          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
-      - run:
-          name: publish-package
-          command: npm run publish:prod
+      - install
+      - run_tests
+      - build:
+        environment: 'dev'
+      - publish:
+        environment: 'dev'
+
+  release:
+    docker:
+      - image: circleci/node:10.15
+    working_directory: ~/react-simple-tree-menu
+    steps:
+      - install
+      - run_tests
+      - build:
+        environment: 'prod'
+      - publish:
+        environment: 'prod'
 
 workflows:
   version: 2
   release-rc:
     jobs:
-      - build_rc:
+      - release_rc:
           filters:
             branches:
               only: /^(\*|\d+(\.\d+){0,2}(\.\*)?)-rc\.\d+$/
-      # - publish_rc:
-      #     filters:
-      #       branches:
-      #         only: /^(\*|\d+(\.\d+){0,2}(\.\*)?)-rc\.\d+$/
-      #     requires:
-      #       - build_rc
