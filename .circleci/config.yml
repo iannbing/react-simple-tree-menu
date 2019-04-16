@@ -35,37 +35,76 @@ jobs:
       - store_artifacts:
           path: reports/junit
 
-  build:
+  build_rc:
     docker:
       - image: circleci/node:10.15
 
     working_directory: ~/react-simple-tree-menu
-
-    steps:
-      - checkout
-      - run:
-          name: 'Build prod'
-          command: npm run build:prod
-  build-rc:
-    docker:
-      - image: circleci/node:10.15
-
-    working_directory: ~/react-simple-tree-menu
-
+    branches:
+      only:
+        - /rc-.*/
     steps:
       - checkout
       - run:
           name: 'Build dev'
           command: npm run build:dev
 
+  build:
+    docker:
+      - image: circleci/node:10.15
+
+    working_directory: ~/react-simple-tree-menu
+    branches:
+      only:
+        - master
+    steps:
+      - checkout
+      - run:
+          name: 'Build prod'
+          command: npm run build:prod
+  publish_rc:
+    docker:
+      - image: circleci/node:10.15
+    working_directory: ~/react-simple-tree-menu
+    branches:
+      only:
+        - /rc-.*/
+    steps:
+      - checkout
+      - run:
+          name: authenticate-with-registry
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
+      - run:
+          name: publish-package
+          command: npm run publish:dev
+
+  publish:
+    docker:
+      - image: circleci/node:10.15
+    working_directory: ~/react-simple-tree-menu
+    branches:
+      only:
+        - master
+    steps:
+      - checkout
+      - run:
+          name: authenticate-with-registry
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
+      - run:
+          name: publish-package
+          command: npm run publish:prod
+
 workflows:
   version: 2
   release-rc:
     jobs:
       - install_and_test
-      - build-rc:
+      - build_rc:
           requires:
             - install_and_test
+      - publish_rc:
+          requires:
+            - build_rc
   # build:
   #   docker:
   #     - image: circleci/node:10.15
