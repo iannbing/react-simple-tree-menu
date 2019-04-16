@@ -3,125 +3,127 @@
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
 version: 2
-jobs:
-  build:
-    docker:
-      # specify the version you desire here
-      - image: circleci/node:10.15
+workflows:
+  release-rc:
+    jobs:
+      build:
+        docker:
+          # specify the version you desire here
+          - image: circleci/node:10.15
 
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mongo:3.4.4
+          # Specify service dependencies here if necessary
+          # CircleCI maintains a library of pre-built images
+          # documented at https://circleci.com/docs/2.0/circleci-images/
+          # - image: circleci/mongo:3.4.4
 
-    working_directory: ~/repo
+        working_directory: ~/repo
 
-    branches:
-      only:
-        - /rc-.*/
+        branches:
+          only:
+            - /rc-.*/
 
-    steps:
-      - checkout
+        steps:
+          - checkout
 
-      - run:
-          name: update-npm
-          command: 'sudo npm install -g npm@latest'
+          - run:
+              name: update-npm
+              command: 'sudo npm install -g npm@latest'
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - dependencies-cache-{{ checksum "package.json" }}
+          # Download and cache dependencies
+          - restore_cache:
+              keys:
+                - dependencies-cache-{{ checksum "package.json" }}
 
-      - run:
-          name: install-npm
-          command: npm install
+          - run:
+              name: install-npm
+              command: npm install
 
-      - save_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-          paths:
-            - node_modules
+          - save_cache:
+              key: dependency-cache-{{ checksum "package.json" }}
+              paths:
+                - node_modules
 
-      - run:
-          name: test
-          command: npm run test:ci
-          environment:
-            JEST_JUNIT_OUTPUT: 'reports/junit/js-test-results.xml'
+          - run:
+              name: test
+              command: npm run test:ci
+              environment:
+                JEST_JUNIT_OUTPUT: 'reports/junit/js-test-results.xml'
 
-      - store_test_results:
-          path: reports/junit
+          - store_test_results:
+              path: reports/junit
 
-      - store_artifacts:
-          path: reports/junit
+          - store_artifacts:
+              path: reports/junit
 
-      - run:
-          name: build
-          command: npm run build:dev
+          - run:
+              name: build
+              command: npm run build:dev
 
-      - run:
-          name: authenticate-with-registry
-          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
+          - run:
+              name: authenticate-with-registry
+              command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
 
-      - run:
-          name: publish-package
-          command: npm run publish:dev
+          - run:
+              name: publish-package
+              command: npm run publish:dev
+  release:
+    build:
+      docker:
+        # specify the version you desire here
+        - image: circleci/node:10.15
 
-  build:
-    docker:
-      # specify the version you desire here
-      - image: circleci/node:10.15
+        # Specify service dependencies here if necessary
+        # CircleCI maintains a library of pre-built images
+        # documented at https://circleci.com/docs/2.0/circleci-images/
+        # - image: circleci/mongo:3.4.4
 
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mongo:3.4.4
+      working_directory: ~/repo
 
-    working_directory: ~/repo
+      branches:
+        only:
+          - master
 
-    branches:
-      only:
-        - master
+      steps:
+        - checkout
 
-    steps:
-      - checkout
+        - run:
+            name: update-npm
+            command: 'sudo npm install -g npm@latest'
 
-      - run:
-          name: update-npm
-          command: 'sudo npm install -g npm@latest'
+        # Download and cache dependencies
+        - restore_cache:
+            keys:
+              - dependencies-cache-{{ checksum "package.json" }}
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - dependencies-cache-{{ checksum "package.json" }}
+        - run:
+            name: install-npm
+            command: npm install
 
-      - run:
-          name: install-npm
-          command: npm install
+        - save_cache:
+            key: dependency-cache-{{ checksum "package.json" }}
+            paths:
+              - node_modules
 
-      - save_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-          paths:
-            - node_modules
+        - run:
+            name: test
+            command: npm run test:ci
+            environment:
+              JEST_JUNIT_OUTPUT: 'reports/junit/js-test-results.xml'
 
-      - run:
-          name: test
-          command: npm run test:ci
-          environment:
-            JEST_JUNIT_OUTPUT: 'reports/junit/js-test-results.xml'
+        - store_test_results:
+            path: reports/junit
 
-      - store_test_results:
-          path: reports/junit
+        - store_artifacts:
+            path: reports/junit
 
-      - store_artifacts:
-          path: reports/junit
+        - run:
+            name: build
+            command: npm run build:prod
 
-      - run:
-          name: build
-          command: npm run build:prod
+        - run:
+            name: authenticate-with-registry
+            command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
 
-      - run:
-          name: authenticate-with-registry
-          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
-
-      - run:
-          name: publish-package
-          command: npm run publish:prod
+        - run:
+            name: publish-package
+            command: npm run publish:prod
