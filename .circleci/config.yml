@@ -38,7 +38,7 @@ jobs:
       - image: circleci/node:10.15
     working_directory: ~/react-simple-tree-menu
     steps:
-      - checkout
+      - install_and_test
       - run:
           name: 'Build dev'
           command: npm run build:dev
@@ -48,7 +48,7 @@ jobs:
       - image: circleci/node:10.15
     working_directory: ~/react-simple-tree-menu
     steps:
-      - checkout
+      - install_and_test
       - run:
           name: 'Build prod'
           command: npm run build:prod
@@ -58,7 +58,7 @@ jobs:
       - image: circleci/node:10.15
     working_directory: ~/react-simple-tree-menu
     steps:
-      - checkout
+      - build_rc
       - run:
           name: authenticate-with-registry
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
@@ -71,7 +71,7 @@ jobs:
       - image: circleci/node:10.15
     working_directory: ~/react-simple-tree-menu
     steps:
-      - checkout
+      - build
       - run:
           name: authenticate-with-registry
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
@@ -83,16 +83,7 @@ workflows:
   version: 2
   release-rc:
     jobs:
-      - install_and_test
       - build_rc:
-          requires:
-            - install_and_test
-          filters:
-            branches:
-              only: /^(\*|\d+(\.\d+){0,2}(\.\*)?)-rc\.\d+$/
-      - publish_rc:
-          requires:
-            - build_rc
           filters:
             branches:
               only: /^(\*|\d+(\.\d+){0,2}(\.\*)?)-rc\.\d+$/
