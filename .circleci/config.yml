@@ -99,26 +99,40 @@ jobs:
 
 workflows:
   version: 2
-  release-rc:
-    triggers:
-      - schedule:
-        filters:
-          branches:
-            only:
-              - /rc-.*/
+  release-rc:    
     jobs:
       - install-and-test
+          filters:
+            branches:
+              only:
+                - master
+                - /rc-.*/
       - build-rc
+          filters:
+            branches:
+              only:
+                - /rc-.*/
       - publish-rc
+          filters:
+            branches:
+              only:
+                - /rc-.*/
 
   release:
-    triggers:
-      - schedule:
-        filters:
-          branches:
-            only:
-              - master
     jobs:
       - install-and-test
+          filters:
+            branches:
+              only:
+                - master
+                - /rc-.*/
       - build
+          filters:
+            branches:
+              only:
+                - master
       - publish
+          filters:
+            branches:
+              only:
+                - master
