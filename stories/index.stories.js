@@ -98,7 +98,7 @@ storiesOf('TreeMenu', module)
   ))
   .add('apply bootstrap', () => (
     <TreeMenu data={dataInArray} debounceTime={125} onClickItem={action(`on click node`)}>
-      {({ search, items }) => {
+      {({ search, items }) => (
         <>
           <Input onChange={e => search(e.target.value)} placeholder="Type and search" />
           <ListGroup>
@@ -106,7 +106,7 @@ storiesOf('TreeMenu', module)
               <ListItem {...props} />
             ))}
           </ListGroup>
-        </>;
-      }}
+        </>
+      )}
     </TreeMenu>
   ));
