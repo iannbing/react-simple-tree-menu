@@ -37,6 +37,12 @@ jobs:
       - run:
           name: build
           command: npm run build:dev
+
+  workflows:
+    version: 2
+    release-rc:
+      jobs:
+        - build
   # build:
   #   docker:
   #     - image: circleci/node:10.15
