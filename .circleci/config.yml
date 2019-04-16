@@ -4,7 +4,7 @@
 #
 version: 2
 jobs:
-  install:
+  install-and-test:
     docker:
       - image: circleci/node:10.15
 
@@ -25,14 +25,6 @@ jobs:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - node_modules
-  run-tests:
-    docker:
-      - image: circleci/node:10.15
-
-    working_directory: ~/react-simple-tree-menu
-
-    steps:
-      - checkout
       - run:
           name: 'Run tests'
           command: npm run test:ci
@@ -70,13 +62,10 @@ workflows:
   version: 2
   release-rc:
     jobs:
-      - install
-      - run-tests:
-          requires:
-            - install
+      - install-and-test
       - build-rc:
           requires:
-            - run-tests
+            - install-and-test
   # build:
   #   docker:
   #     - image: circleci/node:10.15
