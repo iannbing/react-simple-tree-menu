@@ -4,7 +4,7 @@
 #
 version: 2
 jobs:
-  build:
+  install:
     docker:
       - image: circleci/node:10.15
 
@@ -25,6 +25,15 @@ jobs:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - node_modules
+
+  build:
+    docker:
+      - image: circleci/node:10.15
+
+    working_directory: ~/react-simple-tree-menu
+
+    steps:
+      - checkout
       - run:
           name: 'Run tests'
           command: npm run test:ci
@@ -46,19 +55,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: 'Update NPM'
-          command: 'sudo npm install -g npm@latest'
-      - restore_cache:
-          keys:
-            - dependencies-cache-{{ checksum "package.json" }}
-      - run:
-          name: 'Install NPM'
-          command: npm install
-      - save_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-          paths:
-            - node_modules
-      - run:
           name: 'Run tests'
           command: npm run test:ci
           environment:
@@ -75,6 +71,7 @@ workflows:
   version: 2
   release-rc:
     jobs:
+      - install
       - build-rc
   # build:
   #   docker:
