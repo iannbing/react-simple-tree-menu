@@ -3,127 +3,110 @@
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
 version: 2
+jobs:
+  install-and-test:
+    docker:
+      - image: circleci/node:10.15
+
+    working_directory: ~/repo
+
+    branches:
+      only:
+        - master
+        - /rc-.*/
+
+    steps:
+      - checkout
+      - run:
+          name: update-npm
+          command: 'sudo npm install -g npm@latest'
+      - restore_cache:
+          keys:
+            - dependencies-cache-{{ checksum "package.json" }}
+      - run:
+          name: install-npm
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+      - run:
+          name: test
+          command: npm run test:ci
+          environment:
+            JEST_JUNIT_OUTPUT: 'reports/junit/js-test-results.xml'
+      - store_test_results:
+          path: reports/junit
+      - store_artifacts:
+          path: reports/junit
+  build-rc:
+    docker:
+      - image: circleci/node:10.15
+    working_directory: ~/repo
+    branches:
+      only:
+        - /rc-.*/
+    steps:
+      - checkout
+      - run:
+          name: build
+          command: npm run build:dev
+
+  build:
+    docker:
+      - image: circleci/node:10.15
+    working_directory: ~/repo
+    branches:
+      only:
+        - master
+    steps:
+      - checkout
+      - run:
+          name: build
+          command: npm run build:prod
+
+  publish-rc:
+    docker:
+      - image: circleci/node:10.15
+    working_directory: ~/repo
+    branches:
+      only:
+        - /rc-.*/
+    steps:
+      - checkout
+      - run:
+          name: authenticate-with-registry
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
+      - run:
+          name: publish-package
+          command: npm run publish:dev
+
+  publish:
+    docker:
+      - image: circleci/node:10.15
+    working_directory: ~/repo
+    branches:
+      only:
+        - master
+    steps:
+      - checkout
+      - run:
+          name: authenticate-with-registry
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
+      - run:
+          name: publish-package
+          command: npm run publish:prod
+
 workflows:
+  version: 2
   release-rc:
     jobs:
-      build:
-        docker:
-          # specify the version you desire here
-          - image: circleci/node:10.15
+      - install-and-test
+      - build-rc
+      - publish-rc
 
-          # Specify service dependencies here if necessary
-          # CircleCI maintains a library of pre-built images
-          # documented at https://circleci.com/docs/2.0/circleci-images/
-          # - image: circleci/mongo:3.4.4
-
-        working_directory: ~/repo
-
-        branches:
-          only:
-            - /rc-.*/
-
-        steps:
-          - checkout
-
-          - run:
-              name: update-npm
-              command: 'sudo npm install -g npm@latest'
-
-          # Download and cache dependencies
-          - restore_cache:
-              keys:
-                - dependencies-cache-{{ checksum "package.json" }}
-
-          - run:
-              name: install-npm
-              command: npm install
-
-          - save_cache:
-              key: dependency-cache-{{ checksum "package.json" }}
-              paths:
-                - node_modules
-
-          - run:
-              name: test
-              command: npm run test:ci
-              environment:
-                JEST_JUNIT_OUTPUT: 'reports/junit/js-test-results.xml'
-
-          - store_test_results:
-              path: reports/junit
-
-          - store_artifacts:
-              path: reports/junit
-
-          - run:
-              name: build
-              command: npm run build:dev
-
-          - run:
-              name: authenticate-with-registry
-              command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
-
-          - run:
-              name: publish-package
-              command: npm run publish:dev
   release:
-    build:
-      docker:
-        # specify the version you desire here
-        - image: circleci/node:10.15
-
-        # Specify service dependencies here if necessary
-        # CircleCI maintains a library of pre-built images
-        # documented at https://circleci.com/docs/2.0/circleci-images/
-        # - image: circleci/mongo:3.4.4
-
-      working_directory: ~/repo
-
-      branches:
-        only:
-          - master
-
-      steps:
-        - checkout
-
-        - run:
-            name: update-npm
-            command: 'sudo npm install -g npm@latest'
-
-        # Download and cache dependencies
-        - restore_cache:
-            keys:
-              - dependencies-cache-{{ checksum "package.json" }}
-
-        - run:
-            name: install-npm
-            command: npm install
-
-        - save_cache:
-            key: dependency-cache-{{ checksum "package.json" }}
-            paths:
-              - node_modules
-
-        - run:
-            name: test
-            command: npm run test:ci
-            environment:
-              JEST_JUNIT_OUTPUT: 'reports/junit/js-test-results.xml'
-
-        - store_test_results:
-            path: reports/junit
-
-        - store_artifacts:
-            path: reports/junit
-
-        - run:
-            name: build
-            command: npm run build:prod
-
-        - run:
-            name: authenticate-with-registry
-            command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
-
-        - run:
-            name: publish-package
-            command: npm run publish:prod
+    jobs:
+      - install-and-test
+      - build
+      - publish
