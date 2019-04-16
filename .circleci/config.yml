@@ -2,61 +2,112 @@
 #
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
-version: 2
-jobs:
-  build:
-    docker:
-      # specify the version you desire here
-      - image: circleci/node:10.15
+version: 2.1
 
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mongo:3.4.4
-
-    working_directory: ~/repo
-
+commands:
+  install:
+    description: 'Install packages'
     steps:
       - checkout
-
       - run:
-          name: update-npm
+          name: 'Update NPM'
           command: 'sudo npm install -g npm@latest'
-
-      # Download and cache dependencies
       - restore_cache:
           keys:
-            - dependencies-cache-{{ checksum "package.json" }}
-
+            - dependency-cache-{{ checksum "package.json" }}
       - run:
-          name: install-npm
+          name: 'Install NPM'
           command: npm install
-
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - node_modules
-
+  run_tests:
+    description: 'Run tests'
+    steps:
       - run:
-          name: test
+          name: 'Run tests'
           command: npm run test:ci
           environment:
             JEST_JUNIT_OUTPUT: 'reports/junit/js-test-results.xml'
-
       - store_test_results:
           path: reports/junit
-
       - store_artifacts:
           path: reports/junit
-
+  build:
+    description: 'Build the bundle'
+    parameters:
+      environment:
+        type: string
+        default: 'dev'
+    steps:
       - run:
-          name: build
-          command: npm run build:dev
-
+          name: 'Build'
+          command: npm run build:<< parameters.environment >>
+  publish:
+    description: 'Publish to npmjs'
+    parameters:
+      environment:
+        type: string
+        default: 'dev'
+    steps:
       - run:
-          name: authenticate-with-registry
+          name: 'Authenticate with registry'
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
-
       - run:
-          name: publish-package
-          command: npm run publish:dev
+          name: 'Publish package'
+          command: npm run publish:<< parameters.environment >>
+
+jobs:
+  build:
+    docker:
+      - image: circleci/node:10.15
+    working_directory: ~/react-simple-tree-menu
+    steps:
+      - install
+      - run_tests
+      - build:
+        environment: 'prod'
+  release_rc:
+    docker:
+      - image: circleci/node:10.15
+    working_directory: ~/react-simple-tree-menu
+    steps:
+      - install
+      - run_tests
+      - build:
+        environment: 'dev'
+      - publish:
+        environment: 'dev'
+
+  release:
+    docker:
+      - image: circleci/node:10.15
+    working_directory: ~/react-simple-tree-menu
+    steps:
+      - install
+      - run_tests
+      - build:
+        environment: 'prod'
+      - publish:
+        environment: 'prod'
+
+workflows:
+  version: 2
+  release-rc:
+    jobs:
+      - build:
+          filters:
+            branches:
+              ignore:
+                - /^(\*|\d+(\.\d+){0,2}(\.\*)?)-rc\.\d+$/
+                - master
+      - release_rc:
+          filters:
+            branches:
+              only: /^(\*|\d+(\.\d+){0,2}(\.\*)?)-rc\.\d+$/
+              # 1.2.3-rc.12
+      - release:
+          filters:
+            branches:
+              only: master
