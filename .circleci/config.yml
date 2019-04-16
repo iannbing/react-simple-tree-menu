@@ -15,7 +15,7 @@ jobs:
           command: 'sudo npm install -g npm@latest'
       - restore_cache:
           keys:
-            - dependencies-cache-{{ checksum "package.json" }}
+            - dependency-cache-{{ checksum "package.json" }}
       - run:
           name: 'Install NPM'
           command: npm install
@@ -38,7 +38,29 @@ jobs:
       - image: circleci/node:10.15
     working_directory: ~/react-simple-tree-menu
     steps:
-      - install_and_test
+      - checkout
+      - run:
+          name: 'Update NPM'
+          command: 'sudo npm install -g npm@latest'
+      - restore_cache:
+          keys:
+            - dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: 'Install NPM'
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+      - run:
+          name: 'Run tests'
+          command: npm run test:ci
+          environment:
+            JEST_JUNIT_OUTPUT: 'reports/junit/js-test-results.xml'
+      - store_test_results:
+          path: reports/junit
+      - store_artifacts:
+          path: reports/junit
       - run:
           name: 'Build dev'
           command: npm run build:dev
@@ -48,7 +70,7 @@ jobs:
       - image: circleci/node:10.15
     working_directory: ~/react-simple-tree-menu
     steps:
-      - install_and_test
+      - checkout
       - run:
           name: 'Build prod'
           command: npm run build:prod
@@ -58,7 +80,7 @@ jobs:
       - image: circleci/node:10.15
     working_directory: ~/react-simple-tree-menu
     steps:
-      - build_rc
+      - checkout
       - run:
           name: authenticate-with-registry
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
@@ -71,7 +93,7 @@ jobs:
       - image: circleci/node:10.15
     working_directory: ~/react-simple-tree-menu
     steps:
-      - build
+      - checkout
       - run:
           name: authenticate-with-registry
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
@@ -87,3 +109,9 @@ workflows:
           filters:
             branches:
               only: /^(\*|\d+(\.\d+){0,2}(\.\*)?)-rc\.\d+$/
+      # - publish_rc:
+      #     filters:
+      #       branches:
+      #         only: /^(\*|\d+(\.\d+){0,2}(\.\*)?)-rc\.\d+$/
+      #     requires:
+      #       - build_rc
