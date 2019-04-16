@@ -102,37 +102,31 @@ workflows:
   release-rc:    
     jobs:
       - install-and-test
-          filters:
-            branches:
-              only:
-                - master
-                - /rc-.*/
       - build-rc
+          requires:
+            - install-and-test
           filters:
             branches:
-              only:
-                - /rc-.*/
+              only: /rc-.*/
       - publish-rc
+          requires:
+            - build-rc
           filters:
             branches:
-              only:
-                - /rc-.*/
+              only: /rc-.*/
 
   release:
     jobs:
       - install-and-test
-          filters:
-            branches:
-              only:
-                - master
-                - /rc-.*/
       - build
+          requires:
+            - install-and-test
           filters:
             branches:
-              only:
-                - master
+              only: master
       - publish
+          requires:
+            - build
           filters:
             branches:
-              only:
-                - master
+              only: master
