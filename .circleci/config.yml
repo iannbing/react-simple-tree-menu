@@ -99,16 +99,16 @@ jobs:
 
 workflows:
   version: 2
-  release-rc:    
+  release-rc:
     jobs:
-      - install-and-test
-      - build-rc
+      - install-and-test:
+      - build-rc:
           requires:
             - install-and-test
           filters:
             branches:
               only: /rc-.*/
-      - publish-rc
+      - publish-rc:
           requires:
             - build-rc
           filters:
@@ -117,14 +117,14 @@ workflows:
 
   release:
     jobs:
-      - install-and-test
-      - build
+      - install-and-test:
+      - build:
           requires:
             - install-and-test
           filters:
             branches:
               only: master
-      - publish
+      - publish:
           requires:
             - build
           filters:
