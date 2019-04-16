@@ -93,37 +93,36 @@ jobs:
   #     - run:
   #         name: publish-package
   #         command: npm run publish:prod
+# workflows:
+#   version: 2
+#   release-rc:
+#     jobs:
+#       - install-and-test:
+# - build-rc:
+#     requires:
+#       - install-and-test
+#     filters:
+#       branches:
+#         only: /rc-.*/
+# - publish-rc:
+#     requires:
+#       - build-rc
+#     filters:
+#       branches:
+#         only: /rc-.*/
 
-workflows:
-  version: 2
-  release-rc:
-    jobs:
-      - install-and-test:
-      # - build-rc:
-      #     requires:
-      #       - install-and-test
-      #     filters:
-      #       branches:
-      #         only: /rc-.*/
-      # - publish-rc:
-      #     requires:
-      #       - build-rc
-      #     filters:
-      #       branches:
-      #         only: /rc-.*/
-
-  release:
-    jobs:
-      - install-and-test:
-      - build:
-          requires:
-            - install-and-test
-          filters:
-            branches:
-              only: master
-      - publish:
-          requires:
-            - build
-          filters:
-            branches:
-              only: master
+# release:
+#   jobs:
+#     - install-and-test:
+#     - build:
+#         requires:
+#           - install-and-test
+#         filters:
+#           branches:
+#             only: master
+#     - publish:
+#         requires:
+#           - build
+#         filters:
+#           branches:
+#             only: master
