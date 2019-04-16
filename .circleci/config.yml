@@ -39,7 +39,12 @@ jobs:
           path: reports/junit
       - store_artifacts:
           path: reports/junit
-  # build-rc:
+  
+  
+  
+  
+  
+          # build-rc:
   #   docker:
   #     - image: circleci/node:10.15
   #   working_directory: ~/react-simple-tree-menu
