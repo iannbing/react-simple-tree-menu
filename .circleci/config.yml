@@ -85,14 +85,14 @@ workflows:
     jobs:
       - install_and_test
       - build_rc:
-          filters:
-            branches:
-              only: /^(\*|\d+(\.\d+){0,2}(\.\*)?)-rc\.\d+$/
           requires:
             - install_and_test
-      - publish_rc:
           filters:
             branches:
               only: /^(\*|\d+(\.\d+){0,2}(\.\*)?)-rc\.\d+$/
+      - publish_rc:
           requires:
             - build_rc
+          filters:
+            branches:
+              only: /^(\*|\d+(\.\d+){0,2}(\.\*)?)-rc\.\d+$/
