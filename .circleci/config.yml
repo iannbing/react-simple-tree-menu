@@ -72,9 +72,9 @@ workflows:
   release-rc:
     jobs:
       - install
-      - build-rc
-        requires:
-          - install
+      - build-rc:
+          requires:
+            - install
   # build:
   #   docker:
   #     - image: circleci/node:10.15
