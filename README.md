@@ -89,7 +89,7 @@ import TreeMenu from 'react-simple-tree-menu'
     this.navigate(props.url); // user defined prop
   }}
   debounceTime={125}>
-    {({ search, items }) => {
+    {({ search, items }) => (
         <>
           <Input onChange={e => search(e.target.value)} placeholder="Type and search" />
           <ListGroup>
@@ -101,7 +101,7 @@ import TreeMenu from 'react-simple-tree-menu'
             ))}
           </ListGroup>
         </>
-    }}
+    )}
 </TreeViewMenu>
 
 ```
