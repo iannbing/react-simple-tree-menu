@@ -40,31 +40,27 @@ commands:
       - run:
           name: 'Build'
           command: npm run build:<< parameters.environment >>
+  bump_beta:
+    description: 'Bump version to beta'
+    steps:
+      - run:
+          name: 'Bump rc version'
+          command: npm run bump-beta
+
   publish:
     description: 'Publish to npmjs'
     parameters:
-      prod:
-        type: boolean
-        default: false
+      environment:
+        type: string
+        default: 'dev'
     steps:
       - run:
           name: 'Authenticate with registry'
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
-      - when:
-          condition: << parameters.prod >>
-          - steps:
-            - run:
-              name: 'Publish prod version'
-              command: npm run publish:prod
-      - unless:
-          condition: << parameters.prod >>
-          - steps:
-            - run:
-              name: 'Bump rc version'
-              command: npm run bump-beta
-            - run:
-              name: 'Publish rc version'
-              command: npm run publish:dev
+      - run:
+          name: 'Publish package'
+          command: npm run publish:<< parameters.environment >>
+
   build_story:
     description: 'Build the story'
     steps:
@@ -102,10 +98,11 @@ jobs:
       - install
       - run_tests
       - build_story
+      - bump_beta
       - build:
         environment: 'dev'
       - publish:
-        prod: false
+        environment: 'dev'
 
   release:
     docker:
@@ -117,11 +114,11 @@ jobs:
       - build:
         environment: 'prod'
       - publish:
-        prod: true
+        environment: 'prod'
       - deploy_story
 
 workflows:
-  version: 2
+  version: 2.1
   release-rc:
     jobs:
       - build
