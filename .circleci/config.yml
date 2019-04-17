@@ -40,6 +40,13 @@ commands:
       - run:
           name: 'Build'
           command: npm run build:<< parameters.environment >>
+  bump_beta:
+    description: 'Bump version to beta'
+    steps:
+      - run:
+          name: 'Bump rc version'
+          command: npm run bump-beta
+
   publish:
     description: 'Publish to npmjs'
     parameters:
@@ -53,6 +60,7 @@ commands:
       - run:
           name: 'Publish package'
           command: npm run publish:<< parameters.environment >>
+
   build_story:
     description: 'Build the story'
     steps:
@@ -90,6 +98,7 @@ jobs:
       - install
       - run_tests
       - build_story
+      - bump_beta
       - build:
         environment: 'dev'
       - publish:
@@ -109,21 +118,15 @@ jobs:
       - deploy_story
 
 workflows:
-  version: 2
+  version: 2.1
   release-rc:
     jobs:
       - build
       - release_rc:
           filters:
             branches:
-              ignore: /.*/
-            tags:
-              only: /^v(\*|\d+(\.\d+){0,2}(\.\*)?)-rc\.\d+$/
-              # v1.2.3-rc.12
+              only: development
       - release:
           filters:
             branches:
               only: master
-            tags:
-              only: /^v(\*|\d+(\.\d+){0,2}(\.\*)?)$/
-              # v1.2.3
