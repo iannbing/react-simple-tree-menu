@@ -121,7 +121,12 @@ workflows:
   version: 2.1
   release-rc:
     jobs:
-      - build
+      - build:
+          filters:
+            branches:
+              ignore:
+                - development
+                - master
       - release_rc:
           filters:
             branches:
