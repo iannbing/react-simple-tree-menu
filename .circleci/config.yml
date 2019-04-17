@@ -122,6 +122,11 @@ workflows:
   release-rc:
     jobs:
       - build
+          filters:
+            branches:
+              ignore: 
+                - development
+                - master
       - release_rc:
           filters:
             branches:
