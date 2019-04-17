@@ -28,8 +28,8 @@
     "deploy-storybook": "storybook-to-ghpages",
     "publish:dev": "npm publish --tag beta",
     "publish:prod": "npm publish",
-    "bump-beta": "node ./utils/bump-beta.js",
-    "bump-release": "node ./utils/bump-release.js"
+    "bump-beta": "node ./release-utils/bump-beta.js",
+    "bump-release": "node ./release-utils/bump-release.js"
   },
   "repository": {
     "type": "git",
