@@ -115,11 +115,15 @@ workflows:
       - build
       - release_rc:
           filters:
+            branches:
+              ignore: /.*/
             tags:
               only: /^v(\*|\d+(\.\d+){0,2}(\.\*)?)-rc\.\d+$/
               # v1.2.3-rc.12
       - release:
           filters:
+            branches:
+              ignore: /.*/
             tags:
               only: /^v(\*|\d+(\.\d+){0,2}(\.\*)?)$/
               # v1.2.3
