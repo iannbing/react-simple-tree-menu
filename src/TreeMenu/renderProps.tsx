@@ -3,7 +3,7 @@ import * as React from 'react';
 const DEFAULT_PADDING = 1.25;
 const LEVEL_SPACE = 1.25;
 const ICON_SIZE = 1;
-const ToggleIcon = ({ on }: { on: boolean }) => <div>{on ? '-' : '+'}</div>;
+const ToggleIcon = ({ on }: { on: boolean }) => <div role="img" aria-label="Toggle">{on ? '-' : '+'}</div>;
 
 export interface TreeMenuItem {
   hasNodes?: boolean;
@@ -38,6 +38,8 @@ const renderItem: RenderItem = ({
       color: active ? 'white' : '#333',
       background: active ? '#179ed3' : 'none',
     }}
+    role="button"
+    aria-pressed={active}
     onClick={onClick}
     key={key}
   >
@@ -66,6 +68,8 @@ export const defaultChildren: TreeMenuChildren = ({ search, items }) => {
     <>
       <input
         style={{ margin: '.5em', paddingLeft: '.4em' }}
+        aria-label="Type and search"
+        type="search"
         placeholder="Type and search"
         onChange={onSearch}
       />
