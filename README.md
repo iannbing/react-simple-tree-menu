@@ -1,4 +1,7 @@
-# react-simple-tree-menu
+# React Simple Tree Menu
+
+[![npm version](https://badge.fury.io/js/react-simple-tree-menu.svg)](https://badge.fury.io/js/react-simple-tree-menu)
+[![CircleCI](https://circleci.com/gh/iannbing/react-simple-tree-menu/tree/master.svg?style=shield)](https://circleci.com/gh/iannbing/react-simple-tree-menu/tree/master)
 
 Inspired by [Downshift](https://github.com/downshift-js/downshift), a simple, data-driven, light-weight React Tree Menu component that:
 
@@ -6,7 +9,7 @@ Inspired by [Downshift](https://github.com/downshift-js/downshift), a simple, da
 - fully customizable with `render props` and `control props`
 - allows search
 
-[Storybook Demo](https://iannbing.github.io/react-simple-tree-menu/)
+Check [Storybook Demo](https://iannbing.github.io/react-simple-tree-menu/).
 
 ## Usage
 
