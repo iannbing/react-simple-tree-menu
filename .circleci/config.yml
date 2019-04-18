@@ -45,7 +45,7 @@ commands:
     steps:
       - run:
           name: 'Bump rc version'
-          command: npm run bump-beta
+          command: npm run add-version-suffix
 
   publish:
     description: 'Publish to npmjs'
