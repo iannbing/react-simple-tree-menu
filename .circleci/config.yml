@@ -87,9 +87,9 @@ jobs:
       - run_tests
       - build_story
       - build:
-        environment: 'dev'
+          environment: 'dev'
       - build:
-        environment: 'prod'
+          environment: 'prod'
   release_rc:
     docker:
       - image: circleci/node:10.15
@@ -100,9 +100,9 @@ jobs:
       - build_story
       - bump_beta
       - build:
-        environment: 'dev'
+          environment: 'dev'
       - publish:
-        environment: 'dev'
+          environment: 'dev'
 
   release:
     docker:
@@ -112,9 +112,9 @@ jobs:
       - install
       - run_tests
       - build:
-        environment: 'prod'
+          environment: 'prod'
       - publish:
-        environment: 'prod'
+          environment: 'prod'
       - deploy_story
 
 workflows:
