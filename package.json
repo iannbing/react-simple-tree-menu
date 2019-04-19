@@ -72,7 +72,7 @@
     "execa": "^1.0.0",
     "jest": "^24.1.0",
     "jest-junit": "^6.3.0",
-    "npm-version-suffix": "0.1.0-rc.1",
+    "npm-version-suffix": "0.1.0",
     "prettier": "^1.15.2",
     "prop-types": "^15.6.2",
     "react": "^16.6.3",
