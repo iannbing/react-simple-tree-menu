@@ -1,44 +1,327 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`TreeViewMenu should render the roots only 1`] = `
+exports[`TreeViewMenu should highlight the active node 1`] = `
 <Fragment>
   <input
+    aria-label="Type and search"
     onChange={[Function]}
     placeholder="Type and search"
     style={
       Object {
-        "margin": ".5em",
-        "paddingLeft": ".4em",
+        "border": "none",
+        "padding": "1rem 2rem",
+        "width": "100%",
       }
     }
+    type="search"
   />
   <ul
     style={
       Object {
+        "borderTop": "1px solid #ccc",
         "listStyleType": "none",
         "paddingLeft": 0,
       }
     }
   >
     <li
+      aria-pressed={false}
       key="releasenotes"
       onClick={[Function]}
+      role="button"
       style={
         Object {
           "background": "none",
+          "borderBottom": "1px solid #ccc",
           "color": "#333",
           "cursor": "pointer",
-          "paddingLeft": "2.25rem",
+          "padding": " .75rem  1rem  .75rem 3.5rem",
         }
       }
     >
       <div
         style={
           Object {
-            "height": "1rem",
-            "left": "1rem",
+            "height": "2rem",
+            "left": "2rem",
             "position": "absolute",
-            "width": "1rem",
+            "width": "2rem",
+          }
+        }
+      >
+        <ToggleIcon
+          on={true}
+        />
+      </div>
+      Release Notes
+    </li>
+    <li
+      aria-pressed={false}
+      key="releasenotes/desktop-modeler"
+      onClick={[Function]}
+      role="button"
+      style={
+        Object {
+          "background": "none",
+          "borderBottom": "1px solid #ccc",
+          "color": "#333",
+          "cursor": "pointer",
+          "padding": " .75rem  1rem  .75rem 4.75rem",
+        }
+      }
+    >
+      <div
+        style={
+          Object {
+            "height": "2rem",
+            "left": "3.25rem",
+            "position": "absolute",
+            "width": "2rem",
+          }
+        }
+      >
+        <ToggleIcon
+          on={true}
+        />
+      </div>
+      Desktop Modeler
+    </li>
+    <li
+      aria-pressed={true}
+      key="releasenotes/desktop-modeler/7"
+      onClick={[Function]}
+      role="button"
+      style={
+        Object {
+          "background": "#179ed3",
+          "borderBottom": "1px solid #ccc",
+          "color": "white",
+          "cursor": "pointer",
+          "padding": " .75rem  1rem  .75rem 6rem",
+        }
+      }
+    >
+      <div
+        style={
+          Object {
+            "height": "2rem",
+            "left": "4.5rem",
+            "position": "absolute",
+            "width": "2rem",
+          }
+        }
+      >
+        <ToggleIcon
+          on={false}
+        />
+      </div>
+      7
+    </li>
+    <li
+      aria-pressed={false}
+      key="atd"
+      onClick={[Function]}
+      role="button"
+      style={
+        Object {
+          "background": "none",
+          "borderBottom": "1px solid #ccc",
+          "color": "#333",
+          "cursor": "pointer",
+          "padding": " .75rem  1rem  .75rem 3.5rem",
+        }
+      }
+    >
+      ATS Guide
+    </li>
+  </ul>
+</Fragment>
+`;
+
+exports[`TreeViewMenu should open specified nodes 1`] = `
+<Fragment>
+  <input
+    aria-label="Type and search"
+    onChange={[Function]}
+    placeholder="Type and search"
+    style={
+      Object {
+        "border": "none",
+        "padding": "1rem 2rem",
+        "width": "100%",
+      }
+    }
+    type="search"
+  />
+  <ul
+    style={
+      Object {
+        "borderTop": "1px solid #ccc",
+        "listStyleType": "none",
+        "paddingLeft": 0,
+      }
+    }
+  >
+    <li
+      aria-pressed={false}
+      key="releasenotes"
+      onClick={[Function]}
+      role="button"
+      style={
+        Object {
+          "background": "none",
+          "borderBottom": "1px solid #ccc",
+          "color": "#333",
+          "cursor": "pointer",
+          "padding": " .75rem  1rem  .75rem 3.5rem",
+        }
+      }
+    >
+      <div
+        style={
+          Object {
+            "height": "2rem",
+            "left": "2rem",
+            "position": "absolute",
+            "width": "2rem",
+          }
+        }
+      >
+        <ToggleIcon
+          on={true}
+        />
+      </div>
+      Release Notes
+    </li>
+    <li
+      aria-pressed={false}
+      key="releasenotes/desktop-modeler"
+      onClick={[Function]}
+      role="button"
+      style={
+        Object {
+          "background": "none",
+          "borderBottom": "1px solid #ccc",
+          "color": "#333",
+          "cursor": "pointer",
+          "padding": " .75rem  1rem  .75rem 4.75rem",
+        }
+      }
+    >
+      <div
+        style={
+          Object {
+            "height": "2rem",
+            "left": "3.25rem",
+            "position": "absolute",
+            "width": "2rem",
+          }
+        }
+      >
+        <ToggleIcon
+          on={true}
+        />
+      </div>
+      Desktop Modeler
+    </li>
+    <li
+      aria-pressed={false}
+      key="releasenotes/desktop-modeler/7"
+      onClick={[Function]}
+      role="button"
+      style={
+        Object {
+          "background": "none",
+          "borderBottom": "1px solid #ccc",
+          "color": "#333",
+          "cursor": "pointer",
+          "padding": " .75rem  1rem  .75rem 6rem",
+        }
+      }
+    >
+      <div
+        style={
+          Object {
+            "height": "2rem",
+            "left": "4.5rem",
+            "position": "absolute",
+            "width": "2rem",
+          }
+        }
+      >
+        <ToggleIcon
+          on={false}
+        />
+      </div>
+      7
+    </li>
+    <li
+      aria-pressed={false}
+      key="atd"
+      onClick={[Function]}
+      role="button"
+      style={
+        Object {
+          "background": "none",
+          "borderBottom": "1px solid #ccc",
+          "color": "#333",
+          "cursor": "pointer",
+          "padding": " .75rem  1rem  .75rem 3.5rem",
+        }
+      }
+    >
+      ATS Guide
+    </li>
+  </ul>
+</Fragment>
+`;
+
+exports[`TreeViewMenu should render the level-1 nodes by default 1`] = `
+<Fragment>
+  <input
+    aria-label="Type and search"
+    onChange={[Function]}
+    placeholder="Type and search"
+    style={
+      Object {
+        "border": "none",
+        "padding": "1rem 2rem",
+        "width": "100%",
+      }
+    }
+    type="search"
+  />
+  <ul
+    style={
+      Object {
+        "borderTop": "1px solid #ccc",
+        "listStyleType": "none",
+        "paddingLeft": 0,
+      }
+    }
+  >
+    <li
+      aria-pressed={false}
+      key="releasenotes"
+      onClick={[Function]}
+      role="button"
+      style={
+        Object {
+          "background": "none",
+          "borderBottom": "1px solid #ccc",
+          "color": "#333",
+          "cursor": "pointer",
+          "padding": " .75rem  1rem  .75rem 3.5rem",
+        }
+      }
+    >
+      <div
+        style={
+          Object {
+            "height": "2rem",
+            "left": "2rem",
+            "position": "absolute",
+            "width": "2rem",
           }
         }
       >
@@ -49,14 +332,17 @@ exports[`TreeViewMenu should render the roots only 1`] = `
       Release Notes
     </li>
     <li
+      aria-pressed={false}
       key="atd"
       onClick={[Function]}
+      role="button"
       style={
         Object {
           "background": "none",
+          "borderBottom": "1px solid #ccc",
           "color": "#333",
           "cursor": "pointer",
-          "paddingLeft": "2.25rem",
+          "padding": " .75rem  1rem  .75rem 3.5rem",
         }
       }
     >

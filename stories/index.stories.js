@@ -14,14 +14,25 @@ const ICON_SIZE = 8;
 const LEVEL_SPACE = 16;
 
 const ToggleIcon = ({ on }) => <span style={{ marginRight: 8 }}>{on ? '-' : '+'}</span>;
-const ListItem = ({ level = 0, ...props }) => (
+const ListItem = ({
+  level = 0,
+  hasNodes,
+  isOpen,
+  label,
+  searchTerm,
+  openNodes,
+  ...props
+}) => (
   <ListGroupItem
     {...props}
     style={{
       paddingLeft: DEFAULT_PADDING + ICON_SIZE + level * LEVEL_SPACE,
       cursor: 'pointer',
     }}
-  />
+  >
+    {hasNodes && <ToggleIcon on={isOpen} />}
+    {label}
+  </ListGroupItem>
 );
 
 const dataInArray = [
@@ -94,21 +105,16 @@ storiesOf('TreeMenu', module)
     <TreeMenu data={dataInArray} onClickItem={action(`on click node`)} />
   ))
   .add('apply bootstrap', () => (
-    <TreeMenu
-      data={dataInArray}
-      onClickItem={action(`on click node`)}
-      debounceTime={125}
-      renderItem={({ hasNodes, isOpen, level, label, key, active, onClick }) => (
-        <ListItem level={level} key={key} onClick={onClick} active={active}>
-          {hasNodes && <ToggleIcon on={isOpen} />}
-          {label}
-        </ListItem>
-      )}
-      renderList={({ search, items }) => (
+    <TreeMenu data={dataInArray} debounceTime={125} onClickItem={action(`on click node`)}>
+      {({ search, items }) => (
         <>
           <Input onChange={e => search(e.target.value)} placeholder="Type and search" />
-          <ListGroup>{items}</ListGroup>
+          <ListGroup>
+            {items.map(props => (
+              <ListItem {...props} />
+            ))}
+          </ListGroup>
         </>
       )}
-    />
+    </TreeMenu>
   ));

@@ -2,12 +2,7 @@ import * as React from 'react';
 import { debounce } from 'lodash';
 
 import walk, { TreeNode, Item } from './walk';
-import {
-  renderItem as defaultRenderItem,
-  renderList as defaultRenderList,
-  RenderItem,
-  RenderList,
-} from './renderProps';
+import { defaultChildren, TreeMenuChildren, TreeMenuItem } from './renderProps';
 
 type TreeMenuProps = {
   data: { [name: string]: TreeNode };
@@ -15,8 +10,7 @@ type TreeMenuProps = {
   openNodes?: string[];
   onClickItem: (props: Item) => void;
   debounceTime: number;
-  renderItem: RenderItem;
-  renderList: RenderList;
+  children: TreeMenuChildren;
 };
 
 type TreeMenuState = {
@@ -32,8 +26,7 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
     data: {},
     onClickItem: defaultOnClick,
     debounceTime: 125,
-    renderItem: defaultRenderItem,
-    renderList: defaultRenderList,
+    children: defaultChildren,
   };
 
   state: TreeMenuState = { openNodes: [], searchTerm: '', activeKey: '' };
@@ -58,41 +51,36 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
     }
   };
 
-  getOnClickItem = (props: Item) => () => {
-    this.toggleNode(props.key);
-    this.props.onClickItem(props);
-  };
-
-  loadListItems = (): JSX.Element[] => {
-    const { data, renderItem } = this.props;
+  generateItems = (): TreeMenuItem[] => {
+    const { data, onClickItem } = this.props;
     const { searchTerm } = this.state;
     const openNodes = this.props.openNodes || this.state.openNodes;
     const activeKey = this.props.activeKey || this.state.activeKey;
 
     const items: Item[] = walk({ data, openNodes, searchTerm });
 
-    return items.map(({ key, ...props }) => {
-      const onClick = this.getOnClickItem({ key, ...props });
-
-      return renderItem({
-        onClick,
-        active: key === activeKey,
-        key,
+    return items.map(props => {
+      const { key } = props;
+      const onClick = () => {
+        this.toggleNode(props.key);
+        onClickItem(props);
+      };
+      return {
         ...props,
-      });
+        active: key === activeKey,
+        onClick,
+      };
     });
   };
 
   render() {
-    const { data, renderList } = this.props;
-    return (
-      <>
-        {renderList({
-          search: this.onSearch,
-          items: data ? this.loadListItems() : [],
-        })}
-      </>
-    );
+    const { data, children } = this.props;
+
+    const search = this.onSearch;
+    const items = data ? this.generateItems() : [];
+    const renderedChildren = children || defaultChildren;
+
+    return renderedChildren({ search, items });
   }
 }
 

@@ -1,13 +1,16 @@
 {
   "name": "react-simple-tree-menu",
-  "version": "0.1.4-rc.2",
+  "version": "1.0.0",
   "description": "A simple React tree menu component",
   "keywords": [
     "react",
     "tree",
     "menu",
     "react-component",
-    "tree menu"
+    "tree menu",
+    "render-props",
+    "control-props",
+    "downshift"
   ],
   "main": "dist/main.js",
   "types": "dist/index.d.ts",
@@ -17,14 +20,16 @@
   ],
   "scripts": {
     "test": "jest",
-    "test:ci": "jest --ci",
+    "test:ci": "jest --ci --runInBand --reporters=jest-junit",
     "build:dev": "cross-env ANALYSIS=true webpack --config webpack.dev.js",
     "build:prod": "cross-env ANALYSIS=true webpack --config webpack.prod.js",
     "storybook": "start-storybook -p 9001 -c .storybook",
     "build-storybook": "build-storybook",
     "deploy-storybook": "storybook-to-ghpages",
     "publish:dev": "npm publish --tag beta",
-    "publish:prod": "npm publish"
+    "publish:prod": "npm publish",
+    "add-version-suffix": "node ./node_modules/npm-version-suffix/run-add-suffix.js",
+    "remove-version-suffix": "node ./node_modules/npm-version-suffix/run-remove-suffix.js"
   },
   "repository": {
     "type": "git",
@@ -63,14 +68,18 @@
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.7.1",
     "enzyme-to-json": "^3.3.5",
+    "escape-string-regexp": "^2.0.0",
+    "execa": "^1.0.0",
     "jest": "^24.1.0",
     "jest-junit": "^6.3.0",
+    "npm-version-suffix": "0.1.0",
     "prettier": "^1.15.2",
     "prop-types": "^15.6.2",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react-test-renderer": "^16.7.0",
     "reactstrap": "^7.1.0",
+    "replace-in-file": "^3.4.4",
     "source-map-loader": "^0.2.4",
     "style-loader": "^0.23.1",
     "ts-jest": "^24.0.0",

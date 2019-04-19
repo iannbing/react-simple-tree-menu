@@ -38,11 +38,57 @@ const mockData = {
 };
 
 describe('TreeViewMenu', () => {
-  it('should render the roots only', () => {
+  it('should render the level-1 nodes by default', () => {
+    const wrapper = shallow(<TreeViewMenu data={mockData} />);
+
+    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.find('li').length).toEqual(2);
+  });
+  it('should open specified nodes', () => {
     const wrapper = shallow(
-      <TreeViewMenu data={mockData} activeKey="releasenotes/desktop-modeler/7" />
+      <TreeViewMenu
+        data={mockData}
+        openNodes={['releasenotes', 'releasenotes/desktop-modeler']}
+      />
     );
 
     expect(wrapper).toMatchSnapshot();
+    expect(wrapper.find('li').length).toEqual(4);
+  });
+  it('should highlight the active node', () => {
+    const activeKey = 'releasenotes/desktop-modeler/7';
+    const highLightColor = 'white';
+    const wrapper = shallow(
+      <TreeViewMenu
+        data={mockData}
+        activeKey={activeKey}
+        openNodes={['releasenotes', 'releasenotes/desktop-modeler']}
+      />
+    );
+    const highlightedElement = wrapper.findWhere(node => node.key() === activeKey).get(0);
+
+    expect(wrapper).toMatchSnapshot();
+    expect(highlightedElement.props.style.color).toEqual(highLightColor);
+  });
+  it('should trigger onClickItem when a node is clicked', () => {
+    const mockOnClickItem = jest.fn();
+    const wrapper = shallow(
+      <TreeViewMenu data={mockData} onClickItem={mockOnClickItem} />
+    );
+
+    const targetNode = wrapper.findWhere(node => node.key() === 'releasenotes');
+    targetNode.simulate('click');
+    expect(mockOnClickItem.mock.calls.length).toEqual(1);
+    expect(mockOnClickItem).toHaveBeenCalledWith({
+      hasNodes: true,
+      index: 0,
+      isOpen: false,
+      key: 'releasenotes',
+      label: 'Release Notes',
+      level: 0,
+      openNodes: [],
+      parent: '',
+      searchTerm: '',
+    });
   });
 });
