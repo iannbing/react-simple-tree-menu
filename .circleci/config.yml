@@ -122,7 +122,10 @@ workflows:
   version: 2.1
   build:
     jobs:
-      - build
+      - build:
+          filters:
+            branches:
+              ignore: gh-pages
   release:
     jobs:
       - release_rc:
