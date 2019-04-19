@@ -111,6 +111,7 @@ jobs:
     steps:
       - install
       - run_tests
+      - build_story
       - build:
           environment: 'prod'
       - publish:
