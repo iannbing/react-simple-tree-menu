@@ -3,18 +3,22 @@
 exports[`defaultChildren should render the toggle icon with "on" equals to false 1`] = `
 Array [
   <input
+    aria-label="Type and search"
     onChange={[Function]}
     placeholder="Type and search"
     style={
       Object {
-        "margin": ".5em",
-        "paddingLeft": ".4em",
+        "border": "none",
+        "padding": "1rem 2rem",
+        "width": "100%",
       }
     }
+    type="search"
   />,
   <ul
     style={
       Object {
+        "borderTop": "1px solid #ccc",
         "listStyleType": "none",
         "paddingLeft": 0,
       }
@@ -22,29 +26,34 @@ Array [
   >
     <li
       key="key"
+      role="button"
       style={
         Object {
           "background": "none",
+          "borderBottom": "1px solid #ccc",
           "color": "#333",
           "cursor": "pointer",
-          "paddingLeft": "3.5rem",
+          "padding": " .75rem  1rem  .75rem 4.75rem",
         }
       }
     >
       <div
         style={
           Object {
-            "height": "1rem",
-            "left": "2.25rem",
+            "height": "2rem",
+            "left": "3.25rem",
             "position": "absolute",
-            "width": "1rem",
+            "width": "2rem",
           }
         }
       >
         <ToggleIcon
           on={false}
         >
-          <div>
+          <div
+            aria-label="Toggle"
+            role="img"
+          >
             +
           </div>
         </ToggleIcon>
@@ -58,18 +67,22 @@ Array [
 exports[`defaultChildren should render the toggle icon with "on" equals to true 1`] = `
 Array [
   <input
+    aria-label="Type and search"
     onChange={[Function]}
     placeholder="Type and search"
     style={
       Object {
-        "margin": ".5em",
-        "paddingLeft": ".4em",
+        "border": "none",
+        "padding": "1rem 2rem",
+        "width": "100%",
       }
     }
+    type="search"
   />,
   <ul
     style={
       Object {
+        "borderTop": "1px solid #ccc",
         "listStyleType": "none",
         "paddingLeft": 0,
       }
@@ -77,29 +90,34 @@ Array [
   >
     <li
       key="foo"
+      role="button"
       style={
         Object {
           "background": "none",
+          "borderBottom": "1px solid #ccc",
           "color": "#333",
           "cursor": "pointer",
-          "paddingLeft": "3.5rem",
+          "padding": " .75rem  1rem  .75rem 4.75rem",
         }
       }
     >
       <div
         style={
           Object {
-            "height": "1rem",
-            "left": "2.25rem",
+            "height": "2rem",
+            "left": "3.25rem",
             "position": "absolute",
-            "width": "1rem",
+            "width": "2rem",
           }
         }
       >
         <ToggleIcon
           on={true}
         >
-          <div>
+          <div
+            aria-label="Toggle"
+            role="img"
+          >
             -
           </div>
         </ToggleIcon>
@@ -108,12 +126,14 @@ Array [
     </li>
     <li
       key="bar"
+      role="button"
       style={
         Object {
           "background": "none",
+          "borderBottom": "1px solid #ccc",
           "color": "#333",
           "cursor": "pointer",
-          "paddingLeft": "4.75rem",
+          "padding": " .75rem  1rem  .75rem 6rem",
         }
       }
     >
@@ -121,12 +141,14 @@ Array [
     </li>
     <li
       key="zoo"
+      role="button"
       style={
         Object {
           "background": "none",
+          "borderBottom": "1px solid #ccc",
           "color": "#333",
           "cursor": "pointer",
-          "paddingLeft": "4.75rem",
+          "padding": " .75rem  1rem  .75rem 6rem",
         }
       }
     >
@@ -139,18 +161,22 @@ Array [
 exports[`defaultChildren should render without the toggle icon 1`] = `
 Array [
   <input
+    aria-label="Type and search"
     onChange={[Function]}
     placeholder="Type and search"
     style={
       Object {
-        "margin": ".5em",
-        "paddingLeft": ".4em",
+        "border": "none",
+        "padding": "1rem 2rem",
+        "width": "100%",
       }
     }
+    type="search"
   />,
   <ul
     style={
       Object {
+        "borderTop": "1px solid #ccc",
         "listStyleType": "none",
         "paddingLeft": 0,
       }
@@ -158,12 +184,14 @@ Array [
   >
     <li
       key="key"
+      role="button"
       style={
         Object {
           "background": "none",
+          "borderBottom": "1px solid #ccc",
           "color": "#333",
           "cursor": "pointer",
-          "paddingLeft": "2.25rem",
+          "padding": " .75rem  1rem  .75rem 3.5rem",
         }
       }
     >

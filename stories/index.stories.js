@@ -14,7 +14,15 @@ const ICON_SIZE = 8;
 const LEVEL_SPACE = 16;
 
 const ToggleIcon = ({ on }) => <span style={{ marginRight: 8 }}>{on ? '-' : '+'}</span>;
-const ListItem = ({ level = 0, hasNodes, isOpen, label, ...props }) => (
+const ListItem = ({
+  level = 0,
+  hasNodes,
+  isOpen,
+  label,
+  searchTerm,
+  openNodes,
+  ...props
+}) => (
   <ListGroupItem
     {...props}
     style={{

@@ -1,9 +1,13 @@
 import * as React from 'react';
 
-const DEFAULT_PADDING = 1.25;
+const DEFAULT_PADDING = 1.5;
 const LEVEL_SPACE = 1.25;
-const ICON_SIZE = 1;
-const ToggleIcon = ({ on }: { on: boolean }) => <div>{on ? '-' : '+'}</div>;
+const ICON_SIZE = 2;
+const ToggleIcon = ({ on }: { on: boolean }) => (
+  <div role="img" aria-label="Toggle">
+    {on ? '-' : '+'}
+  </div>
+);
 
 export interface TreeMenuItem {
   hasNodes?: boolean;
@@ -16,9 +20,10 @@ export interface TreeMenuItem {
   [name: string]: any;
 }
 
-export type TreeMenuChildren = (
-  props: { search: Function; items: TreeMenuItem[] }
-) => JSX.Element;
+export type TreeMenuChildren = (props: {
+  search: Function;
+  items: TreeMenuItem[];
+}) => JSX.Element;
 
 type RenderItem = (props: TreeMenuItem) => JSX.Element;
 
@@ -33,11 +38,16 @@ const renderItem: RenderItem = ({
 }) => (
   <li
     style={{
-      paddingLeft: `${DEFAULT_PADDING + ICON_SIZE + level * LEVEL_SPACE}rem`,
+      padding: ` .75rem  1rem  .75rem ${DEFAULT_PADDING +
+        ICON_SIZE +
+        level * LEVEL_SPACE}rem`,
       cursor: 'pointer',
       color: active ? 'white' : '#333',
       background: active ? '#179ed3' : 'none',
+      borderBottom: '1px solid #ccc',
     }}
+    role="button"
+    aria-pressed={active}
     onClick={onClick}
     key={key}
   >
@@ -65,11 +75,15 @@ export const defaultChildren: TreeMenuChildren = ({ search, items }) => {
   return (
     <>
       <input
-        style={{ margin: '.5em', paddingLeft: '.4em' }}
+        style={{ padding: '1rem 2rem', border: 'none', width: '100%' }}
+        aria-label="Type and search"
+        type="search"
         placeholder="Type and search"
         onChange={onSearch}
       />
-      <ul style={{ listStyleType: 'none', paddingLeft: 0 }}>{items.map(renderItem)}</ul>
+      <ul style={{ listStyleType: 'none', paddingLeft: 0, borderTop: '1px solid #ccc' }}>
+        {items.map(renderItem)}
+      </ul>
     </>
   );
 };
