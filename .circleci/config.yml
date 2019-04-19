@@ -40,7 +40,7 @@ commands:
       - run:
           name: 'Build'
           command: npm run build:<< parameters.environment >>
-  bump_beta:
+  bump_beta_version:
     description: 'Bump version to beta'
     steps:
       - run:
@@ -67,15 +67,6 @@ commands:
       - run:
           name: 'build storybook'
           command: npm run build-storybook
-  deploy_story:
-    description: 'Deploy the story'
-    steps:
-      - run:
-          name: 'build storybook'
-          command: npm run build-storybook
-      - run:
-          name: 'Deploy the story to the github page'
-          command: npm run deploy-storybook
 
 jobs:
   build:
@@ -98,7 +89,7 @@ jobs:
       - install
       - run_tests
       - build_story
-      - bump_beta
+      - bump_beta_version
       - build:
           environment: 'dev'
       - publish:
@@ -116,7 +107,6 @@ jobs:
           environment: 'prod'
       - publish:
           environment: 'prod'
-      - deploy_story
 
 workflows:
   version: 2.1
@@ -125,7 +115,9 @@ workflows:
       - build:
           filters:
             branches:
-              ignore: gh-pages
+              ignore:
+                - gh-pages
+                - master
   release:
     jobs:
       - release_rc:
