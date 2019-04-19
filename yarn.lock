@@ -7143,6 +7143,15 @@ npm-run-path@^2.0.0:
   dependencies:
     path-key "^2.0.0"
 
+npm-version-suffix@0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/npm-version-suffix/-/npm-version-suffix-0.1.0.tgz#1e2e708081dcec170edc9c890ed1e2497258dbb0"
+  integrity sha512-IVCywW4o5mJqwn49nJP6HufqGqCJaMiyn13MzpBM416n57vzCIt0sfdpsNZdqGjW8wU9pFIQN7jfijmSLBs7qg==
+  dependencies:
+    escape-string-regexp "^2.0.0"
+    execa "^1.0.0"
+    replace-in-file "^3.4.4"
+
 npmlog@^4.0.2, npmlog@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/npmlog/-/npmlog-4.1.2.tgz#08a7f2a8bf734604779a9efa4ad5cc717abb954b"
