@@ -67,6 +67,12 @@ commands:
       - run:
           name: 'build storybook'
           command: npm run build-storybook
+  deploy_story:
+    description: 'Deploy the story'
+    steps:
+      - run:
+          name: 'deploy storybook'
+          command: npm run deploy-storybook
 
 jobs:
   build:
@@ -107,6 +113,7 @@ jobs:
           environment: 'prod'
       - publish:
           environment: 'prod'
+      - deploy_story
 
 workflows:
   version: 2.1
