@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { debounce } from 'lodash';
 
-import walk, { TreeNode, Item } from './walk';
+import walk, { TreeNode, Item, TreeNodeInArray } from './walk';
 import { defaultChildren, TreeMenuChildren, TreeMenuItem } from './renderProps';
 
 type TreeMenuProps = {
-  data: { [name: string]: TreeNode };
+  data: { [name: string]: TreeNode } | TreeNodeInArray[];
   activeKey?: string;
   openNodes?: string[];
   onClickItem: (props: Item) => void;
