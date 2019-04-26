@@ -2,19 +2,18 @@ import { isEmpty } from 'lodash';
 
 export type TreeNodeObject = { [name: string]: TreeNode };
 
-type BaseTreeNode = {
+export type TreeNode = {
   label: string;
+  index: number;
+  nodes?: TreeNodeObject;
   [name: string]: any;
 };
 
-export type TreeNode = BaseTreeNode & {
-  index: number;
-  nodes?: TreeNodeObject;
-};
-
-export type TreeNodeInArray = BaseTreeNode & {
+export type TreeNodeInArray = {
+  label: string;
   key: string;
   nodes?: TreeNodeInArray[];
+  [name: string]: any;
 };
 
 type WalkProps = {

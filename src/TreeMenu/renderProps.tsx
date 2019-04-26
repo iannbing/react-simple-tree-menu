@@ -20,10 +20,12 @@ export interface TreeMenuItem {
   [name: string]: any;
 }
 
-export type TreeMenuChildren = (props: {
-  search: Function;
-  items: TreeMenuItem[];
-}) => JSX.Element;
+export type TreeMenuChildren = (
+  props: {
+    search: Function;
+    items: TreeMenuItem[];
+  }
+) => JSX.Element;
 
 type RenderItem = (props: TreeMenuItem) => JSX.Element;
 
