@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 const DEFAULT_PADDING = 1.5;
 const LEVEL_SPACE = 1.25;
