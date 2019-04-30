@@ -51,5 +51,4 @@ module.exports = {
   },
   plugins: [new CleanWebpackPlugin(['dist'])],
   externals: ['react', 'react-dom'],
-  devtool: 'eval-source-map',
 };

@@ -99,10 +99,34 @@ const dataInArray = [
   },
 ];
 
+const translations = {
+  Mammal: 'Mamífero',
+  Canidae: 'Canidae',
+  Dog: 'Perro',
+  Fox: 'Zorro',
+  Wolf: 'Lobo',
+  Reptile: 'Reptil',
+  Squamata: 'Squamata',
+  Lizard: 'Lagartija',
+  Snake: 'Serpiente',
+  Gekko: 'Gekko',
+};
+
 storiesOf('TreeMenu', module)
   .addDecorator(withInfo)
   .add('default usage', () => (
     <TreeMenu data={dataInArray} onClickItem={action(`on click node`)} />
+  ))
+  .add('translate to Spanish', () => (
+    <TreeMenu
+      data={dataInArray}
+      onClickItem={action(`on click node`)}
+      locale={label => {
+        console.log('label: ' + label);
+        console.log(translations[label]);
+        return translations[label];
+      }}
+    />
   ))
   .add('apply bootstrap', () => (
     <TreeMenu data={dataInArray} debounceTime={125} onClickItem={action(`on click node`)}>
