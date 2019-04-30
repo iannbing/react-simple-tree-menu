@@ -113,7 +113,6 @@ jobs:
           environment: 'prod'
       - publish:
           environment: 'prod'
-      - deploy_story
 
 workflows:
   version: 2.1
