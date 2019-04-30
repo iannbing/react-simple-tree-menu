@@ -120,7 +120,8 @@ import TreeMenu from 'react-simple-tree-menu'
 | onClickItem  | A callback function that defines the behavior when user clicks on an node                                                                | (Item): void                         | `console.warn` |
 | debounceTime | debounce time for searching                                                                                                              | number                               | 125            |
 | openNodes    | you can pass an array of node names to make the branches open                                                                            | string[]                             | null           |
-| children     | a render props that provdes two props: `search` and `items`                                                                              | (ChildrenProps) => React.ReactNode | -              |
+| locale       | you can provide a function that convert `label` into `string`, e.g. if using [i18next](https://github.com/i18next/react-i18next), locale can be `label => t(label)`                | (any) => string                      | x => x         |
+| children     | a render props that provdes two props: `search` and `items`                                                                              | (ChildrenProps) => React.ReactNode   | -              |
 
 ### TreeNode
 

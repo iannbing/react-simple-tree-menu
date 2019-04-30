@@ -1,7 +1,7 @@
 import React from 'react';
 import { debounce } from 'lodash';
 
-import walk, { TreeNode, Item, TreeNodeInArray } from './walk';
+import walk, { TreeNode, Item, TreeNodeInArray, LocaleFunction } from './walk';
 import { defaultChildren, TreeMenuChildren, TreeMenuItem } from './renderProps';
 
 type TreeMenuProps = {
@@ -11,6 +11,7 @@ type TreeMenuProps = {
   onClickItem: (props: Item) => void;
   debounceTime: number;
   children: TreeMenuChildren;
+  locale?: LocaleFunction;
 };
 
 type TreeMenuState = {
@@ -52,12 +53,12 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
   };
 
   generateItems = (): TreeMenuItem[] => {
-    const { data, onClickItem } = this.props;
+    const { data, onClickItem, locale } = this.props;
     const { searchTerm } = this.state;
     const openNodes = this.props.openNodes || this.state.openNodes;
     const activeKey = this.props.activeKey || this.state.activeKey;
 
-    const items: Item[] = walk({ data, openNodes, searchTerm });
+    const items: Item[] = walk({ data, openNodes, searchTerm, locale });
 
     return items.map(props => {
       const { key } = props;
