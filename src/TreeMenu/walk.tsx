@@ -52,29 +52,23 @@ export interface Item {
 
 const walk = ({ data = {}, ...props }: WalkProps): Item[] => {
   const propsWithDefaultValues = { parent: '', level: 0, ...props };
+  const handleArray = (data: TreeNodeInArray[]) =>
+    data.reduce((all: Item[], node: TreeNodeInArray, index) => {
+      const branchProps = { node, index, nodeName: node.key, ...propsWithDefaultValues };
+      const branch = generateBranch(branchProps);
+      return [...all, ...branch];
+    }, []);
 
-  return Array.isArray(data)
-    ? (data as TreeNodeInArray[]).reduce(
-        (all: Item[], node: TreeNodeInArray, index) => [
-          ...all,
-          ...generateBranch({
-            node,
-            nodeName: node.key,
-            index,
-            ...propsWithDefaultValues,
-          }),
-        ],
-        []
-      )
-    : Object.entries(data as TreeNodeObject)
-        .sort((a, b) => a[1].index - b[1].index)
-        .reduce(
-          (all: Item[], [nodeName, node]: [string, TreeNode]) => [
-            ...all,
-            ...generateBranch({ node, nodeName, ...propsWithDefaultValues }),
-          ],
-          []
-        );
+  const handleObject = (data: TreeNodeObject) =>
+    Object.entries(data)
+      .sort((a, b) => a[1].index - b[1].index) // sorted by index
+      .reduce((all: Item[], [nodeName, node]: [string, TreeNode]) => {
+        const branchProps = { node, nodeName, ...propsWithDefaultValues };
+        const branch = generateBranch(branchProps);
+        return [...all, ...branch];
+      }, []);
+
+  return Array.isArray(data) ? handleArray(data) : handleObject(data);
 };
 
 const matchSearch = (label: string, searchTerm: string) => {
