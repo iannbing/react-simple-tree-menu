@@ -1,33 +1,36 @@
 import { isEmpty } from 'lodash';
 
-export type TreeNodeObject = { [name: string]: TreeNode };
+export interface TreeNodeObject {
+  [name: string]: TreeNode;
+}
 
-export type TreeNode = {
+interface LocaleFunctionProps {
   label: string;
+  [name: string]: any;
+}
+
+export interface TreeNode extends LocaleFunctionProps {
   index: number;
   nodes?: TreeNodeObject;
-  [name: string]: any;
-};
+}
 
-export type TreeNodeInArray = {
-  label: string;
+export interface TreeNodeInArray extends LocaleFunctionProps {
   key: string;
   nodes?: TreeNodeInArray[];
-  [name: string]: any;
-};
+}
 
-export type LocaleFunction = (x: any) => string;
+export type LocaleFunction = (localeFunctionProps: LocaleFunctionProps) => string;
 
-type WalkProps = {
+interface WalkProps {
   data: TreeNodeObject | TreeNodeInArray[];
   parent?: string;
   level?: number;
   openNodes: string[];
   searchTerm: string;
   locale?: LocaleFunction;
-};
+}
 
-type BranchProps = {
+interface BranchProps {
   parent: string;
   level: number;
   openNodes: string[];
@@ -36,16 +39,16 @@ type BranchProps = {
   nodeName: string;
   index?: number;
   locale?: LocaleFunction;
-};
+}
 
-export type Item = {
+export interface Item {
   hasNodes: boolean;
   isOpen: boolean;
   level: number;
   key: string;
-  label: string | JSX.Element;
+  label: string;
   [name: string]: any;
-};
+}
 
 const walk = ({ data = {}, ...props }: WalkProps): Item[] => {
   const propsWithDefaultValues = { parent: '', level: 0, ...props };
@@ -79,24 +82,19 @@ const matchSearch = (label: string, searchTerm: string) => {
   return processString(label).includes(processString(searchTerm));
 };
 
-const generateBranch = ({ node, nodeName, ...props }: BranchProps): Item[] => {
-  const { parent, level, openNodes, searchTerm, locale = (x: string) => x } = props;
+const defaultLocale = ({ label }: LocaleFunctionProps): string => label;
 
-  const { nodes, label = 'unknown', ...nodeProps } = node;
+const generateBranch = ({ node, nodeName, ...props }: BranchProps): Item[] => {
+  const { parent, level, openNodes, searchTerm, locale = defaultLocale } = props;
+
+  const { nodes, label: rawLabel = 'unknown', ...nodeProps } = node;
   const key = [parent, nodeName].filter(x => x).join('/');
   const hasNodes = !!nodes && !isEmpty(nodes);
   const isOpen = hasNodes && (openNodes.includes(key) || !!searchTerm);
-  const translatedLabel = locale(label);
-  const isVisible = !searchTerm || matchSearch(translatedLabel, searchTerm);
+  const label = locale({ label: rawLabel, ...nodeProps });
+  const isVisible = !searchTerm || matchSearch(label, searchTerm);
 
-  const currentItem = {
-    ...props,
-    ...nodeProps,
-    label: translatedLabel,
-    hasNodes,
-    isOpen,
-    key,
-  };
+  const currentItem = { ...props, ...nodeProps, label, hasNodes, isOpen, key };
   const data = Array.isArray(nodes)
     ? (nodes as TreeNodeInArray[])
     : (nodes as TreeNodeObject);
