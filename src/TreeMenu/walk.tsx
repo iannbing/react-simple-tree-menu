@@ -1,33 +1,37 @@
 import { isEmpty } from 'lodash';
 
-export type TreeNodeObject = { [name: string]: TreeNode };
+export interface TreeNodeObject {
+  [name: string]: TreeNode;
+}
 
-export type TreeNode = {
+interface LocaleFunctionProps {
   label: string;
+  [name: string]: any;
+}
+
+export interface TreeNode extends LocaleFunctionProps {
   index: number;
   nodes?: TreeNodeObject;
-  [name: string]: any;
-};
+}
 
-export type TreeNodeInArray = {
-  label: string;
+export interface TreeNodeInArray extends LocaleFunctionProps {
   key: string;
   nodes?: TreeNodeInArray[];
-  [name: string]: any;
-};
+}
 
-export type LocaleFunction = (x: any) => string;
+export type LocaleFunction = (localeFunctionProps: LocaleFunctionProps) => string;
 
-type WalkProps = {
-  data: TreeNodeObject | TreeNodeInArray[];
+type Data = TreeNodeObject | TreeNodeInArray[];
+interface WalkProps {
+  data: Data | undefined;
   parent?: string;
   level?: number;
   openNodes: string[];
   searchTerm: string;
   locale?: LocaleFunction;
-};
+}
 
-type BranchProps = {
+interface BranchProps {
   parent: string;
   level: number;
   openNodes: string[];
@@ -36,42 +40,44 @@ type BranchProps = {
   nodeName: string;
   index?: number;
   locale?: LocaleFunction;
-};
+}
 
-export type Item = {
+export interface Item {
   hasNodes: boolean;
   isOpen: boolean;
   level: number;
   key: string;
-  label: string | JSX.Element;
+  label: string;
   [name: string]: any;
-};
+}
 
-const walk = ({ data = {}, ...props }: WalkProps): Item[] => {
+const validateData = (data: Data | undefined): boolean => !!data && !isEmpty(data);
+const getValidatedData = (data: Data | undefined) =>
+  validateData(data) ? (data as Data) : [];
+
+const walk = ({ data, ...props }: WalkProps): Item[] => {
+  const validatedData = getValidatedData(data);
+
   const propsWithDefaultValues = { parent: '', level: 0, ...props };
+  const handleArray = (dataAsArray: TreeNodeInArray[]) =>
+    dataAsArray.reduce((all: Item[], node: TreeNodeInArray, index) => {
+      const branchProps = { node, index, nodeName: node.key, ...propsWithDefaultValues };
+      const branch = generateBranch(branchProps);
+      return [...all, ...branch];
+    }, []);
 
-  return Array.isArray(data)
-    ? (data as TreeNodeInArray[]).reduce(
-        (all: Item[], node: TreeNodeInArray, index) => [
-          ...all,
-          ...generateBranch({
-            node,
-            nodeName: node.key,
-            index,
-            ...propsWithDefaultValues,
-          }),
-        ],
-        []
-      )
-    : Object.entries(data as TreeNodeObject)
-        .sort((a, b) => a[1].index - b[1].index)
-        .reduce(
-          (all: Item[], [nodeName, node]: [string, TreeNode]) => [
-            ...all,
-            ...generateBranch({ node, nodeName, ...propsWithDefaultValues }),
-          ],
-          []
-        );
+  const handleObject = (dataAsObject: TreeNodeObject) =>
+    Object.entries(dataAsObject)
+      .sort((a, b) => a[1].index - b[1].index) // sorted by index
+      .reduce((all: Item[], [nodeName, node]: [string, TreeNode]) => {
+        const branchProps = { node, nodeName, ...propsWithDefaultValues };
+        const branch = generateBranch(branchProps);
+        return [...all, ...branch];
+      }, []);
+
+  return Array.isArray(validatedData)
+    ? handleArray(validatedData)
+    : handleObject(validatedData);
 };
 
 const matchSearch = (label: string, searchTerm: string) => {
@@ -79,30 +85,25 @@ const matchSearch = (label: string, searchTerm: string) => {
   return processString(label).includes(processString(searchTerm));
 };
 
+const defaultLocale = ({ label }: LocaleFunctionProps): string => label;
+
 const generateBranch = ({ node, nodeName, ...props }: BranchProps): Item[] => {
-  const { parent, level, openNodes, searchTerm, locale = (x: string) => x } = props;
+  const { parent, level, openNodes, searchTerm, locale = defaultLocale } = props;
 
-  const { nodes, label = 'unknown', ...nodeProps } = node;
+  const { nodes, label: rawLabel = 'unknown', ...nodeProps } = node;
   const key = [parent, nodeName].filter(x => x).join('/');
-  const hasNodes = !!nodes && !isEmpty(nodes);
+  const hasNodes = validateData(nodes);
   const isOpen = hasNodes && (openNodes.includes(key) || !!searchTerm);
-  const translatedLabel = locale(label);
-  const isVisible = !searchTerm || matchSearch(translatedLabel, searchTerm);
 
-  const currentItem = {
-    ...props,
-    ...nodeProps,
-    label: translatedLabel,
-    hasNodes,
-    isOpen,
-    key,
-  };
-  const data = Array.isArray(nodes)
-    ? (nodes as TreeNodeInArray[])
-    : (nodes as TreeNodeObject);
+  const label = locale({ label: rawLabel, ...nodeProps });
+  const isVisible = !searchTerm || matchSearch(label, searchTerm);
+  const currentItem = { ...props, ...nodeProps, label, hasNodes, isOpen, key };
+
+  const data = getValidatedData(nodes);
   const nextLevelItems = isOpen
     ? walk({ data, ...props, parent: key, level: level + 1 })
     : [];
+
   return isVisible ? [currentItem, ...nextLevelItems] : nextLevelItems;
 };
 
