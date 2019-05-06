@@ -128,7 +128,7 @@ import TreeMenu from 'react-simple-tree-menu'
 
 | props    | description                                                                                                            | type                              | default |
 | -------- | ---------------------------------------------------------------------------------------------------------------------- | --------------------------------- | ------- |
-| label    | the rendered text of a Node                                                                                            | string \| React.ReactNode         | ''      |
+| label    | the rendered text of a Node                                                                                            | string                            | ''      |
 | index    | a number that defines the rendering order of this node on the same level; this is not needed if `data` is `TreeNode[]` | number                            | -       |
 | nodes    | a node without this property means that it is the last child of its branch                                             | {[string]:TreeNode} \| TreeNode[] | -       |
 | ...other | User defined props                                                                                                     | any                               | -       |
@@ -138,7 +138,7 @@ import TreeMenu from 'react-simple-tree-menu'
 | props    | description                                                                                                            | type                              | default |
 | -------- | ---------------------------------------------------------------------------------------------------------------------- | --------------------------------- | ------- |
 | key      | Node name                                                                                                              | string                            | -       |
-| label    | the rendered text of a Node                                                                                            | string \| React.ReactNode         | ''      |
+| label    | the rendered text of a Node                                                                                            | string                            | ''      |
 | nodes    | a node without this property means that it is the last child of its branch                                             | {[string]:TreeNode} \| TreeNode[] | -       |
 | ...other | User defined props                                                                                                     | any                               | -       |
 
@@ -150,7 +150,7 @@ import TreeMenu from 'react-simple-tree-menu'
 | isOpen   | if it is showing its children                  | boolean                   | false   |
 | level    | the level of the current node (root is zero)   | number                    | 0       |
 | key      | key of a `TreeNode`                            | string                    | -       |
-| label    | `TreeNode` `label`                             | string \| React.ReactNode | -       |
+| label    | `TreeNode` `label`                             | string                    | -       |
 | ...other | User defined props                             | any                       | -       |
 
 ### ChildrenProps
@@ -168,7 +168,7 @@ import TreeMenu from 'react-simple-tree-menu'
 | isOpen   | if it is showing its children                            | boolean                   | false   |
 | level    | the level of the current node (root is zero)             | number                    | 0       |
 | key      | key of a `TreeNode`                                      | string                    | -       |
-| label    | `TreeNode` `label`                                       | string \| React.ReactNode | -       |
+| label    | `TreeNode` `label`                                       | string                    | -       |
 | active   | if current node is being selected                        | boolean                   | -       |
 | onClick  | a callback function that is run when the node is clicked | Function                  | -       |
 | ...other | User defined props                                       | {[string]: any}           | -       |
