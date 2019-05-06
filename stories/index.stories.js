@@ -117,18 +117,25 @@ storiesOf('TreeMenu', module)
   .add('default usage', () => (
     <TreeMenu data={dataInArray} onClickItem={action(`on click node`)} />
   ))
+  .add('has initialOpenNode', () => (
+    <TreeMenu
+      data={dataInArray}
+      onClickItem={action(`on click node`)}
+      initialOpenNodes={['reptile', 'reptile/squamata', 'reptile/squamata/lizard']}
+    />
+  ))
   .add('translate to Spanish', () => (
     <TreeMenu
       data={dataInArray}
       onClickItem={action(`on click node`)}
-      locale={label => {
+      locale={({ label }) => {
         console.log('label: ' + label);
         console.log(translations[label]);
         return translations[label];
       }}
     />
   ))
-  .add('apply bootstrap', () => (
+  .add('apply other UI framework, e.g. bootstrap', () => (
     <TreeMenu data={dataInArray} debounceTime={125} onClickItem={action(`on click node`)}>
       {({ search, items }) => (
         <>

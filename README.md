@@ -113,15 +113,16 @@ import TreeMenu from 'react-simple-tree-menu'
 
 ### TreeViewMenu
 
-| props        | description                                                                                                                              | type                                        | default            |
-| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- | ------------------ |
-| data         | Data that defines the structure of the tree. You can nest it as many levels as you want, but note that it might cause performance issue. | {[string]:TreeNode} \| TreeNodeInArray[]    | -                  |
-| activeKey    | the node matching this key will be highlighted                                                                                           | string                                      | ''                 |
-| onClickItem  | A callback function that defines the behavior when user clicks on an node                                                                | (Item): void                                | `console.warn`     |
-| debounceTime | debounce time for searching                                                                                                              | number                                      | 125                |
-| openNodes    | you can pass an array of node names to make the branches open                                                                            | string[]                                    | null               |
-| locale       | you can provide a function that convert `label` into `string`                                                                            | ({label, ...other}) => string               | ({label}) => label |
-| children     | a render props that provdes two props: `search` and `items`                                                                              | (ChildrenProps) => React.ReactNode          | -                  |
+| props               | description                                                                                                                              | type                                        | default            |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- | ------------------ |
+| data                | Data that defines the structure of the tree. You can nest it as many levels as you want, but note that it might cause performance issue. | {[string]:TreeNode} \| TreeNodeInArray[]    | -                  |
+| activeKey           | the node matching this key will be highlighted                                                                                           | string                                      | ''                 |
+| onClickItem         | A callback function that defines the behavior when user clicks on an node                                                                | (Item): void                                | `console.warn`     |
+| debounceTime        | debounce time for searching                                                                                                              | number                                      | 125                |
+| openNodes           | you can pass an array of node names to control the open state of certain branches                                                        | string[]                                    | -                  |
+| initialOpenNodes    | you can pass an array of node names to set some branches open as initial state                                                           | string[]                                    | -                  |
+| locale              | you can provide a function that convert `label` into `string`                                                                            | ({label, ...other}) => string               | ({label}) => label |
+| children            | a render props that provdes two props: `search` and `items`                                                                              | (ChildrenProps) => React.ReactNode          | -                  |
 
 ### TreeNode
 
