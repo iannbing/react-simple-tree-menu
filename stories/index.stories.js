@@ -117,18 +117,73 @@ storiesOf('TreeMenu', module)
   .add('default usage', () => (
     <TreeMenu data={dataInArray} onClickItem={action(`on click node`)} />
   ))
+  .add('has initial states', () => (
+    <TreeMenu
+      data={dataInArray}
+      onClickItem={action(`on click node`)}
+      initialOpenNodes={['reptile', 'reptile/squamata', 'reptile/squamata/lizard']}
+      initialActiveKey="reptile"
+    />
+  ))
+  .add('control TreeMenu from its parent', () => {
+    class TreeMenuWrapper extends React.Component {
+      state = { openNodes: [] };
+      render() {
+        return (
+          <>
+            <div style={{ padding: '12px', background: 'black' }}>
+              <button
+                style={{ margin: '4px' }}
+                onClick={() =>
+                  this.setState({ openNodes: ['reptile'], activeKey: 'reptile' })
+                }
+              >
+                Open Reptile
+              </button>
+              <button
+                style={{ margin: '4px' }}
+                onClick={() =>
+                  this.setState({ openNodes: ['mammal'], activeKey: 'mammal' })
+                }
+              >
+                Open Mammal
+              </button>
+              <button
+                style={{ margin: '4px' }}
+                onClick={() =>
+                  this.setState({
+                    openNodes: ['mammal', 'mammal/canidae'],
+                    activeKey: 'mammal/canidae/dog',
+                  })
+                }
+              >
+                Highlight Dog
+              </button>
+            </div>
+            <TreeMenu
+              data={dataInArray}
+              activeKey={this.state.activeKey}
+              onClickItem={action(`on click node`)}
+              openNodes={this.state.openNodes}
+            />
+          </>
+        );
+      }
+    }
+    return <TreeMenuWrapper />;
+  })
   .add('translate to Spanish', () => (
     <TreeMenu
       data={dataInArray}
       onClickItem={action(`on click node`)}
-      locale={label => {
+      locale={({ label }) => {
         console.log('label: ' + label);
         console.log(translations[label]);
         return translations[label];
       }}
     />
   ))
-  .add('apply bootstrap', () => (
+  .add('apply other UI framework, e.g. bootstrap', () => (
     <TreeMenu data={dataInArray} debounceTime={125} onClickItem={action(`on click node`)}>
       {({ search, items }) => (
         <>

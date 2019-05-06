@@ -7,6 +7,8 @@ import { defaultChildren, TreeMenuChildren, TreeMenuItem } from './renderProps';
 type TreeMenuProps = {
   data: { [name: string]: TreeNode } | TreeNodeInArray[];
   activeKey?: string;
+  initialActiveKey?: string;
+  initialOpenNodes?: string[];
   openNodes?: string[];
   onClickItem: (props: Item) => void;
   debounceTime: number;
@@ -30,7 +32,11 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
     children: defaultChildren,
   };
 
-  state: TreeMenuState = { openNodes: [], searchTerm: '', activeKey: '' };
+  state: TreeMenuState = {
+    openNodes: this.props.initialOpenNodes || [],
+    searchTerm: '',
+    activeKey: this.props.initialActiveKey || '',
+  };
 
   onSearch = (value: string) => {
     const { debounceTime } = this.props;
