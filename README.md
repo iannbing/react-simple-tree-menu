@@ -123,6 +123,7 @@ import TreeMenu from 'react-simple-tree-menu'
 | openNodes           | you can pass an array of node names to control the open state of certain branches                                                        | string[]                                    | -                  |
 | initialOpenNodes    | you can pass an array of node names to set some branches open as initial state                                                           | string[]                                    | -                  |
 | locale              | you can provide a function that convert `label` into `string`                                                                            | ({label, ...other}) => string               | ({label}) => label |
+| matchSearch         | you can provide a function that convert `label` and `searchTerm` into `boolean`                                                          | ({label, searchTerm, ...other}) => boolean  | ({label}) => isVisible |
 | children            | a render props that provdes two props: `search` and `items`                                                                              | (ChildrenProps) => React.ReactNode          | -                  |
 
 ### TreeNode
