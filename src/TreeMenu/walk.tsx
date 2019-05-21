@@ -24,7 +24,7 @@ export interface TreeNodeInArray extends LocaleFunctionProps {
 }
 
 export type LocaleFunction = (localeFunctionProps: LocaleFunctionProps) => string;
-export type MatchSearchFunction = (MatchSearchFunctionProps: MatchSearchFunctionProps) => string;
+export type MatchSearchFunction = (matchSearchFunctionProps: MatchSearchFunctionProps) => string;
 
 type Data = TreeNodeObject | TreeNodeInArray[];
 interface WalkProps {
@@ -87,7 +87,7 @@ const walk = ({ data, ...props }: WalkProps): Item[] => {
     : handleObject(validatedData);
 };
 
-const defaultMatchSearch = ({label, searchTerm}: MatchSearchFunctionProps) => {
+const defaultMatchSearch = ({ label, searchTerm }: MatchSearchFunctionProps) => {
   const processString = (text: string): string => text.trim().toLowerCase();
   return processString(label).includes(processString(searchTerm));
 };
