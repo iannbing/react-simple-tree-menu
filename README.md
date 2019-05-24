@@ -123,6 +123,7 @@ import TreeMenu from 'react-simple-tree-menu'
 | openNodes           | you can pass an array of node names to control the open state of certain branches                                                        | string[]                                    | -                  |
 | initialOpenNodes    | you can pass an array of node names to set some branches open as initial state                                                           | string[]                                    | -                  |
 | locale              | you can provide a function that convert `label` into `string`                                                                            | ({label, ...other}) => string               | ({label}) => label |
+| matchSearch         | you can provide a function that convert `label` and `searchTerm` into `boolean`. This is useful if you want to customize the search method using your own algorithm.                                                          | ({label, searchTerm, ...other}) => boolean  | ({label, searchTerm}) => isVisible |
 | children            | a render props that provdes two props: `search` and `items`                                                                              | (ChildrenProps) => React.ReactNode          | -                  |
 
 ### TreeNode
@@ -173,7 +174,6 @@ import TreeMenu from 'react-simple-tree-menu'
 | active   | if current node is being selected                        | boolean                   | -       |
 | onClick  | a callback function that is run when the node is clicked | Function                  | -       |
 | ...other | User defined props                                       | {[string]: any}           | -       |
-
 
 ## Dependencies
 

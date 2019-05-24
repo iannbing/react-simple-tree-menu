@@ -9,6 +9,10 @@ interface LocaleFunctionProps {
   [name: string]: any;
 }
 
+interface MatchSearchFunctionProps extends LocaleFunctionProps{
+  searchTerm: string;
+}
+
 export interface TreeNode extends LocaleFunctionProps {
   index: number;
   nodes?: TreeNodeObject;
@@ -20,6 +24,7 @@ export interface TreeNodeInArray extends LocaleFunctionProps {
 }
 
 export type LocaleFunction = (localeFunctionProps: LocaleFunctionProps) => string;
+export type MatchSearchFunction = (matchSearchFunctionProps: MatchSearchFunctionProps) => string;
 
 type Data = TreeNodeObject | TreeNodeInArray[];
 interface WalkProps {
@@ -29,6 +34,7 @@ interface WalkProps {
   openNodes: string[];
   searchTerm: string;
   locale?: LocaleFunction;
+  matchSearch?: MatchSearchFunction;
 }
 
 interface BranchProps {
@@ -40,6 +46,7 @@ interface BranchProps {
   nodeName: string;
   index?: number;
   locale?: LocaleFunction;
+  matchSearch?: MatchSearchFunction;
 }
 
 export interface Item {
@@ -80,7 +87,7 @@ const walk = ({ data, ...props }: WalkProps): Item[] => {
     : handleObject(validatedData);
 };
 
-const matchSearch = (label: string, searchTerm: string) => {
+const defaultMatchSearch = ({ label, searchTerm }: MatchSearchFunctionProps) => {
   const processString = (text: string): string => text.trim().toLowerCase();
   return processString(label).includes(processString(searchTerm));
 };
@@ -88,7 +95,7 @@ const matchSearch = (label: string, searchTerm: string) => {
 const defaultLocale = ({ label }: LocaleFunctionProps): string => label;
 
 const generateBranch = ({ node, nodeName, ...props }: BranchProps): Item[] => {
-  const { parent, level, openNodes, searchTerm, locale = defaultLocale } = props;
+  const { parent, level, openNodes, searchTerm, matchSearch = defaultMatchSearch, locale = defaultLocale } = props;
 
   const { nodes, label: rawLabel = 'unknown', ...nodeProps } = node;
   const key = [parent, nodeName].filter(x => x).join('/');
@@ -96,7 +103,7 @@ const generateBranch = ({ node, nodeName, ...props }: BranchProps): Item[] => {
   const isOpen = hasNodes && (openNodes.includes(key) || !!searchTerm);
 
   const label = locale({ label: rawLabel, ...nodeProps });
-  const isVisible = !searchTerm || matchSearch(label, searchTerm);
+  const isVisible = !searchTerm || matchSearch({ label, searchTerm, ...nodeProps });
   const currentItem = { ...props, ...nodeProps, label, hasNodes, isOpen, key };
 
   const data = getValidatedData(nodes);
