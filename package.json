@@ -1,6 +1,6 @@
 {
   "name": "react-simple-tree-menu",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A simple React tree menu component",
   "keywords": [
     "react",
@@ -86,7 +86,7 @@
     "ts-jest": "^24.0.0",
     "typescript": "^3.2.2",
     "webpack": "^4.26.1",
-    "webpack-bundle-analyzer": "^3.0.3",
+    "webpack-bundle-analyzer": "^3.3.2",
     "webpack-cli": "^3.1.2",
     "webpack-merge": "^4.1.4"
   },
