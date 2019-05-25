@@ -28,6 +28,7 @@
         "camel2DashComponentName": false
       },
       "lodash"
-    ]
+    ],
+    "transform-es2015-modules-simple-commonjs"
   ]
 }

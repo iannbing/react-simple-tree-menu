@@ -10,6 +10,9 @@ module.exports = merge(common, {
   mode: 'production',
   plugins: [
     new webpack.optimize.ModuleConcatenationPlugin(),
-    new BundleAnalyzerPlugin({ analyzerMode: 'static' }),
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'static',
+      reportFilename: '../reports/bundle-report.html',
+    }),
   ],
 });

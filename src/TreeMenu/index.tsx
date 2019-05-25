@@ -1,7 +1,13 @@
 import React from 'react';
 import { debounce } from 'lodash';
 
-import walk, { TreeNode, Item, TreeNodeInArray, LocaleFunction, MatchSearchFunction } from './walk';
+import walk, {
+  TreeNode,
+  Item,
+  TreeNodeInArray,
+  LocaleFunction,
+  MatchSearchFunction,
+} from './walk';
 import { defaultChildren, TreeMenuChildren, TreeMenuItem } from './renderProps';
 
 type TreeMenuProps = {

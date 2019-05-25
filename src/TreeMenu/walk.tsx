@@ -9,7 +9,7 @@ interface LocaleFunctionProps {
   [name: string]: any;
 }
 
-interface MatchSearchFunctionProps extends LocaleFunctionProps{
+interface MatchSearchFunctionProps extends LocaleFunctionProps {
   searchTerm: string;
 }
 
@@ -24,7 +24,9 @@ export interface TreeNodeInArray extends LocaleFunctionProps {
 }
 
 export type LocaleFunction = (localeFunctionProps: LocaleFunctionProps) => string;
-export type MatchSearchFunction = (matchSearchFunctionProps: MatchSearchFunctionProps) => string;
+export type MatchSearchFunction = (
+  matchSearchFunctionProps: MatchSearchFunctionProps
+) => string;
 
 type Data = TreeNodeObject | TreeNodeInArray[];
 interface WalkProps {
@@ -95,7 +97,14 @@ const defaultMatchSearch = ({ label, searchTerm }: MatchSearchFunctionProps) => 
 const defaultLocale = ({ label }: LocaleFunctionProps): string => label;
 
 const generateBranch = ({ node, nodeName, ...props }: BranchProps): Item[] => {
-  const { parent, level, openNodes, searchTerm, matchSearch = defaultMatchSearch, locale = defaultLocale } = props;
+  const {
+    parent,
+    level,
+    openNodes,
+    searchTerm,
+    matchSearch = defaultMatchSearch,
+    locale = defaultLocale,
+  } = props;
 
   const { nodes, label: rawLabel = 'unknown', ...nodeProps } = node;
   const key = [parent, nodeName].filter(x => x).join('/');
