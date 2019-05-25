@@ -7,10 +7,11 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'main.js',
-    library: 'react-simple-tree-menu',
+    library: 'ReactSimpleTreeMenu',
     libraryTarget: 'umd',
     publicPath: '/dist/',
-    umdNamedDefine: false,
+    umdNamedDefine: true,
+    globalObject: `typeof self !== 'undefined' ? self : this`,
   },
   module: {
     rules: [
