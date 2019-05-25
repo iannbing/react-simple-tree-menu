@@ -117,6 +117,13 @@ storiesOf('TreeMenu', module)
   .add('default usage', () => (
     <TreeMenu data={dataInArray} onClickItem={action(`on click node`)} />
   ))
+  .add('without search', () => (
+    <TreeMenu
+      data={dataInArray}
+      onClickItem={action(`on click node`)}
+      hasSearch={false}
+    />
+  ))
   .add('has initial states', () => (
     <TreeMenu
       data={dataInArray}

@@ -16,6 +16,7 @@ type TreeMenuProps = {
   initialActiveKey?: string;
   initialOpenNodes?: string[];
   openNodes?: string[];
+  hasSearch?: boolean;
   onClickItem: (props: Item) => void;
   debounceTime: number;
   children: TreeMenuChildren;
@@ -37,6 +38,7 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
     onClickItem: defaultOnClick,
     debounceTime: 125,
     children: defaultChildren,
+    hasSearch: true,
   };
 
   state: TreeMenuState = {
@@ -88,9 +90,9 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
   };
 
   render() {
-    const { data, children } = this.props;
+    const { data, children, hasSearch } = this.props;
 
-    const search = this.onSearch;
+    const search = hasSearch ? this.onSearch : undefined;
     const items = data ? this.generateItems() : [];
     const renderedChildren = children || defaultChildren;
 

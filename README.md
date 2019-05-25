@@ -2,6 +2,7 @@
 
 [![npm version](https://badge.fury.io/js/react-simple-tree-menu.svg)](https://badge.fury.io/js/react-simple-tree-menu)
 [![CircleCI](https://circleci.com/gh/iannbing/react-simple-tree-menu/tree/master.svg?style=shield)](https://circleci.com/gh/iannbing/react-simple-tree-menu/tree/master)
+[![Storybook](https://cdn.jsdelivr.net/gh/storybooks/brand@master/badge/badge-storybook.svg)](link to site)
 
 Inspired by [Downshift](https://github.com/downshift-js/downshift), a simple, data-driven, light-weight React Tree Menu component that:
 
@@ -113,18 +114,19 @@ import TreeMenu from 'react-simple-tree-menu'
 
 ### TreeViewMenu
 
-| props               | description                                                                                                                              | type                                        | default            |
-| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- | ------------------ |
-| data                | Data that defines the structure of the tree. You can nest it as many levels as you want, but note that it might cause performance issue. | {[string]:TreeNode} \| TreeNodeInArray[]    | -                  |
-| activeKey           | the node matching this key will be highlighted                                                                                           | string                                      | ''                 |
-| initialActiveKey    | set initial state of `activeKey`                                                                                                         | string                                      | -                  |
-| onClickItem         | A callback function that defines the behavior when user clicks on an node                                                                | (Item): void                                | `console.warn`     |
-| debounceTime        | debounce time for searching                                                                                                              | number                                      | 125                |
-| openNodes           | you can pass an array of node names to control the open state of certain branches                                                        | string[]                                    | -                  |
-| initialOpenNodes    | you can pass an array of node names to set some branches open as initial state                                                           | string[]                                    | -                  |
-| locale              | you can provide a function that convert `label` into `string`                                                                            | ({label, ...other}) => string               | ({label}) => label |
-| matchSearch         | you can provide a function that convert `label` and `searchTerm` into `boolean`. This is useful if you want to customize the search method using your own algorithm.                                                          | ({label, searchTerm, ...other}) => boolean  | ({label, searchTerm}) => isVisible |
-| children            | a render props that provdes two props: `search` and `items`                                                                              | (ChildrenProps) => React.ReactNode          | -                  |
+| props               | description                                                                                                                              | type                                        | default                            |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- | ---------------------------------- |
+| data                | Data that defines the structure of the tree. You can nest it as many levels as you want, but note that it might cause performance issue. | {[string]:TreeNode} \| TreeNodeInArray[]    | -                                  |
+| activeKey           | the node matching this key will be highlighted                                                                                           | string                                      | ''                                 |
+| initialActiveKey    | set initial state of `activeKey`                                                                                                         | string                                      | -                                  |
+| onClickItem         | A callback function that defines the behavior when user clicks on an node                                                                | (Item): void                                | `console.warn`                     |
+| debounceTime        | debounce time for searching                                                                                                              | number                                      | 125                                |
+| openNodes           | you can pass an array of node names to control the open state of certain branches                                                        | string[]                                    | -                                  |
+| initialOpenNodes    | you can pass an array of node names to set some branches open as initial state                                                           | string[]                                    | -                                  |
+| locale              | you can provide a function that converts `label` into `string`                                                                           | ({label, ...other}) => string               | ({label}) => label                 |
+| hasSearch           | Set to `false` then `children` will not have the prop `search`                                                                           | boolean                                     | true                               |
+| matchSearch         | you can define your own search function                                                                                                  | ({label, searchTerm, ...other}) => boolean  | ({label, searchTerm}) => isVisible |
+| children            | a render props that provdes two props: `search` and `items`                                                                              | (ChildrenProps) => React.ReactNode          | -                                  |
 
 ### TreeNode
 
