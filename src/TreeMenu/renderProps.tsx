@@ -22,7 +22,7 @@ export interface TreeMenuItem {
 
 export type TreeMenuChildren = (
   props: {
-    search: Function;
+    search?: Function;
     items: TreeMenuItem[];
   }
 ) => JSX.Element;
@@ -72,17 +72,19 @@ const renderItem: RenderItem = ({
 export const defaultChildren: TreeMenuChildren = ({ search, items }) => {
   const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-    search(value);
+    search && search(value);
   };
   return (
     <>
-      <input
-        style={{ padding: '1rem 2rem', border: 'none', width: '100%' }}
-        aria-label="Type and search"
-        type="search"
-        placeholder="Type and search"
-        onChange={onSearch}
-      />
+      {search && (
+        <input
+          style={{ padding: '1rem 2rem', border: 'none', width: '100%' }}
+          aria-label="Type and search"
+          type="search"
+          placeholder="Type and search"
+          onChange={onSearch}
+        />
+      )}
       <ul style={{ listStyleType: 'none', paddingLeft: 0, borderTop: '1px solid #ccc' }}>
         {items.map(renderItem)}
       </ul>
