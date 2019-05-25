@@ -2,7 +2,7 @@
 
 [![npm version](https://badge.fury.io/js/react-simple-tree-menu.svg)](https://badge.fury.io/js/react-simple-tree-menu)
 [![CircleCI](https://circleci.com/gh/iannbing/react-simple-tree-menu/tree/master.svg?style=shield)](https://circleci.com/gh/iannbing/react-simple-tree-menu/tree/master)
-[![Storybook](https://cdn.jsdelivr.net/gh/storybooks/brand@master/badge/badge-storybook.svg)](link to site)
+[![Storybook](https://cdn.jsdelivr.net/gh/storybooks/brand@master/badge/badge-storybook.svg)](https://iannbing.github.io/react-simple-tree-menu/)
 
 Inspired by [Downshift](https://github.com/downshift-js/downshift), a simple, data-driven, light-weight React Tree Menu component that:
 
