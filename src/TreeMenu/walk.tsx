@@ -1,4 +1,5 @@
 import { isEmpty } from 'lodash';
+import memoize from 'fast-memoize';
 
 export interface TreeNodeObject {
   [name: string]: TreeNode;
@@ -123,4 +124,4 @@ const generateBranch = ({ node, nodeName, ...props }: BranchProps): Item[] => {
   return isVisible ? [currentItem, ...nextLevelItems] : nextLevelItems;
 };
 
-export default walk;
+export default memoize(walk);
