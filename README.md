@@ -159,23 +159,24 @@ import TreeMenu from 'react-simple-tree-menu'
 
 ### ChildrenProps
 
-| props  | description                                                    | type                    | default |
-| ------ | -------------------------------------------------------------- | ----------------------- | ------- |
-| search | A function that takes a string to filter the label of the item | (value: string) => void | -       |
-| items  | An array of `TreeMenuItem`                                     | TreeMenuItem[]          | []      |
+| props  | description                                                                                              | type                    | default |
+| ------ | -------------------------------------------------------------------------------------------------------- | ----------------------- | ------- |
+| search | A function that takes a string to filter the label of the item (only available if `hasSearch` is `true`) | (value: string) => void | -       |
+| items  | An array of `TreeMenuItem`                                                                               | TreeMenuItem[]          | []      |
 
 ### TreeMenuItem
 
-| props    | description                                              | type                      | default |
-| -------- | -------------------------------------------------------- | ------------------------- | ------- |
-| hasNodes | if a `TreeNode` is the last node of its branch           | boolean                   | false   |
-| isOpen   | if it is showing its children                            | boolean                   | false   |
-| level    | the level of the current node (root is zero)             | number                    | 0       |
-| key      | key of a `TreeNode`                                      | string                    | -       |
-| label    | `TreeNode` `label`                                       | string                    | -       |
-| active   | if current node is being selected                        | boolean                   | -       |
-| onClick  | a callback function that is run when the node is clicked | Function                  | -       |
-| ...other | User defined props                                       | {[string]: any}           | -       |
+| props      | description                                                           | type                      | default |
+| ---------- | --------------------------------------------------------------------- | ------------------------- | ------- |
+| hasNodes   | if a `TreeNode` is the last node of its branch                        | boolean                   | false   |
+| isOpen     | if it is showing its children                                         | boolean                   | false   |
+| level      | the level of the current node (root is zero)                          | number                    | 0       |
+| key        | key of a `TreeNode`                                                   | string                    | -       |
+| label      | `TreeNode` `label`                                                    | string                    | -       |
+| active     | if current node is being selected                                     | boolean                   | -       |
+| onClick    | a callback function that is run when the node is clicked              | Function                  | -       |
+| toggleNode | a function that toggles the node (only availavble if it has children) | Function                  | -       |
+| ...other   | User defined props                                                    | {[string]: any}           | -       |
 
 ## Dependencies
 

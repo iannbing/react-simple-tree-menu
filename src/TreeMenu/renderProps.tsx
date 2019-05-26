@@ -1,23 +1,28 @@
 import React from 'react';
+import { Item } from './walk';
 
-const DEFAULT_PADDING = 1.5;
-const LEVEL_SPACE = 1.25;
+const DEFAULT_PADDING = 0.75;
+const LEVEL_SPACE = 1.75;
 const ICON_SIZE = 2;
 const ToggleIcon = ({ on }: { on: boolean }) => (
-  <div role="img" aria-label="Toggle">
+  <div
+    role="img"
+    aria-label="Toggle"
+    style={{
+      width: `${ICON_SIZE}rem`,
+      height: `${ICON_SIZE}rem`,
+      textAlign: 'center',
+      lineHeight: `${ICON_SIZE}rem`,
+    }}
+  >
     {on ? '-' : '+'}
   </div>
 );
 
-export interface TreeMenuItem {
-  hasNodes?: boolean;
-  isOpen?: boolean;
-  level?: number;
+export interface TreeMenuItem extends Item {
   active?: boolean;
-  key: string;
-  label: string | JSX.Element;
-  onClick?: (event: React.MouseEvent<HTMLLIElement>) => void;
-  [name: string]: any;
+  onClick: (event: React.MouseEvent<HTMLLIElement>) => void;
+  toggleNode?: () => void;
 }
 
 export type TreeMenuChildren = (
@@ -34,6 +39,7 @@ const renderItem: RenderItem = ({
   isOpen = false,
   level = 0,
   onClick,
+  toggleNode,
   active,
   key,
   label = 'unknown',
@@ -41,7 +47,7 @@ const renderItem: RenderItem = ({
   <li
     style={{
       padding: ` .75rem  1rem  .75rem ${DEFAULT_PADDING +
-        ICON_SIZE +
+        ICON_SIZE * (hasNodes ? 0 : 1) +
         level * LEVEL_SPACE}rem`,
       cursor: 'pointer',
       color: active ? 'white' : '#333',
@@ -50,22 +56,14 @@ const renderItem: RenderItem = ({
     }}
     role="button"
     aria-pressed={active}
-    onClick={onClick}
     key={key}
   >
     {hasNodes && (
-      <div
-        style={{
-          position: 'absolute',
-          left: `${ICON_SIZE + level * LEVEL_SPACE}rem`,
-          width: `${ICON_SIZE}rem`,
-          height: `${ICON_SIZE}rem`,
-        }}
-      >
+      <div style={{ display: 'inline-block' }} onClick={toggleNode}>
         <ToggleIcon on={isOpen} />
       </div>
     )}
-    {label}
+    <span onClick={onClick}>{label}</span>
   </li>
 );
 
@@ -78,7 +76,7 @@ export const defaultChildren: TreeMenuChildren = ({ search, items }) => {
     <>
       {search && (
         <input
-          style={{ padding: '1rem 2rem', border: 'none', width: '100%' }}
+          style={{ padding: '1rem 1.5rem', border: 'none', width: '100%' }}
           aria-label="Type and search"
           type="search"
           placeholder="Type and search"

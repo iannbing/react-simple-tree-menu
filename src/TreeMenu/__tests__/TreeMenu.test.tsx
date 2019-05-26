@@ -76,7 +76,7 @@ describe('TreeViewMenu', () => {
       <TreeViewMenu data={mockData} onClickItem={mockOnClickItem} />
     );
 
-    const targetNode = wrapper.findWhere(node => node.key() === 'releasenotes');
+    const targetNode = wrapper.findWhere(node => node.text() === 'Release Notes').at(0);
     targetNode.simulate('click');
     expect(mockOnClickItem.mock.calls.length).toEqual(1);
     expect(mockOnClickItem).toHaveBeenCalledWith({

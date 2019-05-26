@@ -27,7 +27,7 @@ export interface TreeNodeInArray extends LocaleFunctionProps {
 export type LocaleFunction = (localeFunctionProps: LocaleFunctionProps) => string;
 export type MatchSearchFunction = (
   matchSearchFunctionProps: MatchSearchFunctionProps
-) => string;
+) => boolean;
 
 type Data = TreeNodeObject | TreeNodeInArray[];
 interface WalkProps {
@@ -97,15 +97,14 @@ const defaultMatchSearch = ({ label, searchTerm }: MatchSearchFunctionProps) => 
 
 const defaultLocale = ({ label }: LocaleFunctionProps): string => label;
 
-const generateBranch = ({ node, nodeName, ...props }: BranchProps): Item[] => {
-  const {
-    parent,
-    level,
-    openNodes,
-    searchTerm,
-    matchSearch = defaultMatchSearch,
-    locale = defaultLocale,
-  } = props;
+const generateBranch = ({
+  node,
+  nodeName,
+  matchSearch = defaultMatchSearch,
+  locale = defaultLocale,
+  ...props
+}: BranchProps): Item[] => {
+  const { parent, level, openNodes, searchTerm } = props;
 
   const { nodes, label: rawLabel = 'unknown', ...nodeProps } = node;
   const key = [parent, nodeName].filter(x => x).join('/');
@@ -118,7 +117,7 @@ const generateBranch = ({ node, nodeName, ...props }: BranchProps): Item[] => {
 
   const data = getValidatedData(nodes);
   const nextLevelItems = isOpen
-    ? walk({ data, ...props, parent: key, level: level + 1 })
+    ? walk({ data, locale, matchSearch, ...props, parent: key, level: level + 1 })
     : [];
 
   return isVisible ? [currentItem, ...nextLevelItems] : nextLevelItems;
