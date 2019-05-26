@@ -1,6 +1,6 @@
 {
   "name": "react-simple-tree-menu",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A simple React tree menu component",
   "keywords": [
     "react",
@@ -46,21 +46,21 @@
     "@babel/preset-env": "^7.2.3",
     "@babel/preset-react": "^7.0.0",
     "@babel/runtime": "^7.2.0",
-    "@storybook/addon-actions": "^5.0.10",
-    "@storybook/addon-info": "^5.0.10",
-    "@storybook/addon-links": "^5.0.10",
-    "@storybook/addons": "^5.0.10",
-    "@storybook/react": "^5.0.10",
+    "@storybook/addon-actions": "^5.0.11",
+    "@storybook/addon-info": "^5.0.11",
+    "@storybook/addon-links": "^5.0.11",
+    "@storybook/addons": "^5.0.11",
+    "@storybook/react": "^5.0.11",
     "@storybook/storybook-deployer": "^2.8.1",
-    "@storybook/theming": "^5.0.10",
+    "@storybook/theming": "^5.0.11",
     "@types/enzyme": "^3.1.15",
     "@types/jest": "^24.0.9",
-    "@types/lodash": "^4.14.119",
+    "@types/lodash": "^4.14.132",
     "@types/react": "^16.7.18",
     "@types/react-dom": "^16.0.11",
     "awesome-typescript-loader": "^5.2.1",
     "babel-loader": "^8.0.4",
-    "babel-plugin-import": "^1.11.0",
+    "babel-plugin-import": "^1.11.2",
     "bootstrap": "^4.3.1",
     "clean-webpack-plugin": "^1.0.0",
     "cross-env": "^5.2.0",
@@ -86,7 +86,7 @@
     "ts-jest": "^24.0.0",
     "typescript": "^3.2.2",
     "webpack": "^4.26.1",
-    "webpack-bundle-analyzer": "^3.0.3",
+    "webpack-bundle-analyzer": "^3.3.2",
     "webpack-cli": "^3.1.2",
     "webpack-merge": "^4.1.4"
   },
@@ -95,6 +95,7 @@
     "react-dom": "^16.6.3"
   },
   "dependencies": {
+    "fast-memoize": "^2.5.1",
     "lodash": "^4.17.11"
   }
 }

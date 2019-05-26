@@ -1,7 +1,13 @@
 import React from 'react';
 import { debounce } from 'lodash';
 
-import walk, { TreeNode, Item, TreeNodeInArray, LocaleFunction } from './walk';
+import walk, {
+  TreeNode,
+  Item,
+  TreeNodeInArray,
+  LocaleFunction,
+  MatchSearchFunction,
+} from './walk';
 import { defaultChildren, TreeMenuChildren, TreeMenuItem } from './renderProps';
 
 type TreeMenuProps = {
@@ -10,10 +16,12 @@ type TreeMenuProps = {
   initialActiveKey?: string;
   initialOpenNodes?: string[];
   openNodes?: string[];
+  hasSearch?: boolean;
   onClickItem: (props: Item) => void;
   debounceTime: number;
   children: TreeMenuChildren;
   locale?: LocaleFunction;
+  matchSearch?: MatchSearchFunction;
 };
 
 type TreeMenuState = {
@@ -30,6 +38,7 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
     onClickItem: defaultOnClick,
     debounceTime: 125,
     children: defaultChildren,
+    hasSearch: true,
   };
 
   state: TreeMenuState = {
@@ -59,12 +68,12 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
   };
 
   generateItems = (): TreeMenuItem[] => {
-    const { data, onClickItem, locale } = this.props;
+    const { data, onClickItem, locale, matchSearch } = this.props;
     const { searchTerm } = this.state;
     const openNodes = this.props.openNodes || this.state.openNodes;
     const activeKey = this.props.activeKey || this.state.activeKey;
 
-    const items: Item[] = walk({ data, openNodes, searchTerm, locale });
+    const items: Item[] = walk({ data, openNodes, searchTerm, locale, matchSearch });
 
     return items.map(props => {
       const { key } = props;
@@ -81,9 +90,9 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
   };
 
   render() {
-    const { data, children } = this.props;
+    const { data, children, hasSearch } = this.props;
 
-    const search = this.onSearch;
+    const search = hasSearch ? this.onSearch : undefined;
     const items = data ? this.generateItems() : [];
     const renderedChildren = children || defaultChildren;
 
