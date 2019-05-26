@@ -9,7 +9,7 @@ exports[`TreeViewMenu should highlight the active node 1`] = `
     style={
       Object {
         "border": "none",
-        "padding": "1rem 2rem",
+        "padding": "1rem 1.5rem",
         "width": "100%",
       }
     }
@@ -27,7 +27,6 @@ exports[`TreeViewMenu should highlight the active node 1`] = `
     <li
       aria-pressed={false}
       key="releasenotes"
-      onClick={[Function]}
       role="button"
       style={
         Object {
@@ -35,17 +34,15 @@ exports[`TreeViewMenu should highlight the active node 1`] = `
           "borderBottom": "1px solid #ccc",
           "color": "#333",
           "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 3.5rem",
+          "padding": " .75rem  1rem  .75rem 0.75rem",
         }
       }
     >
       <div
+        onClick={[Function]}
         style={
           Object {
-            "height": "2rem",
-            "left": "2rem",
-            "position": "absolute",
-            "width": "2rem",
+            "display": "inline-block",
           }
         }
       >
@@ -53,12 +50,15 @@ exports[`TreeViewMenu should highlight the active node 1`] = `
           on={true}
         />
       </div>
-      Release Notes
+      <span
+        onClick={[Function]}
+      >
+        Release Notes
+      </span>
     </li>
     <li
       aria-pressed={false}
       key="releasenotes/desktop-modeler"
-      onClick={[Function]}
       role="button"
       style={
         Object {
@@ -66,17 +66,15 @@ exports[`TreeViewMenu should highlight the active node 1`] = `
           "borderBottom": "1px solid #ccc",
           "color": "#333",
           "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 4.75rem",
+          "padding": " .75rem  1rem  .75rem 2.5rem",
         }
       }
     >
       <div
+        onClick={[Function]}
         style={
           Object {
-            "height": "2rem",
-            "left": "3.25rem",
-            "position": "absolute",
-            "width": "2rem",
+            "display": "inline-block",
           }
         }
       >
@@ -84,12 +82,15 @@ exports[`TreeViewMenu should highlight the active node 1`] = `
           on={true}
         />
       </div>
-      Desktop Modeler
+      <span
+        onClick={[Function]}
+      >
+        Desktop Modeler
+      </span>
     </li>
     <li
       aria-pressed={true}
       key="releasenotes/desktop-modeler/7"
-      onClick={[Function]}
       role="button"
       style={
         Object {
@@ -97,17 +98,15 @@ exports[`TreeViewMenu should highlight the active node 1`] = `
           "borderBottom": "1px solid #ccc",
           "color": "white",
           "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 6rem",
+          "padding": " .75rem  1rem  .75rem 4.25rem",
         }
       }
     >
       <div
+        onClick={[Function]}
         style={
           Object {
-            "height": "2rem",
-            "left": "4.5rem",
-            "position": "absolute",
-            "width": "2rem",
+            "display": "inline-block",
           }
         }
       >
@@ -115,12 +114,15 @@ exports[`TreeViewMenu should highlight the active node 1`] = `
           on={false}
         />
       </div>
-      7
+      <span
+        onClick={[Function]}
+      >
+        7
+      </span>
     </li>
     <li
       aria-pressed={false}
       key="atd"
-      onClick={[Function]}
       role="button"
       style={
         Object {
@@ -128,11 +130,15 @@ exports[`TreeViewMenu should highlight the active node 1`] = `
           "borderBottom": "1px solid #ccc",
           "color": "#333",
           "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 3.5rem",
+          "padding": " .75rem  1rem  .75rem 2.75rem",
         }
       }
     >
-      ATS Guide
+      <span
+        onClick={[Function]}
+      >
+        ATS Guide
+      </span>
     </li>
   </ul>
 </Fragment>
@@ -147,7 +153,7 @@ exports[`TreeViewMenu should open specified nodes 1`] = `
     style={
       Object {
         "border": "none",
-        "padding": "1rem 2rem",
+        "padding": "1rem 1.5rem",
         "width": "100%",
       }
     }
@@ -165,7 +171,6 @@ exports[`TreeViewMenu should open specified nodes 1`] = `
     <li
       aria-pressed={false}
       key="releasenotes"
-      onClick={[Function]}
       role="button"
       style={
         Object {
@@ -173,17 +178,15 @@ exports[`TreeViewMenu should open specified nodes 1`] = `
           "borderBottom": "1px solid #ccc",
           "color": "#333",
           "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 3.5rem",
+          "padding": " .75rem  1rem  .75rem 0.75rem",
         }
       }
     >
       <div
+        onClick={[Function]}
         style={
           Object {
-            "height": "2rem",
-            "left": "2rem",
-            "position": "absolute",
-            "width": "2rem",
+            "display": "inline-block",
           }
         }
       >
@@ -191,12 +194,15 @@ exports[`TreeViewMenu should open specified nodes 1`] = `
           on={true}
         />
       </div>
-      Release Notes
+      <span
+        onClick={[Function]}
+      >
+        Release Notes
+      </span>
     </li>
     <li
       aria-pressed={false}
       key="releasenotes/desktop-modeler"
-      onClick={[Function]}
       role="button"
       style={
         Object {
@@ -204,17 +210,15 @@ exports[`TreeViewMenu should open specified nodes 1`] = `
           "borderBottom": "1px solid #ccc",
           "color": "#333",
           "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 4.75rem",
+          "padding": " .75rem  1rem  .75rem 2.5rem",
         }
       }
     >
       <div
+        onClick={[Function]}
         style={
           Object {
-            "height": "2rem",
-            "left": "3.25rem",
-            "position": "absolute",
-            "width": "2rem",
+            "display": "inline-block",
           }
         }
       >
@@ -222,12 +226,15 @@ exports[`TreeViewMenu should open specified nodes 1`] = `
           on={true}
         />
       </div>
-      Desktop Modeler
+      <span
+        onClick={[Function]}
+      >
+        Desktop Modeler
+      </span>
     </li>
     <li
       aria-pressed={false}
       key="releasenotes/desktop-modeler/7"
-      onClick={[Function]}
       role="button"
       style={
         Object {
@@ -235,17 +242,15 @@ exports[`TreeViewMenu should open specified nodes 1`] = `
           "borderBottom": "1px solid #ccc",
           "color": "#333",
           "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 6rem",
+          "padding": " .75rem  1rem  .75rem 4.25rem",
         }
       }
     >
       <div
+        onClick={[Function]}
         style={
           Object {
-            "height": "2rem",
-            "left": "4.5rem",
-            "position": "absolute",
-            "width": "2rem",
+            "display": "inline-block",
           }
         }
       >
@@ -253,12 +258,15 @@ exports[`TreeViewMenu should open specified nodes 1`] = `
           on={false}
         />
       </div>
-      7
+      <span
+        onClick={[Function]}
+      >
+        7
+      </span>
     </li>
     <li
       aria-pressed={false}
       key="atd"
-      onClick={[Function]}
       role="button"
       style={
         Object {
@@ -266,11 +274,15 @@ exports[`TreeViewMenu should open specified nodes 1`] = `
           "borderBottom": "1px solid #ccc",
           "color": "#333",
           "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 3.5rem",
+          "padding": " .75rem  1rem  .75rem 2.75rem",
         }
       }
     >
-      ATS Guide
+      <span
+        onClick={[Function]}
+      >
+        ATS Guide
+      </span>
     </li>
   </ul>
 </Fragment>
@@ -285,7 +297,7 @@ exports[`TreeViewMenu should render the level-1 nodes by default 1`] = `
     style={
       Object {
         "border": "none",
-        "padding": "1rem 2rem",
+        "padding": "1rem 1.5rem",
         "width": "100%",
       }
     }
@@ -303,7 +315,6 @@ exports[`TreeViewMenu should render the level-1 nodes by default 1`] = `
     <li
       aria-pressed={false}
       key="releasenotes"
-      onClick={[Function]}
       role="button"
       style={
         Object {
@@ -311,17 +322,15 @@ exports[`TreeViewMenu should render the level-1 nodes by default 1`] = `
           "borderBottom": "1px solid #ccc",
           "color": "#333",
           "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 3.5rem",
+          "padding": " .75rem  1rem  .75rem 0.75rem",
         }
       }
     >
       <div
+        onClick={[Function]}
         style={
           Object {
-            "height": "2rem",
-            "left": "2rem",
-            "position": "absolute",
-            "width": "2rem",
+            "display": "inline-block",
           }
         }
       >
@@ -329,12 +338,15 @@ exports[`TreeViewMenu should render the level-1 nodes by default 1`] = `
           on={false}
         />
       </div>
-      Release Notes
+      <span
+        onClick={[Function]}
+      >
+        Release Notes
+      </span>
     </li>
     <li
       aria-pressed={false}
       key="atd"
-      onClick={[Function]}
       role="button"
       style={
         Object {
@@ -342,11 +354,15 @@ exports[`TreeViewMenu should render the level-1 nodes by default 1`] = `
           "borderBottom": "1px solid #ccc",
           "color": "#333",
           "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 3.5rem",
+          "padding": " .75rem  1rem  .75rem 2.75rem",
         }
       }
     >
-      ATS Guide
+      <span
+        onClick={[Function]}
+      >
+        ATS Guide
+      </span>
     </li>
   </ul>
 </Fragment>

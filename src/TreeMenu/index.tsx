@@ -62,8 +62,7 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
       const newOpenNodes = openNodes.includes(node)
         ? openNodes.filter(openNode => openNode !== node)
         : [...openNodes, node];
-      const activeKey = this.props.activeKey || node;
-      this.setState({ openNodes: newOpenNodes, activeKey });
+      this.setState({ openNodes: newOpenNodes });
     }
   };
 
@@ -76,15 +75,20 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
     const items: Item[] = walk({ data, openNodes, searchTerm, locale, matchSearch });
 
     return items.map(props => {
-      const { key } = props;
+      const { key, hasNodes } = props;
       const onClick = () => {
-        this.toggleNode(props.key);
+        const activeKey = this.props.activeKey || props.key;
+        this.setState({ activeKey });
         onClickItem(props);
+      };
+      const toggleNode = () => {
+        this.toggleNode(props.key);
       };
       return {
         ...props,
         active: key === activeKey,
         onClick,
+        toggleNode: hasNodes ? toggleNode : undefined,
       };
     });
   };
