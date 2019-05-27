@@ -13,7 +13,9 @@ import { defaultChildren, TreeMenuChildren, TreeMenuItem } from './renderProps';
 type TreeMenuProps = {
   data: { [name: string]: TreeNode } | TreeNodeInArray[];
   activeKey?: string;
+  focusKey?: string;
   initialActiveKey?: string;
+  initialFocusKey?: string;
   initialOpenNodes?: string[];
   openNodes?: string[];
   hasSearch?: boolean;
@@ -28,6 +30,8 @@ type TreeMenuState = {
   openNodes: string[];
   searchTerm: string;
   activeKey: string;
+  focusKey: string;
+  items: TreeMenuItem[];
 };
 
 const defaultOnClick = (props: Item) => console.log(props); // eslint-disable-line no-console
@@ -45,9 +49,22 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
     openNodes: this.props.initialOpenNodes || [],
     searchTerm: '',
     activeKey: this.props.initialActiveKey || '',
+    focusKey: this.props.initialFocusKey || '',
+    items: [],
   };
 
-  onSearch = (value: string) => {
+  componentDidMount() {
+    const { data } = this.props;
+    const items = this.generateItems();
+    this.setItems(items);
+  }
+
+  setItems = (items: TreeMenuItem[]) => {
+    const focusKey = items[0] ? items[0].key : '';
+    this.setState({ items, focusKey });
+  };
+
+  search = (value: string) => {
     const { debounceTime } = this.props;
     const search = debounce(
       (searchTerm: string) => this.setState({ searchTerm }),
@@ -72,7 +89,11 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
     const openNodes = this.props.openNodes || this.state.openNodes;
     const activeKey = this.props.activeKey || this.state.activeKey;
 
-    const items: Item[] = walk({ data, openNodes, searchTerm, locale, matchSearch });
+    const items: Item[] = data
+      ? walk({ data, openNodes, searchTerm, locale, matchSearch })
+      : [];
+
+    const focusKey = items[0] ? items[0].key : '';
 
     return items.map(props => {
       const { key, hasNodes } = props;
@@ -86,6 +107,7 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
       };
       return {
         ...props,
+        focus: key === focusKey,
         active: key === activeKey,
         onClick,
         toggleNode: hasNodes ? toggleNode : undefined,
@@ -94,13 +116,11 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
   };
 
   render() {
-    const { data, children, hasSearch } = this.props;
-
-    const search = hasSearch ? this.onSearch : undefined;
-    const items = data ? this.generateItems() : [];
+    const { children, hasSearch } = this.props;
+    const { items } = this.state;
     const renderedChildren = children || defaultChildren;
 
-    return renderedChildren({ search, items });
+    return renderedChildren(hasSearch ? { search: this.search, items } : { items });
   }
 }
 
