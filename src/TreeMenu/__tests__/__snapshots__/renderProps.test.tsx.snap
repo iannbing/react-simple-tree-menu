@@ -26,6 +26,7 @@ Array [
   >
     <li
       key="key"
+      onClick={[Function]}
       role="button"
       style={
         Object {
@@ -41,6 +42,7 @@ Array [
       }
     >
       <div
+        onClick={[Function]}
         style={
           Object {
             "display": "inline-block",
@@ -66,11 +68,7 @@ Array [
           </div>
         </ToggleIcon>
       </div>
-      <span
-        onClick={[Function]}
-      >
-        foo
-      </span>
+      foo
     </li>
   </ul>,
 ]
@@ -102,6 +100,7 @@ Array [
   >
     <li
       key="foo"
+      onClick={[Function]}
       role="button"
       style={
         Object {
@@ -117,6 +116,7 @@ Array [
       }
     >
       <div
+        onClick={[Function]}
         style={
           Object {
             "display": "inline-block",
@@ -142,14 +142,11 @@ Array [
           </div>
         </ToggleIcon>
       </div>
-      <span
-        onClick={[Function]}
-      >
-        foo
-      </span>
+      foo
     </li>
     <li
       key="bar"
+      onClick={[Function]}
       role="button"
       style={
         Object {
@@ -164,14 +161,11 @@ Array [
         }
       }
     >
-      <span
-        onClick={[Function]}
-      >
-        bar
-      </span>
+      bar
     </li>
     <li
       key="zoo"
+      onClick={[Function]}
       role="button"
       style={
         Object {
@@ -186,11 +180,7 @@ Array [
         }
       }
     >
-      <span
-        onClick={[Function]}
-      >
-        zoo
-      </span>
+      zoo
     </li>
   </ul>,
 ]
@@ -222,6 +212,7 @@ Array [
   >
     <li
       key="key"
+      onClick={[Function]}
       role="button"
       style={
         Object {
@@ -236,11 +227,7 @@ Array [
         }
       }
     >
-      <span
-        onClick={[Function]}
-      >
-        foo
-      </span>
+      foo
     </li>
   </ul>,
 ]
