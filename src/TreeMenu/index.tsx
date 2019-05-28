@@ -24,6 +24,7 @@ type TreeMenuProps = {
   children: TreeMenuChildren;
   locale?: LocaleFunction;
   matchSearch?: MatchSearchFunction;
+  keyDownConfig?: object;
 };
 
 type TreeMenuState = {
@@ -75,20 +76,21 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
     const { searchTerm } = this.state;
     const openNodes = this.props.openNodes || this.state.openNodes;
     const activeKey = this.props.activeKey || this.state.activeKey;
+    const focusKey = this.props.focusKey || this.state.focusKey;
 
     const items: Item[] = data
       ? walk({ data, openNodes, searchTerm, locale, matchSearch })
       : [];
 
     return items.map(item => {
-      const focusKey = items[0] ? items[0].key : '';
       const focus = item.key === focusKey;
       const active = item.key === activeKey;
       const onClick = () => {
-        const activeKey = this.props.activeKey || item.key;
-        this.setState({ activeKey });
+        const newActiveKey = this.props.activeKey || item.key;
+        this.setState({ activeKey: newActiveKey, focusKey: newActiveKey });
         onClickItem(item);
       };
+
       const toggleNode = item.hasNodes ? () => this.toggleNode(item.key) : undefined;
       return { ...item, focus, active, onClick, toggleNode };
     });
@@ -96,10 +98,64 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
 
   render() {
     const { children, hasSearch } = this.props;
+    const { focusKey, activeKey, openNodes } = this.state;
     const items = this.generateItems();
     const renderedChildren = children || defaultChildren;
+    const focusIndex = items.findIndex(item => item.key === (focusKey || activeKey));
+    const getNodeToBeClosed = (
+      menuItems: TreeMenuItem[],
+      openNodes: string[],
+      focusIndex: number
+    ) => {
+      const nodeArray = menuItems[focusIndex].key.split('/');
+      const currentNode = menuItems[focusIndex].key;
+      if (openNodes.includes(currentNode)) return currentNode;
+      return nodeArray.length > 1
+        ? nodeArray.slice(0, nodeArray.length - 1).join('/')
+        : currentNode;
+    };
 
-    return renderedChildren(hasSearch ? { search: this.search, items } : { items });
+    return (
+      <div
+        tabIndex={0}
+        onKeyDown={e => {
+          switch (e.key) {
+            case 'ArrowUp': {
+              this.setState(({ focusKey }) => ({
+                focusKey: focusIndex > 0 ? items[focusIndex - 1].key : focusKey,
+              }));
+              break;
+            }
+            case 'ArrowDown': {
+              this.setState(({ focusKey }) => ({
+                focusKey:
+                  focusIndex < items.length - 1 ? items[focusIndex + 1].key : focusKey,
+              }));
+              break;
+            }
+            case 'ArrowLeft': {
+              this.setState(({ openNodes }) => {
+                const nodeToBeClosed = getNodeToBeClosed(items, openNodes, focusIndex);
+                const newOpenNodes = openNodes.filter(node => node !== nodeToBeClosed);
+
+                return { openNodes: newOpenNodes, focusKey: nodeToBeClosed };
+              });
+              break;
+            }
+            case 'ArrowRight': {
+              const { hasNodes, key } = items[focusIndex];
+              if (hasNodes)
+                this.setState(state => ({
+                  openNodes: [...state.openNodes, key],
+                }));
+              break;
+            }
+          }
+        }}
+      >
+        {renderedChildren(hasSearch ? { search: this.search, items } : { items })}
+      </div>
+    );
   }
 }
 

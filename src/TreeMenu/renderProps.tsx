@@ -53,7 +53,7 @@ const renderItem: RenderItem = ({
       cursor: 'pointer',
       color: active ? 'white' : '#333',
       background: active ? '#179ed3' : 'none',
-      borderBottom: '1px solid #ccc',
+      borderBottom: active ? 'none' : '1px solid #ccc',
       boxShadow: focus ? '0px 0px 5px 0px rgba(17,103,194,1)' : 'none',
     }}
     role="button"
