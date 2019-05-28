@@ -117,7 +117,7 @@ When the tree menu is focused, you can use your keyboard to browse the tree.
 
 - UP: move the focus onto the previous node
 - DOWN: move the focus onto the next node
-- LEFT: close the current node if it has children and it is open; close the parent node if the current node has no children
+- LEFT: close the current node if it has children and it is open; otherwise move the focus to the parent node
 - RIGHT: open the current node if it has children
 - ENTER: fire `onClick` function and set `activeKey` to current node
 
@@ -185,6 +185,7 @@ Note the difference between the state `active` and `focused`. ENTER is equivalen
 | ---------- | --------------------------------------------------------------------- | ------------------------- | ------- |
 | hasNodes   | if a `TreeNode` is the last node of its branch                        | boolean                   | false   |
 | isOpen     | if it is showing its children                                         | boolean                   | false   |
+| openNodes  | an array of the names of all the open nodes                           | string[]                  | -       |
 | level      | the level of the current node (root is zero)                          | number                    | 0       |
 | key        | key of a `TreeNode`                                                   | string                    | -       |
 | label      | `TreeNode` `label`                                                    | string                    | -       |
