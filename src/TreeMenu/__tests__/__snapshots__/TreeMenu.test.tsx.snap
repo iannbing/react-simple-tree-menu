@@ -1,7 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`TreeViewMenu should highlight the active node 1`] = `
-<Fragment>
+<div
+  onKeyDown={[Function]}
+  tabIndex={0}
+>
   <input
     aria-label="Type and search"
     onChange={[Function]}
@@ -32,9 +35,12 @@ exports[`TreeViewMenu should highlight the active node 1`] = `
         Object {
           "background": "none",
           "borderBottom": "1px solid #ccc",
+          "boxShadow": "none",
           "color": "#333",
           "cursor": "pointer",
           "padding": " .75rem  1rem  .75rem 0.75rem",
+          "position": "relative",
+          "zIndex": "unset",
         }
       }
     >
@@ -64,9 +70,12 @@ exports[`TreeViewMenu should highlight the active node 1`] = `
         Object {
           "background": "none",
           "borderBottom": "1px solid #ccc",
+          "boxShadow": "none",
           "color": "#333",
           "cursor": "pointer",
           "padding": " .75rem  1rem  .75rem 2.5rem",
+          "position": "relative",
+          "zIndex": "unset",
         }
       }
     >
@@ -95,10 +104,13 @@ exports[`TreeViewMenu should highlight the active node 1`] = `
       style={
         Object {
           "background": "#179ed3",
-          "borderBottom": "1px solid #ccc",
+          "borderBottom": "none",
+          "boxShadow": "none",
           "color": "white",
           "cursor": "pointer",
           "padding": " .75rem  1rem  .75rem 4.25rem",
+          "position": "relative",
+          "zIndex": "unset",
         }
       }
     >
@@ -128,9 +140,12 @@ exports[`TreeViewMenu should highlight the active node 1`] = `
         Object {
           "background": "none",
           "borderBottom": "1px solid #ccc",
+          "boxShadow": "none",
           "color": "#333",
           "cursor": "pointer",
           "padding": " .75rem  1rem  .75rem 2.75rem",
+          "position": "relative",
+          "zIndex": "unset",
         }
       }
     >
@@ -141,11 +156,14 @@ exports[`TreeViewMenu should highlight the active node 1`] = `
       </span>
     </li>
   </ul>
-</Fragment>
+</div>
 `;
 
 exports[`TreeViewMenu should open specified nodes 1`] = `
-<Fragment>
+<div
+  onKeyDown={[Function]}
+  tabIndex={0}
+>
   <input
     aria-label="Type and search"
     onChange={[Function]}
@@ -176,9 +194,12 @@ exports[`TreeViewMenu should open specified nodes 1`] = `
         Object {
           "background": "none",
           "borderBottom": "1px solid #ccc",
+          "boxShadow": "none",
           "color": "#333",
           "cursor": "pointer",
           "padding": " .75rem  1rem  .75rem 0.75rem",
+          "position": "relative",
+          "zIndex": "unset",
         }
       }
     >
@@ -208,9 +229,12 @@ exports[`TreeViewMenu should open specified nodes 1`] = `
         Object {
           "background": "none",
           "borderBottom": "1px solid #ccc",
+          "boxShadow": "none",
           "color": "#333",
           "cursor": "pointer",
           "padding": " .75rem  1rem  .75rem 2.5rem",
+          "position": "relative",
+          "zIndex": "unset",
         }
       }
     >
@@ -240,9 +264,12 @@ exports[`TreeViewMenu should open specified nodes 1`] = `
         Object {
           "background": "none",
           "borderBottom": "1px solid #ccc",
+          "boxShadow": "none",
           "color": "#333",
           "cursor": "pointer",
           "padding": " .75rem  1rem  .75rem 4.25rem",
+          "position": "relative",
+          "zIndex": "unset",
         }
       }
     >
@@ -272,9 +299,12 @@ exports[`TreeViewMenu should open specified nodes 1`] = `
         Object {
           "background": "none",
           "borderBottom": "1px solid #ccc",
+          "boxShadow": "none",
           "color": "#333",
           "cursor": "pointer",
           "padding": " .75rem  1rem  .75rem 2.75rem",
+          "position": "relative",
+          "zIndex": "unset",
         }
       }
     >
@@ -285,11 +315,14 @@ exports[`TreeViewMenu should open specified nodes 1`] = `
       </span>
     </li>
   </ul>
-</Fragment>
+</div>
 `;
 
 exports[`TreeViewMenu should render the level-1 nodes by default 1`] = `
-<Fragment>
+<div
+  onKeyDown={[Function]}
+  tabIndex={0}
+>
   <input
     aria-label="Type and search"
     onChange={[Function]}
@@ -320,9 +353,12 @@ exports[`TreeViewMenu should render the level-1 nodes by default 1`] = `
         Object {
           "background": "none",
           "borderBottom": "1px solid #ccc",
+          "boxShadow": "none",
           "color": "#333",
           "cursor": "pointer",
           "padding": " .75rem  1rem  .75rem 0.75rem",
+          "position": "relative",
+          "zIndex": "unset",
         }
       }
     >
@@ -352,9 +388,12 @@ exports[`TreeViewMenu should render the level-1 nodes by default 1`] = `
         Object {
           "background": "none",
           "borderBottom": "1px solid #ccc",
+          "boxShadow": "none",
           "color": "#333",
           "cursor": "pointer",
           "padding": " .75rem  1rem  .75rem 2.75rem",
+          "position": "relative",
+          "zIndex": "unset",
         }
       }
     >
@@ -365,5 +404,5 @@ exports[`TreeViewMenu should render the level-1 nodes by default 1`] = `
       </span>
     </li>
   </ul>
-</Fragment>
+</div>
 `;
