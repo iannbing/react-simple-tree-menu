@@ -31,9 +31,12 @@ Array [
         Object {
           "background": "none",
           "borderBottom": "1px solid #ccc",
+          "boxShadow": "none",
           "color": "#333",
           "cursor": "pointer",
           "padding": " .75rem  1rem  .75rem 2.5rem",
+          "position": "relative",
+          "zIndex": "unset",
         }
       }
     >
@@ -104,9 +107,12 @@ Array [
         Object {
           "background": "none",
           "borderBottom": "1px solid #ccc",
+          "boxShadow": "none",
           "color": "#333",
           "cursor": "pointer",
           "padding": " .75rem  1rem  .75rem 2.5rem",
+          "position": "relative",
+          "zIndex": "unset",
         }
       }
     >
@@ -149,9 +155,12 @@ Array [
         Object {
           "background": "none",
           "borderBottom": "1px solid #ccc",
+          "boxShadow": "none",
           "color": "#333",
           "cursor": "pointer",
           "padding": " .75rem  1rem  .75rem 6.25rem",
+          "position": "relative",
+          "zIndex": "unset",
         }
       }
     >
@@ -168,9 +177,12 @@ Array [
         Object {
           "background": "none",
           "borderBottom": "1px solid #ccc",
+          "boxShadow": "none",
           "color": "#333",
           "cursor": "pointer",
           "padding": " .75rem  1rem  .75rem 6.25rem",
+          "position": "relative",
+          "zIndex": "unset",
         }
       }
     >
@@ -215,9 +227,12 @@ Array [
         Object {
           "background": "none",
           "borderBottom": "1px solid #ccc",
+          "boxShadow": "none",
           "color": "#333",
           "cursor": "pointer",
           "padding": " .75rem  1rem  .75rem 2.75rem",
+          "position": "relative",
+          "zIndex": "unset",
         }
       }
     >

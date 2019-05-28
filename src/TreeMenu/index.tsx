@@ -9,11 +9,14 @@ import walk, {
   MatchSearchFunction,
 } from './walk';
 import { defaultChildren, TreeMenuChildren, TreeMenuItem } from './renderProps';
+import KeyDown from '../KeyDown';
 
 type TreeMenuProps = {
   data: { [name: string]: TreeNode } | TreeNodeInArray[];
   activeKey?: string;
+  focusKey?: string;
   initialActiveKey?: string;
+  initialFocusKey?: string;
   initialOpenNodes?: string[];
   openNodes?: string[];
   hasSearch?: boolean;
@@ -28,6 +31,7 @@ type TreeMenuState = {
   openNodes: string[];
   searchTerm: string;
   activeKey: string;
+  focusKey: string;
 };
 
 const defaultOnClick = (props: Item) => console.log(props); // eslint-disable-line no-console
@@ -45,9 +49,10 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
     openNodes: this.props.initialOpenNodes || [],
     searchTerm: '',
     activeKey: this.props.initialActiveKey || '',
+    focusKey: this.props.initialFocusKey || '',
   };
 
-  onSearch = (value: string) => {
+  search = (value: string) => {
     const { debounceTime } = this.props;
     const search = debounce(
       (searchTerm: string) => this.setState({ searchTerm }),
@@ -71,36 +76,80 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
     const { searchTerm } = this.state;
     const openNodes = this.props.openNodes || this.state.openNodes;
     const activeKey = this.props.activeKey || this.state.activeKey;
+    const focusKey = this.props.focusKey || this.state.focusKey;
 
-    const items: Item[] = walk({ data, openNodes, searchTerm, locale, matchSearch });
+    const items: Item[] = data
+      ? walk({ data, openNodes, searchTerm, locale, matchSearch })
+      : [];
 
-    return items.map(props => {
-      const { key, hasNodes } = props;
+    return items.map(item => {
+      const focused = item.key === focusKey;
+      const active = item.key === activeKey;
       const onClick = () => {
-        const activeKey = this.props.activeKey || props.key;
-        this.setState({ activeKey });
-        onClickItem(props);
+        const newActiveKey = this.props.activeKey || item.key;
+        this.setState({ activeKey: newActiveKey, focusKey: newActiveKey });
+        onClickItem(item);
       };
-      const toggleNode = () => {
-        this.toggleNode(props.key);
-      };
-      return {
-        ...props,
-        active: key === activeKey,
-        onClick,
-        toggleNode: hasNodes ? toggleNode : undefined,
-      };
+
+      const toggleNode = item.hasNodes ? () => this.toggleNode(item.key) : undefined;
+      return { ...item, focused, active, onClick, toggleNode };
     });
   };
 
   render() {
-    const { data, children, hasSearch } = this.props;
-
-    const search = hasSearch ? this.onSearch : undefined;
-    const items = data ? this.generateItems() : [];
+    const { children, hasSearch, onClickItem } = this.props;
+    const { focusKey, activeKey, openNodes } = this.state;
+    const items = this.generateItems();
     const renderedChildren = children || defaultChildren;
+    const focusIndex = items.findIndex(item => item.key === (focusKey || activeKey));
+    const getNodeToBeClosed = (
+      menuItems: TreeMenuItem[],
+      openNodes: string[],
+      focusIndex: number
+    ) => {
+      const nodeArray = menuItems[focusIndex].key.split('/');
+      const currentNode = menuItems[focusIndex].key;
+      if (openNodes.includes(currentNode)) return currentNode;
+      return nodeArray.length > 1
+        ? nodeArray.slice(0, nodeArray.length - 1).join('/')
+        : currentNode;
+    };
 
-    return renderedChildren({ search, items });
+    const keyDownProps = {
+      up: () => {
+        this.setState(({ focusKey }) => ({
+          focusKey: focusIndex > 0 ? items[focusIndex - 1].key : focusKey,
+        }));
+      },
+      down: () => {
+        this.setState(({ focusKey }) => ({
+          focusKey: focusIndex < items.length - 1 ? items[focusIndex + 1].key : focusKey,
+        }));
+      },
+      left: () => {
+        this.setState(({ openNodes }) => {
+          const nodeToBeClosed = getNodeToBeClosed(items, openNodes, focusIndex);
+          const newOpenNodes = openNodes.filter(node => node !== nodeToBeClosed);
+
+          return { openNodes: newOpenNodes, focusKey: nodeToBeClosed };
+        });
+      },
+      right: () => {
+        const { hasNodes, key } = items[focusIndex];
+        if (hasNodes)
+          this.setState(({ openNodes }) => ({ openNodes: [...openNodes, key] }));
+      },
+      enter: () => {
+        this.setState(({ focusKey }) => ({ activeKey: focusKey }));
+        onClickItem(items[focusIndex]);
+      },
+    };
+
+    return (
+      <KeyDown {...keyDownProps}>
+        {renderedChildren(hasSearch ? { search: this.search, items } : { items })}
+      </KeyDown>
+    );
   }
 }
 

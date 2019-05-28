@@ -41,6 +41,7 @@ const renderItem: RenderItem = ({
   onClick,
   toggleNode,
   active,
+  focused,
   key,
   label = 'unknown',
 }) => (
@@ -52,7 +53,10 @@ const renderItem: RenderItem = ({
       cursor: 'pointer',
       color: active ? 'white' : '#333',
       background: active ? '#179ed3' : 'none',
-      borderBottom: '1px solid #ccc',
+      borderBottom: active ? 'none' : '1px solid #ccc',
+      boxShadow: focused ? '0px 0px 5px 0px #222' : 'none',
+      zIndex: focused ? 999 : 'unset',
+      position: 'relative',
     }}
     role="button"
     aria-pressed={active}
