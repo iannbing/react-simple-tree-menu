@@ -145,9 +145,12 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
             case 'ArrowRight': {
               const { hasNodes, key } = items[focusIndex];
               if (hasNodes)
-                this.setState(state => ({
-                  openNodes: [...state.openNodes, key],
-                }));
+                this.setState(({ openNodes }) => ({ openNodes: [...openNodes, key] }));
+              break;
+            }
+
+            case 'Enter': {
+              this.setState(({ focusKey }) => ({ activeKey: focusKey }));
               break;
             }
           }

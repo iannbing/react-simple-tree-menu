@@ -54,7 +54,9 @@ const renderItem: RenderItem = ({
       color: active ? 'white' : '#333',
       background: active ? '#179ed3' : 'none',
       borderBottom: active ? 'none' : '1px solid #ccc',
-      boxShadow: focus ? '0px 0px 5px 0px rgba(17,103,194,1)' : 'none',
+      boxShadow: focus ? '0px 0px 5px 0px #222' : 'none',
+      zIndex: focus ? 999 : 'unset',
+      position: 'relative',
     }}
     role="button"
     aria-pressed={active}
