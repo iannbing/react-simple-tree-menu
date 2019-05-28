@@ -61,13 +61,20 @@ const renderItem: RenderItem = ({
     role="button"
     aria-pressed={active}
     key={key}
+    onClick={onClick}
   >
     {hasNodes && (
-      <div style={{ display: 'inline-block' }} onClick={toggleNode}>
+      <div
+        style={{ display: 'inline-block' }}
+        onClick={e => {
+          hasNodes && toggleNode && toggleNode();
+          e.stopPropagation();
+        }}
+      >
         <ToggleIcon on={isOpen} />
       </div>
     )}
-    <span onClick={onClick}>{label}</span>
+    {label}
   </li>
 );
 
