@@ -33,6 +33,7 @@ exports[`TreeViewMenu should highlight the active node 1`] = `
     <li
       aria-pressed={false}
       key="releasenotes"
+      onClick={[Function]}
       role="button"
       style={
         Object {
@@ -59,15 +60,12 @@ exports[`TreeViewMenu should highlight the active node 1`] = `
           on={true}
         />
       </div>
-      <span
-        onClick={[Function]}
-      >
-        Release Notes
-      </span>
+      Release Notes
     </li>
     <li
       aria-pressed={false}
       key="releasenotes/desktop-modeler"
+      onClick={[Function]}
       role="button"
       style={
         Object {
@@ -94,15 +92,12 @@ exports[`TreeViewMenu should highlight the active node 1`] = `
           on={true}
         />
       </div>
-      <span
-        onClick={[Function]}
-      >
-        Desktop Modeler
-      </span>
+      Desktop Modeler
     </li>
     <li
       aria-pressed={true}
       key="releasenotes/desktop-modeler/7"
+      onClick={[Function]}
       role="button"
       style={
         Object {
@@ -129,15 +124,12 @@ exports[`TreeViewMenu should highlight the active node 1`] = `
           on={false}
         />
       </div>
-      <span
-        onClick={[Function]}
-      >
-        7
-      </span>
+      7
     </li>
     <li
       aria-pressed={false}
       key="atd"
+      onClick={[Function]}
       role="button"
       style={
         Object {
@@ -152,11 +144,7 @@ exports[`TreeViewMenu should highlight the active node 1`] = `
         }
       }
     >
-      <span
-        onClick={[Function]}
-      >
-        ATS Guide
-      </span>
+      ATS Guide
     </li>
   </ul>
 </KeyDown>
@@ -195,6 +183,7 @@ exports[`TreeViewMenu should open specified nodes 1`] = `
     <li
       aria-pressed={false}
       key="releasenotes"
+      onClick={[Function]}
       role="button"
       style={
         Object {
@@ -221,15 +210,12 @@ exports[`TreeViewMenu should open specified nodes 1`] = `
           on={true}
         />
       </div>
-      <span
-        onClick={[Function]}
-      >
-        Release Notes
-      </span>
+      Release Notes
     </li>
     <li
       aria-pressed={false}
       key="releasenotes/desktop-modeler"
+      onClick={[Function]}
       role="button"
       style={
         Object {
@@ -256,15 +242,12 @@ exports[`TreeViewMenu should open specified nodes 1`] = `
           on={true}
         />
       </div>
-      <span
-        onClick={[Function]}
-      >
-        Desktop Modeler
-      </span>
+      Desktop Modeler
     </li>
     <li
       aria-pressed={false}
       key="releasenotes/desktop-modeler/7"
+      onClick={[Function]}
       role="button"
       style={
         Object {
@@ -291,15 +274,12 @@ exports[`TreeViewMenu should open specified nodes 1`] = `
           on={false}
         />
       </div>
-      <span
-        onClick={[Function]}
-      >
-        7
-      </span>
+      7
     </li>
     <li
       aria-pressed={false}
       key="atd"
+      onClick={[Function]}
       role="button"
       style={
         Object {
@@ -314,11 +294,7 @@ exports[`TreeViewMenu should open specified nodes 1`] = `
         }
       }
     >
-      <span
-        onClick={[Function]}
-      >
-        ATS Guide
-      </span>
+      ATS Guide
     </li>
   </ul>
 </KeyDown>
@@ -357,6 +333,7 @@ exports[`TreeViewMenu should render the level-1 nodes by default 1`] = `
     <li
       aria-pressed={false}
       key="releasenotes"
+      onClick={[Function]}
       role="button"
       style={
         Object {
@@ -383,15 +360,12 @@ exports[`TreeViewMenu should render the level-1 nodes by default 1`] = `
           on={false}
         />
       </div>
-      <span
-        onClick={[Function]}
-      >
-        Release Notes
-      </span>
+      Release Notes
     </li>
     <li
       aria-pressed={false}
       key="atd"
+      onClick={[Function]}
       role="button"
       style={
         Object {
@@ -406,11 +380,7 @@ exports[`TreeViewMenu should render the level-1 nodes by default 1`] = `
         }
       }
     >
-      <span
-        onClick={[Function]}
-      >
-        ATS Guide
-      </span>
+      ATS Guide
     </li>
   </ul>
 </KeyDown>
