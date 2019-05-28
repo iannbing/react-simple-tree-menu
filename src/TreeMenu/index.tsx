@@ -9,6 +9,7 @@ import walk, {
   MatchSearchFunction,
 } from './walk';
 import { defaultChildren, TreeMenuChildren, TreeMenuItem } from './renderProps';
+import KeyDown from '../KeyDown';
 
 type TreeMenuProps = {
   data: { [name: string]: TreeNode } | TreeNodeInArray[];
@@ -114,50 +115,40 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
         : currentNode;
     };
 
+    const keyDownProps = {
+      up: () => {
+        this.setState(({ focusKey }) => ({
+          focusKey: focusIndex > 0 ? items[focusIndex - 1].key : focusKey,
+        }));
+      },
+      down: () => {
+        this.setState(({ focusKey }) => ({
+          focusKey: focusIndex < items.length - 1 ? items[focusIndex + 1].key : focusKey,
+        }));
+      },
+      left: () => {
+        this.setState(({ openNodes }) => {
+          const nodeToBeClosed = getNodeToBeClosed(items, openNodes, focusIndex);
+          const newOpenNodes = openNodes.filter(node => node !== nodeToBeClosed);
+
+          return { openNodes: newOpenNodes, focusKey: nodeToBeClosed };
+        });
+      },
+      right: () => {
+        const { hasNodes, key } = items[focusIndex];
+        if (hasNodes)
+          this.setState(({ openNodes }) => ({ openNodes: [...openNodes, key] }));
+      },
+      enter: () => {
+        this.setState(({ focusKey }) => ({ activeKey: focusKey }));
+        onClickItem(items[focusIndex]);
+      },
+    };
+
     return (
-      <div
-        tabIndex={0}
-        onKeyDown={e => {
-          switch (e.key) {
-            case 'ArrowUp': {
-              this.setState(({ focusKey }) => ({
-                focusKey: focusIndex > 0 ? items[focusIndex - 1].key : focusKey,
-              }));
-              break;
-            }
-            case 'ArrowDown': {
-              this.setState(({ focusKey }) => ({
-                focusKey:
-                  focusIndex < items.length - 1 ? items[focusIndex + 1].key : focusKey,
-              }));
-              break;
-            }
-            case 'ArrowLeft': {
-              this.setState(({ openNodes }) => {
-                const nodeToBeClosed = getNodeToBeClosed(items, openNodes, focusIndex);
-                const newOpenNodes = openNodes.filter(node => node !== nodeToBeClosed);
-
-                return { openNodes: newOpenNodes, focusKey: nodeToBeClosed };
-              });
-              break;
-            }
-            case 'ArrowRight': {
-              const { hasNodes, key } = items[focusIndex];
-              if (hasNodes)
-                this.setState(({ openNodes }) => ({ openNodes: [...openNodes, key] }));
-              break;
-            }
-
-            case 'Enter': {
-              this.setState(({ focusKey }) => ({ activeKey: focusKey }));
-              onClickItem(items[focusIndex]);
-              break;
-            }
-          }
-        }}
-      >
+      <KeyDown {...keyDownProps}>
         {renderedChildren(hasSearch ? { search: this.search, items } : { items })}
-      </div>
+      </KeyDown>
     );
   }
 }

@@ -1,9 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`TreeViewMenu should highlight the active node 1`] = `
-<div
-  onKeyDown={[Function]}
-  tabIndex={0}
+<KeyDown
+  down={[Function]}
+  enter={[Function]}
+  left={[Function]}
+  right={[Function]}
+  up={[Function]}
 >
   <input
     aria-label="Type and search"
@@ -156,13 +159,16 @@ exports[`TreeViewMenu should highlight the active node 1`] = `
       </span>
     </li>
   </ul>
-</div>
+</KeyDown>
 `;
 
 exports[`TreeViewMenu should open specified nodes 1`] = `
-<div
-  onKeyDown={[Function]}
-  tabIndex={0}
+<KeyDown
+  down={[Function]}
+  enter={[Function]}
+  left={[Function]}
+  right={[Function]}
+  up={[Function]}
 >
   <input
     aria-label="Type and search"
@@ -315,13 +321,16 @@ exports[`TreeViewMenu should open specified nodes 1`] = `
       </span>
     </li>
   </ul>
-</div>
+</KeyDown>
 `;
 
 exports[`TreeViewMenu should render the level-1 nodes by default 1`] = `
-<div
-  onKeyDown={[Function]}
-  tabIndex={0}
+<KeyDown
+  down={[Function]}
+  enter={[Function]}
+  left={[Function]}
+  right={[Function]}
+  up={[Function]}
 >
   <input
     aria-label="Type and search"
@@ -404,5 +413,5 @@ exports[`TreeViewMenu should render the level-1 nodes by default 1`] = `
       </span>
     </li>
   </ul>
-</div>
+</KeyDown>
 `;
