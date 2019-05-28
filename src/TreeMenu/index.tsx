@@ -31,7 +31,6 @@ type TreeMenuState = {
   searchTerm: string;
   activeKey: string;
   focusKey: string;
-  items: TreeMenuItem[];
 };
 
 const defaultOnClick = (props: Item) => console.log(props); // eslint-disable-line no-console
@@ -50,18 +49,6 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
     searchTerm: '',
     activeKey: this.props.initialActiveKey || '',
     focusKey: this.props.initialFocusKey || '',
-    items: [],
-  };
-
-  componentDidMount() {
-    const { data } = this.props;
-    const items = this.generateItems();
-    this.setItems(items);
-  }
-
-  setItems = (items: TreeMenuItem[]) => {
-    const focusKey = items[0] ? items[0].key : '';
-    this.setState({ items, focusKey });
   };
 
   search = (value: string) => {
@@ -93,31 +80,23 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
       ? walk({ data, openNodes, searchTerm, locale, matchSearch })
       : [];
 
-    const focusKey = items[0] ? items[0].key : '';
-
-    return items.map(props => {
-      const { key, hasNodes } = props;
+    return items.map(item => {
+      const focusKey = items[0] ? items[0].key : '';
+      const focus = item.key === focusKey;
+      const active = item.key === activeKey;
       const onClick = () => {
-        const activeKey = this.props.activeKey || props.key;
+        const activeKey = this.props.activeKey || item.key;
         this.setState({ activeKey });
-        onClickItem(props);
+        onClickItem(item);
       };
-      const toggleNode = () => {
-        this.toggleNode(props.key);
-      };
-      return {
-        ...props,
-        focus: key === focusKey,
-        active: key === activeKey,
-        onClick,
-        toggleNode: hasNodes ? toggleNode : undefined,
-      };
+      const toggleNode = item.hasNodes ? () => this.toggleNode(item.key) : undefined;
+      return { ...item, focus, active, onClick, toggleNode };
     });
   };
 
   render() {
     const { children, hasSearch } = this.props;
-    const { items } = this.state;
+    const items = this.generateItems();
     const renderedChildren = children || defaultChildren;
 
     return renderedChildren(hasSearch ? { search: this.search, items } : { items });
