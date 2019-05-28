@@ -102,17 +102,13 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
     const items = this.generateItems();
     const renderedChildren = children || defaultChildren;
     const focusIndex = items.findIndex(item => item.key === (focusKey || activeKey));
-    const getNodeToBeClosed = (
-      menuItems: TreeMenuItem[],
-      openNodes: string[],
-      focusIndex: number
-    ) => {
-      const nodeArray = menuItems[focusIndex].key.split('/');
-      const currentNode = menuItems[focusIndex].key;
-      if (openNodes.includes(currentNode)) return currentNode;
-      return nodeArray.length > 1
-        ? nodeArray.slice(0, nodeArray.length - 1).join('/')
-        : currentNode;
+
+    const getFocusKey = (item: TreeMenuItem) => {
+      const keyArray = item.key.split('/');
+
+      return keyArray.length > 1
+        ? keyArray.slice(0, keyArray.length - 1).join('/')
+        : item.key;
     };
 
     const keyDownProps = {
@@ -127,11 +123,13 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
         }));
       },
       left: () => {
-        this.setState(({ openNodes }) => {
-          const nodeToBeClosed = getNodeToBeClosed(items, openNodes, focusIndex);
-          const newOpenNodes = openNodes.filter(node => node !== nodeToBeClosed);
+        this.setState(({ openNodes, ...rest }) => {
+          const item = items[focusIndex];
+          const newOpenNodes = openNodes.filter(node => node !== item.key);
 
-          return { openNodes: newOpenNodes, focusKey: nodeToBeClosed };
+          return item.isOpen
+            ? { ...rest, openNodes: newOpenNodes, focusKey: item.key }
+            : { ...rest, focusKey: getFocusKey(item) };
         });
       },
       right: () => {
