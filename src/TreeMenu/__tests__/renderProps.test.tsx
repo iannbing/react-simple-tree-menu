@@ -7,7 +7,19 @@ const search = () => console.log('search');
 describe('defaultChildren', () => {
   it('should render without the toggle icon', () => {
     const wrapper = mount(
-      defaultChildren({ search, items: [{ hasNodes: false, label: 'foo', key: 'key' }] })
+      defaultChildren({
+        search,
+        items: [
+          {
+            hasNodes: false,
+            label: 'foo',
+            key: 'key',
+            onClick: () => {},
+            level: 0,
+            isOpen: false,
+          },
+        ],
+      })
     );
 
     expect(wrapper).toMatchSnapshot();
@@ -25,6 +37,7 @@ describe('defaultChildren', () => {
             level: 1,
             label: 'foo',
             key: 'foo',
+            onClick: () => {},
           },
           {
             hasNodes: false,
@@ -32,6 +45,7 @@ describe('defaultChildren', () => {
             level: 2,
             label: 'bar',
             key: 'bar',
+            onClick: () => {},
           },
           {
             hasNodes: false,
@@ -39,6 +53,7 @@ describe('defaultChildren', () => {
             level: 2,
             label: 'zoo',
             key: 'zoo',
+            onClick: () => {},
           },
         ],
       })
@@ -58,6 +73,7 @@ describe('defaultChildren', () => {
             level: 1,
             label: 'foo',
             key: 'key',
+            onClick: () => {},
           },
         ],
       })

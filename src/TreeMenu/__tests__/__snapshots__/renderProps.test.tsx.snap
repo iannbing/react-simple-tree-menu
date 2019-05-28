@@ -9,7 +9,7 @@ Array [
     style={
       Object {
         "border": "none",
-        "padding": "1rem 2rem",
+        "padding": "1rem 1.5rem",
         "width": "100%",
       }
     }
@@ -26,24 +26,26 @@ Array [
   >
     <li
       key="key"
+      onClick={[Function]}
       role="button"
       style={
         Object {
           "background": "none",
           "borderBottom": "1px solid #ccc",
+          "boxShadow": "none",
           "color": "#333",
           "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 4.75rem",
+          "padding": " .75rem  1rem  .75rem 2.5rem",
+          "position": "relative",
+          "zIndex": "unset",
         }
       }
     >
       <div
+        onClick={[Function]}
         style={
           Object {
-            "height": "2rem",
-            "left": "3.25rem",
-            "position": "absolute",
-            "width": "2rem",
+            "display": "inline-block",
           }
         }
       >
@@ -53,6 +55,14 @@ Array [
           <div
             aria-label="Toggle"
             role="img"
+            style={
+              Object {
+                "height": "2rem",
+                "lineHeight": "2rem",
+                "textAlign": "center",
+                "width": "2rem",
+              }
+            }
           >
             +
           </div>
@@ -73,7 +83,7 @@ Array [
     style={
       Object {
         "border": "none",
-        "padding": "1rem 2rem",
+        "padding": "1rem 1.5rem",
         "width": "100%",
       }
     }
@@ -90,24 +100,26 @@ Array [
   >
     <li
       key="foo"
+      onClick={[Function]}
       role="button"
       style={
         Object {
           "background": "none",
           "borderBottom": "1px solid #ccc",
+          "boxShadow": "none",
           "color": "#333",
           "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 4.75rem",
+          "padding": " .75rem  1rem  .75rem 2.5rem",
+          "position": "relative",
+          "zIndex": "unset",
         }
       }
     >
       <div
+        onClick={[Function]}
         style={
           Object {
-            "height": "2rem",
-            "left": "3.25rem",
-            "position": "absolute",
-            "width": "2rem",
+            "display": "inline-block",
           }
         }
       >
@@ -117,6 +129,14 @@ Array [
           <div
             aria-label="Toggle"
             role="img"
+            style={
+              Object {
+                "height": "2rem",
+                "lineHeight": "2rem",
+                "textAlign": "center",
+                "width": "2rem",
+              }
+            }
           >
             -
           </div>
@@ -126,14 +146,18 @@ Array [
     </li>
     <li
       key="bar"
+      onClick={[Function]}
       role="button"
       style={
         Object {
           "background": "none",
           "borderBottom": "1px solid #ccc",
+          "boxShadow": "none",
           "color": "#333",
           "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 6rem",
+          "padding": " .75rem  1rem  .75rem 6.25rem",
+          "position": "relative",
+          "zIndex": "unset",
         }
       }
     >
@@ -141,14 +165,18 @@ Array [
     </li>
     <li
       key="zoo"
+      onClick={[Function]}
       role="button"
       style={
         Object {
           "background": "none",
           "borderBottom": "1px solid #ccc",
+          "boxShadow": "none",
           "color": "#333",
           "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 6rem",
+          "padding": " .75rem  1rem  .75rem 6.25rem",
+          "position": "relative",
+          "zIndex": "unset",
         }
       }
     >
@@ -167,7 +195,7 @@ Array [
     style={
       Object {
         "border": "none",
-        "padding": "1rem 2rem",
+        "padding": "1rem 1.5rem",
         "width": "100%",
       }
     }
@@ -184,14 +212,18 @@ Array [
   >
     <li
       key="key"
+      onClick={[Function]}
       role="button"
       style={
         Object {
           "background": "none",
           "borderBottom": "1px solid #ccc",
+          "boxShadow": "none",
           "color": "#333",
           "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 3.5rem",
+          "padding": " .75rem  1rem  .75rem 2.75rem",
+          "position": "relative",
+          "zIndex": "unset",
         }
       }
     >

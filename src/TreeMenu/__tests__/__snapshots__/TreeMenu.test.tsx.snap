@@ -1,7 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`TreeViewMenu should highlight the active node 1`] = `
-<Fragment>
+<KeyDown
+  down={[Function]}
+  enter={[Function]}
+  left={[Function]}
+  right={[Function]}
+  up={[Function]}
+>
   <input
     aria-label="Type and search"
     onChange={[Function]}
@@ -9,7 +15,7 @@ exports[`TreeViewMenu should highlight the active node 1`] = `
     style={
       Object {
         "border": "none",
-        "padding": "1rem 2rem",
+        "padding": "1rem 1.5rem",
         "width": "100%",
       }
     }
@@ -33,19 +39,20 @@ exports[`TreeViewMenu should highlight the active node 1`] = `
         Object {
           "background": "none",
           "borderBottom": "1px solid #ccc",
+          "boxShadow": "none",
           "color": "#333",
           "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 3.5rem",
+          "padding": " .75rem  1rem  .75rem 0.75rem",
+          "position": "relative",
+          "zIndex": "unset",
         }
       }
     >
       <div
+        onClick={[Function]}
         style={
           Object {
-            "height": "2rem",
-            "left": "2rem",
-            "position": "absolute",
-            "width": "2rem",
+            "display": "inline-block",
           }
         }
       >
@@ -64,19 +71,20 @@ exports[`TreeViewMenu should highlight the active node 1`] = `
         Object {
           "background": "none",
           "borderBottom": "1px solid #ccc",
+          "boxShadow": "none",
           "color": "#333",
           "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 4.75rem",
+          "padding": " .75rem  1rem  .75rem 2.5rem",
+          "position": "relative",
+          "zIndex": "unset",
         }
       }
     >
       <div
+        onClick={[Function]}
         style={
           Object {
-            "height": "2rem",
-            "left": "3.25rem",
-            "position": "absolute",
-            "width": "2rem",
+            "display": "inline-block",
           }
         }
       >
@@ -94,20 +102,21 @@ exports[`TreeViewMenu should highlight the active node 1`] = `
       style={
         Object {
           "background": "#179ed3",
-          "borderBottom": "1px solid #ccc",
+          "borderBottom": "none",
+          "boxShadow": "none",
           "color": "white",
           "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 6rem",
+          "padding": " .75rem  1rem  .75rem 4.25rem",
+          "position": "relative",
+          "zIndex": "unset",
         }
       }
     >
       <div
+        onClick={[Function]}
         style={
           Object {
-            "height": "2rem",
-            "left": "4.5rem",
-            "position": "absolute",
-            "width": "2rem",
+            "display": "inline-block",
           }
         }
       >
@@ -126,20 +135,29 @@ exports[`TreeViewMenu should highlight the active node 1`] = `
         Object {
           "background": "none",
           "borderBottom": "1px solid #ccc",
+          "boxShadow": "none",
           "color": "#333",
           "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 3.5rem",
+          "padding": " .75rem  1rem  .75rem 2.75rem",
+          "position": "relative",
+          "zIndex": "unset",
         }
       }
     >
       ATS Guide
     </li>
   </ul>
-</Fragment>
+</KeyDown>
 `;
 
 exports[`TreeViewMenu should open specified nodes 1`] = `
-<Fragment>
+<KeyDown
+  down={[Function]}
+  enter={[Function]}
+  left={[Function]}
+  right={[Function]}
+  up={[Function]}
+>
   <input
     aria-label="Type and search"
     onChange={[Function]}
@@ -147,7 +165,7 @@ exports[`TreeViewMenu should open specified nodes 1`] = `
     style={
       Object {
         "border": "none",
-        "padding": "1rem 2rem",
+        "padding": "1rem 1.5rem",
         "width": "100%",
       }
     }
@@ -171,19 +189,20 @@ exports[`TreeViewMenu should open specified nodes 1`] = `
         Object {
           "background": "none",
           "borderBottom": "1px solid #ccc",
+          "boxShadow": "none",
           "color": "#333",
           "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 3.5rem",
+          "padding": " .75rem  1rem  .75rem 0.75rem",
+          "position": "relative",
+          "zIndex": "unset",
         }
       }
     >
       <div
+        onClick={[Function]}
         style={
           Object {
-            "height": "2rem",
-            "left": "2rem",
-            "position": "absolute",
-            "width": "2rem",
+            "display": "inline-block",
           }
         }
       >
@@ -202,19 +221,20 @@ exports[`TreeViewMenu should open specified nodes 1`] = `
         Object {
           "background": "none",
           "borderBottom": "1px solid #ccc",
+          "boxShadow": "none",
           "color": "#333",
           "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 4.75rem",
+          "padding": " .75rem  1rem  .75rem 2.5rem",
+          "position": "relative",
+          "zIndex": "unset",
         }
       }
     >
       <div
+        onClick={[Function]}
         style={
           Object {
-            "height": "2rem",
-            "left": "3.25rem",
-            "position": "absolute",
-            "width": "2rem",
+            "display": "inline-block",
           }
         }
       >
@@ -233,19 +253,20 @@ exports[`TreeViewMenu should open specified nodes 1`] = `
         Object {
           "background": "none",
           "borderBottom": "1px solid #ccc",
+          "boxShadow": "none",
           "color": "#333",
           "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 6rem",
+          "padding": " .75rem  1rem  .75rem 4.25rem",
+          "position": "relative",
+          "zIndex": "unset",
         }
       }
     >
       <div
+        onClick={[Function]}
         style={
           Object {
-            "height": "2rem",
-            "left": "4.5rem",
-            "position": "absolute",
-            "width": "2rem",
+            "display": "inline-block",
           }
         }
       >
@@ -264,20 +285,29 @@ exports[`TreeViewMenu should open specified nodes 1`] = `
         Object {
           "background": "none",
           "borderBottom": "1px solid #ccc",
+          "boxShadow": "none",
           "color": "#333",
           "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 3.5rem",
+          "padding": " .75rem  1rem  .75rem 2.75rem",
+          "position": "relative",
+          "zIndex": "unset",
         }
       }
     >
       ATS Guide
     </li>
   </ul>
-</Fragment>
+</KeyDown>
 `;
 
 exports[`TreeViewMenu should render the level-1 nodes by default 1`] = `
-<Fragment>
+<KeyDown
+  down={[Function]}
+  enter={[Function]}
+  left={[Function]}
+  right={[Function]}
+  up={[Function]}
+>
   <input
     aria-label="Type and search"
     onChange={[Function]}
@@ -285,7 +315,7 @@ exports[`TreeViewMenu should render the level-1 nodes by default 1`] = `
     style={
       Object {
         "border": "none",
-        "padding": "1rem 2rem",
+        "padding": "1rem 1.5rem",
         "width": "100%",
       }
     }
@@ -309,19 +339,20 @@ exports[`TreeViewMenu should render the level-1 nodes by default 1`] = `
         Object {
           "background": "none",
           "borderBottom": "1px solid #ccc",
+          "boxShadow": "none",
           "color": "#333",
           "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 3.5rem",
+          "padding": " .75rem  1rem  .75rem 0.75rem",
+          "position": "relative",
+          "zIndex": "unset",
         }
       }
     >
       <div
+        onClick={[Function]}
         style={
           Object {
-            "height": "2rem",
-            "left": "2rem",
-            "position": "absolute",
-            "width": "2rem",
+            "display": "inline-block",
           }
         }
       >
@@ -340,14 +371,17 @@ exports[`TreeViewMenu should render the level-1 nodes by default 1`] = `
         Object {
           "background": "none",
           "borderBottom": "1px solid #ccc",
+          "boxShadow": "none",
           "color": "#333",
           "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 3.5rem",
+          "padding": " .75rem  1rem  .75rem 2.75rem",
+          "position": "relative",
+          "zIndex": "unset",
         }
       }
     >
       ATS Guide
     </li>
   </ul>
-</Fragment>
+</KeyDown>
 `;

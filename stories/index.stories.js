@@ -13,7 +13,11 @@ const DEFAULT_PADDING = 16;
 const ICON_SIZE = 8;
 const LEVEL_SPACE = 16;
 
-const ToggleIcon = ({ on }) => <span style={{ marginRight: 8 }}>{on ? '-' : '+'}</span>;
+const ToggleIcon = ({ on, onClick }) => (
+  <div style={{ display: 'inline-block' }} onClick={onClick}>
+    <span style={{ marginRight: 8 }}>{on ? '-' : '+'}</span>
+  </div>
+);
 const ListItem = ({
   level = 0,
   hasNodes,
@@ -21,6 +25,9 @@ const ListItem = ({
   label,
   searchTerm,
   openNodes,
+  toggleNode,
+  onClick,
+  matchSearch,
   ...props
 }) => (
   <ListGroupItem
@@ -30,8 +37,8 @@ const ListItem = ({
       cursor: 'pointer',
     }}
   >
-    {hasNodes && <ToggleIcon on={isOpen} />}
-    {label}
+    {hasNodes && <ToggleIcon on={isOpen} onClick={toggleNode} />}
+    <span onClick={onClick}>{label}</span>
   </ListGroupItem>
 );
 
