@@ -24,7 +24,6 @@ type TreeMenuProps = {
   children: TreeMenuChildren;
   locale?: LocaleFunction;
   matchSearch?: MatchSearchFunction;
-  keyDownConfig?: object;
 };
 
 type TreeMenuState = {
@@ -83,7 +82,7 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
       : [];
 
     return items.map(item => {
-      const focus = item.key === focusKey;
+      const focused = item.key === focusKey;
       const active = item.key === activeKey;
       const onClick = () => {
         const newActiveKey = this.props.activeKey || item.key;
@@ -92,12 +91,12 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
       };
 
       const toggleNode = item.hasNodes ? () => this.toggleNode(item.key) : undefined;
-      return { ...item, focus, active, onClick, toggleNode };
+      return { ...item, focused, active, onClick, toggleNode };
     });
   };
 
   render() {
-    const { children, hasSearch } = this.props;
+    const { children, hasSearch, onClickItem } = this.props;
     const { focusKey, activeKey, openNodes } = this.state;
     const items = this.generateItems();
     const renderedChildren = children || defaultChildren;
@@ -151,6 +150,7 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
 
             case 'Enter': {
               this.setState(({ focusKey }) => ({ activeKey: focusKey }));
+              onClickItem(items[focusIndex]);
               break;
             }
           }

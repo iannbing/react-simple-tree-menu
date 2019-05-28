@@ -9,6 +9,7 @@ Inspired by [Downshift](https://github.com/downshift-js/downshift), a simple, da
 - does not depend on any UI framework
 - fully customizable with `render props` and `control props`
 - allows search
+- support keyboard browsing
 
 Check [Storybook Demo](https://iannbing.github.io/react-simple-tree-menu/).
 
@@ -110,6 +111,18 @@ import TreeMenu from 'react-simple-tree-menu'
 
 ```
 
+### Keyboard browsing
+
+When the tree menu is focused, you can use your keyboard to browse the tree.
+
+- UP: move the focus onto the previous node
+- DOWN: move the focus onto the next node
+- LEFT: close the current node if it has children and it is open; close the parent node if the current node has no children
+- RIGHT: open the current node if it has children
+- ENTER: fire `onClick` function and set `activeKey` to current node
+
+Note the difference between the state `active` and `focused`. ENTER is equivalent to the `onClick` event, but focus does not fire `onClick`.
+
 ## API
 
 ### TreeViewMenu
@@ -117,8 +130,10 @@ import TreeMenu from 'react-simple-tree-menu'
 | props               | description                                                                                                                              | type                                        | default                            |
 | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- | ---------------------------------- |
 | data                | Data that defines the structure of the tree. You can nest it as many levels as you want, but note that it might cause performance issue. | {[string]:TreeNode} \| TreeNodeInArray[]    | -                                  |
-| activeKey           | the node matching this key will be highlighted                                                                                           | string                                      | ''                                 |
+| activeKey           | the node matching this key will be active                                                                                                | string                                      | ''                                 |
+| focusKey            | the node matching this key will be focused                                                                                               | string                                      | ''                                 |
 | initialActiveKey    | set initial state of `activeKey`                                                                                                         | string                                      | -                                  |
+| initialFocusKey     | set initial state of `focusKey`                                                                                                          | string                                      | -                                  |
 | onClickItem         | A callback function that defines the behavior when user clicks on an node                                                                | (Item): void                                | `console.warn`                     |
 | debounceTime        | debounce time for searching                                                                                                              | number                                      | 125                                |
 | openNodes           | you can pass an array of node names to control the open state of certain branches                                                        | string[]                                    | -                                  |
@@ -174,6 +189,7 @@ import TreeMenu from 'react-simple-tree-menu'
 | key        | key of a `TreeNode`                                                   | string                    | -       |
 | label      | `TreeNode` `label`                                                    | string                    | -       |
 | active     | if current node is being selected                                     | boolean                   | -       |
+| focused    | if current node is being focused                                      | boolean                   | -       |
 | onClick    | a callback function that is run when the node is clicked              | Function                  | -       |
 | toggleNode | a function that toggles the node (only availavble if it has children) | Function                  | -       |
 | ...other   | User defined props                                                    | {[string]: any}           | -       |
