@@ -13,11 +13,7 @@ const DEFAULT_PADDING = 16;
 const ICON_SIZE = 8;
 const LEVEL_SPACE = 16;
 
-const ToggleIcon = ({ on, onClick }) => (
-  <div style={{ display: 'inline-block' }} onClick={onClick}>
-    <span style={{ marginRight: 8 }}>{on ? '-' : '+'}</span>
-  </div>
-);
+const ToggleIcon = ({ on }) => <span style={{ marginRight: 8 }}>{on ? '-' : '+'}</span>;
 const ListItem = ({
   level = 0,
   hasNodes,
@@ -26,8 +22,8 @@ const ListItem = ({
   searchTerm,
   openNodes,
   toggleNode,
-  onClick,
   matchSearch,
+  focused,
   ...props
 }) => (
   <ListGroupItem
@@ -35,10 +31,23 @@ const ListItem = ({
     style={{
       paddingLeft: DEFAULT_PADDING + ICON_SIZE + level * LEVEL_SPACE,
       cursor: 'pointer',
+      boxShadow: focused ? '0px 0px 5px 0px #222' : 'none',
+      zIndex: focused ? 999 : 'unset',
+      position: 'relative',
     }}
   >
-    {hasNodes && <ToggleIcon on={isOpen} onClick={toggleNode} />}
-    <span onClick={onClick}>{label}</span>
+    {hasNodes && (
+      <div
+        style={{ display: 'inline-block' }}
+        onClick={e => {
+          hasNodes && toggleNode && toggleNode();
+          e.stopPropagation();
+        }}
+      >
+        <ToggleIcon on={isOpen} />
+      </div>
+    )}
+    {label}
   </ListGroupItem>
 );
 
