@@ -11,7 +11,7 @@ module.exports = {
     libraryTarget: 'umd',
     publicPath: '/dist/',
     umdNamedDefine: true,
-    globalObject: typeof self !== 'undefined' ? 'self' : 'this',
+    globalObject: `typeof self !== 'undefined' ? self : this`,
   },
   module: {
     rules: [
