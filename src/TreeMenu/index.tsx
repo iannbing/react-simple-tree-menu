@@ -11,7 +11,7 @@ import walk, {
 import { defaultChildren, TreeMenuChildren, TreeMenuItem } from './renderProps';
 import KeyDown from '../KeyDown';
 
-type TreeMenuProps = {
+export type TreeMenuProps = {
   data: { [name: string]: TreeNode } | TreeNodeInArray[];
   activeKey?: string;
   focusKey?: string;
