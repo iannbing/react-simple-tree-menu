@@ -52,6 +52,13 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
     focusKey: this.props.initialFocusKey || '',
   };
 
+  reset = (newOpenNodes?: string[]) => {
+    const { initialOpenNodes } = this.props;
+    const openNodes =
+      (Array.isArray(newOpenNodes) && newOpenNodes) || initialOpenNodes || [];
+    this.setState({ openNodes });
+  };
+
   search = (value: string) => {
     const { debounceTime } = this.props;
     const search = debounce(
@@ -145,7 +152,11 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
 
     return (
       <KeyDown {...keyDownProps}>
-        {renderedChildren(hasSearch ? { search: this.search, items } : { items })}
+        {renderedChildren(
+          hasSearch
+            ? { search: this.search, items, reset: this.reset }
+            : { items, reset: this.reset }
+        )}
       </KeyDown>
     );
   }

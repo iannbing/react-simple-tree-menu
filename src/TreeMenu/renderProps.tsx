@@ -25,12 +25,11 @@ export interface TreeMenuItem extends Item {
   toggleNode?: () => void;
 }
 
-export type TreeMenuChildren = (
-  props: {
-    search?: Function;
-    items: TreeMenuItem[];
-  }
-) => JSX.Element;
+export type TreeMenuChildren = (props: {
+  search?: (term: string) => void;
+  items: TreeMenuItem[];
+  reset?: (openNodes?: string[]) => void;
+}) => JSX.Element;
 
 type RenderItem = (props: TreeMenuItem) => JSX.Element;
 
