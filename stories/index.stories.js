@@ -212,7 +212,28 @@ storiesOf('TreeMenu', module)
         <>
           <Input onChange={e => search(e.target.value)} placeholder="Type and search" />
           <ListGroup>
-            {items.map(props => (
+            {items.map(({ reset, ...props }) => (
+              <ListItem {...props} />
+            ))}
+          </ListGroup>
+        </>
+      )}
+    </TreeMenu>
+  ))
+  .add('reset openNodes', () => (
+    <TreeMenu data={dataInArray} debounceTime={125} onClickItem={action(`on click node`)}>
+      {({ search, items, reset }) => (
+        <>
+          <button
+            onClick={() => {
+              reset(['reptile']);
+            }}
+          >
+            Reset
+          </button>
+          <Input onChange={e => search(e.target.value)} placeholder="Type and search" />
+          <ListGroup>
+            {items.map(({ reset, ...props }) => (
               <ListItem {...props} />
             ))}
           </ListGroup>
