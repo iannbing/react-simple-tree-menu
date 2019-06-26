@@ -2,7 +2,7 @@ import TreeMenu from './TreeMenu';
 
 export default TreeMenu;
 export { TreeMenuProps } from './TreeMenu';
-export { TreeMenuItem, TreeMenuChildren } from './TreeMenu/renderProps';
+export { TreeMenuItem, TreeMenuChildren, defaultChildren } from './TreeMenu/renderProps';
 export {
   TreeNodeObject,
   TreeNode,
