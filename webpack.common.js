@@ -1,10 +1,10 @@
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   mode: 'none',
-  entry: { main: ['./src/index.tsx', './src/sass/index.scss'] },
+  entry: { main: ['./src/index.tsx'] },
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].js',
@@ -30,10 +30,13 @@ module.exports = {
       { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' },
       {
         test: /\.scss$/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: ['css-loader', 'sass-loader'],
-        }),
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+          },
+          'css-loader',
+          'sass-loader',
+        ],
       },
       {
         test: /\.svg$/,
@@ -54,6 +57,12 @@ module.exports = {
       assets: path.resolve(__dirname, 'assets'),
     },
   },
-  plugins: [new CleanWebpackPlugin(['dist']), new ExtractTextPlugin('[name].css')],
+  plugins: [
+    new CleanWebpackPlugin(['dist']),
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
+      chunkFilename: '[id].css',
+    }),
+  ],
   externals: ['react', 'react-dom'],
 };
