@@ -1,6 +1,10 @@
 import TreeMenu from './TreeMenu';
 
+// export components
 export default TreeMenu;
+export { defaultChildren, ItemComponent } from './TreeMenu/renderProps';
+
+// export definitions
 export { TreeMenuProps } from './TreeMenu';
 export { TreeMenuItem, TreeMenuChildren } from './TreeMenu/renderProps';
 export {

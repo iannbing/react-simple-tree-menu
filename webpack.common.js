@@ -1,12 +1,13 @@
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   mode: 'none',
-  entry: './src/index.tsx',
+  entry: { main: ['./src/index.tsx', './src/sass/index.scss'] },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'main.js',
+    filename: '[name].js',
     library: 'ReactSimpleTreeMenu',
     libraryTarget: 'umd',
     publicPath: '/dist/',
@@ -28,8 +29,11 @@ module.exports = {
       },
       { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' },
       {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
+        test: /\.scss$/,
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: ['css-loader', 'sass-loader'],
+        }),
       },
       {
         test: /\.svg$/,
@@ -50,6 +54,6 @@ module.exports = {
       assets: path.resolve(__dirname, 'assets'),
     },
   },
-  plugins: [new CleanWebpackPlugin(['dist'])],
+  plugins: [new CleanWebpackPlugin(['dist']), new ExtractTextPlugin('[name].css')],
   externals: ['react', 'react-dom'],
 };
