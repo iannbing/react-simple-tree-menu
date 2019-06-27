@@ -8,6 +8,11 @@ module.exports = ({ config }) => {
       presets: [['react-app', { flow: false, typescript: true }]],
     },
   });
+  config.module.rules.push({
+    test: /\.scss$/,
+    use: ['style-loader', 'css-loader', 'sass-loader'],
+    include: path.resolve(__dirname, '../src/sass/index.scss'),
+  });
   config.resolve.extensions.push('.ts', '.tsx');
   return config;
 };

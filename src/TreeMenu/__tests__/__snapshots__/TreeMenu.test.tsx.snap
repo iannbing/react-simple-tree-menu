@@ -1,387 +1,657 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`TreeViewMenu should highlight the active node 1`] = `
-<KeyDown
-  down={[Function]}
-  enter={[Function]}
-  left={[Function]}
-  right={[Function]}
-  up={[Function]}
+<TreeMenu
+  activeKey="releasenotes/desktop-modeler/7"
+  data={
+    Object {
+      "atd": Object {
+        "index": 1,
+        "key": "ats",
+        "label": "ATS Guide",
+      },
+      "releasenotes": Object {
+        "index": 0,
+        "key": "releasenotes",
+        "label": "Release Notes",
+        "nodes": Object {
+          "desktop-modeler": Object {
+            "index": 0,
+            "key": "releasenotes/desktop-modeler",
+            "label": "Desktop Modeler",
+            "nodes": Object {
+              "7": Object {
+                "index": 0,
+                "key": "releasenotes/desktop-modeler/7",
+                "label": "7",
+                "nodes": Object {
+                  "7.0": Object {
+                    "index": 0,
+                    "key": "releasenotes/desktop-modeler/7.0",
+                    "label": "7.0",
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    }
+  }
+  debounceTime={125}
+  hasSearch={true}
+  onClickItem={[Function]}
+  openNodes={
+    Array [
+      "releasenotes",
+      "releasenotes/desktop-modeler",
+    ]
+  }
 >
-  <input
-    aria-label="Type and search"
-    onChange={[Function]}
-    placeholder="Type and search"
-    style={
-      Object {
-        "border": "none",
-        "padding": "1rem 1.5rem",
-        "width": "100%",
-      }
-    }
-    type="search"
-  />
-  <ul
-    style={
-      Object {
-        "borderTop": "1px solid #ccc",
-        "listStyleType": "none",
-        "paddingLeft": 0,
-      }
-    }
+  <KeyDown
+    down={[Function]}
+    enter={[Function]}
+    left={[Function]}
+    right={[Function]}
+    up={[Function]}
   >
-    <li
-      aria-pressed={false}
-      key="releasenotes"
-      onClick={[Function]}
-      role="button"
-      style={
-        Object {
-          "background": "none",
-          "borderBottom": "1px solid #ccc",
-          "boxShadow": "none",
-          "color": "#333",
-          "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 0.75rem",
-          "position": "relative",
-          "zIndex": "unset",
-        }
-      }
+    <div
+      onKeyDown={[Function]}
+      tabIndex={0}
     >
-      <div
-        onClick={[Function]}
-        style={
-          Object {
-            "display": "inline-block",
-          }
-        }
+      <input
+        aria-label="Type and search"
+        className="search"
+        onChange={[Function]}
+        placeholder="Type and search"
+        type="search"
+      />
+      <ul
+        className="tree-item-group"
       >
-        <ToggleIcon
-          on={true}
-        />
-      </div>
-      Release Notes
-    </li>
-    <li
-      aria-pressed={false}
-      key="releasenotes/desktop-modeler"
-      onClick={[Function]}
-      role="button"
-      style={
-        Object {
-          "background": "none",
-          "borderBottom": "1px solid #ccc",
-          "boxShadow": "none",
-          "color": "#333",
-          "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 2.5rem",
-          "position": "relative",
-          "zIndex": "unset",
-        }
-      }
-    >
-      <div
-        onClick={[Function]}
-        style={
-          Object {
-            "display": "inline-block",
+        <Component
+          active={false}
+          focused={false}
+          hasNodes={true}
+          index={0}
+          isOpen={true}
+          key="releasenotes"
+          label="Release Notes"
+          level={0}
+          onClick={[Function]}
+          openNodes={
+            Array [
+              "releasenotes",
+              "releasenotes/desktop-modeler",
+            ]
           }
-        }
-      >
-        <ToggleIcon
-          on={true}
-        />
-      </div>
-      Desktop Modeler
-    </li>
-    <li
-      aria-pressed={true}
-      key="releasenotes/desktop-modeler/7"
-      onClick={[Function]}
-      role="button"
-      style={
-        Object {
-          "background": "#179ed3",
-          "borderBottom": "none",
-          "boxShadow": "none",
-          "color": "white",
-          "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 4.25rem",
-          "position": "relative",
-          "zIndex": "unset",
-        }
-      }
-    >
-      <div
-        onClick={[Function]}
-        style={
-          Object {
-            "display": "inline-block",
+          parent=""
+          searchTerm=""
+          toggleNode={[Function]}
+        >
+          <li
+            aria-pressed={false}
+            className="tree-item"
+            onClick={[Function]}
+            role="button"
+            style={
+              Object {
+                "paddingLeft": "0.75rem",
+              }
+            }
+          >
+            <div
+              className="toggle-icon"
+              onClick={[Function]}
+            >
+              <ToggleIcon
+                on={true}
+              >
+                <div
+                  aria-label="Toggle"
+                  className="toggle-icon-symbol"
+                  role="img"
+                >
+                  -
+                </div>
+              </ToggleIcon>
+            </div>
+            Release Notes
+          </li>
+        </Component>
+        <Component
+          active={false}
+          focused={false}
+          hasNodes={true}
+          index={0}
+          isOpen={true}
+          key="releasenotes/desktop-modeler"
+          label="Desktop Modeler"
+          level={1}
+          onClick={[Function]}
+          openNodes={
+            Array [
+              "releasenotes",
+              "releasenotes/desktop-modeler",
+            ]
           }
-        }
-      >
-        <ToggleIcon
-          on={false}
-        />
-      </div>
-      7
-    </li>
-    <li
-      aria-pressed={false}
-      key="atd"
-      onClick={[Function]}
-      role="button"
-      style={
-        Object {
-          "background": "none",
-          "borderBottom": "1px solid #ccc",
-          "boxShadow": "none",
-          "color": "#333",
-          "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 2.75rem",
-          "position": "relative",
-          "zIndex": "unset",
-        }
-      }
-    >
-      ATS Guide
-    </li>
-  </ul>
-</KeyDown>
+          parent="releasenotes"
+          searchTerm=""
+          toggleNode={[Function]}
+        >
+          <li
+            aria-pressed={false}
+            className="tree-item"
+            onClick={[Function]}
+            role="button"
+            style={
+              Object {
+                "paddingLeft": "2.5rem",
+              }
+            }
+          >
+            <div
+              className="toggle-icon"
+              onClick={[Function]}
+            >
+              <ToggleIcon
+                on={true}
+              >
+                <div
+                  aria-label="Toggle"
+                  className="toggle-icon-symbol"
+                  role="img"
+                >
+                  -
+                </div>
+              </ToggleIcon>
+            </div>
+            Desktop Modeler
+          </li>
+        </Component>
+        <Component
+          active={true}
+          focused={false}
+          hasNodes={true}
+          index={0}
+          isOpen={false}
+          key="releasenotes/desktop-modeler/7"
+          label="7"
+          level={2}
+          onClick={[Function]}
+          openNodes={
+            Array [
+              "releasenotes",
+              "releasenotes/desktop-modeler",
+            ]
+          }
+          parent="releasenotes/desktop-modeler"
+          searchTerm=""
+          toggleNode={[Function]}
+        >
+          <li
+            aria-pressed={true}
+            className="tree-item tree-item--active"
+            onClick={[Function]}
+            role="button"
+            style={
+              Object {
+                "paddingLeft": "4.25rem",
+              }
+            }
+          >
+            <div
+              className="toggle-icon"
+              onClick={[Function]}
+            >
+              <ToggleIcon
+                on={false}
+              >
+                <div
+                  aria-label="Toggle"
+                  className="toggle-icon-symbol"
+                  role="img"
+                >
+                  +
+                </div>
+              </ToggleIcon>
+            </div>
+            7
+          </li>
+        </Component>
+        <Component
+          active={false}
+          focused={false}
+          hasNodes={false}
+          index={1}
+          isOpen={false}
+          key="atd"
+          label="ATS Guide"
+          level={0}
+          onClick={[Function]}
+          openNodes={
+            Array [
+              "releasenotes",
+              "releasenotes/desktop-modeler",
+            ]
+          }
+          parent=""
+          searchTerm=""
+        >
+          <li
+            aria-pressed={false}
+            className="tree-item"
+            onClick={[Function]}
+            role="button"
+            style={
+              Object {
+                "paddingLeft": "2.75rem",
+              }
+            }
+          >
+            ATS Guide
+          </li>
+        </Component>
+      </ul>
+    </div>
+  </KeyDown>
+</TreeMenu>
 `;
 
 exports[`TreeViewMenu should open specified nodes 1`] = `
-<KeyDown
-  down={[Function]}
-  enter={[Function]}
-  left={[Function]}
-  right={[Function]}
-  up={[Function]}
+<TreeMenu
+  data={
+    Object {
+      "atd": Object {
+        "index": 1,
+        "key": "ats",
+        "label": "ATS Guide",
+      },
+      "releasenotes": Object {
+        "index": 0,
+        "key": "releasenotes",
+        "label": "Release Notes",
+        "nodes": Object {
+          "desktop-modeler": Object {
+            "index": 0,
+            "key": "releasenotes/desktop-modeler",
+            "label": "Desktop Modeler",
+            "nodes": Object {
+              "7": Object {
+                "index": 0,
+                "key": "releasenotes/desktop-modeler/7",
+                "label": "7",
+                "nodes": Object {
+                  "7.0": Object {
+                    "index": 0,
+                    "key": "releasenotes/desktop-modeler/7.0",
+                    "label": "7.0",
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    }
+  }
+  debounceTime={125}
+  hasSearch={true}
+  onClickItem={[Function]}
+  openNodes={
+    Array [
+      "releasenotes",
+      "releasenotes/desktop-modeler",
+    ]
+  }
 >
-  <input
-    aria-label="Type and search"
-    onChange={[Function]}
-    placeholder="Type and search"
-    style={
-      Object {
-        "border": "none",
-        "padding": "1rem 1.5rem",
-        "width": "100%",
-      }
-    }
-    type="search"
-  />
-  <ul
-    style={
-      Object {
-        "borderTop": "1px solid #ccc",
-        "listStyleType": "none",
-        "paddingLeft": 0,
-      }
-    }
+  <KeyDown
+    down={[Function]}
+    enter={[Function]}
+    left={[Function]}
+    right={[Function]}
+    up={[Function]}
   >
-    <li
-      aria-pressed={false}
-      key="releasenotes"
-      onClick={[Function]}
-      role="button"
-      style={
-        Object {
-          "background": "none",
-          "borderBottom": "1px solid #ccc",
-          "boxShadow": "none",
-          "color": "#333",
-          "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 0.75rem",
-          "position": "relative",
-          "zIndex": "unset",
-        }
-      }
+    <div
+      onKeyDown={[Function]}
+      tabIndex={0}
     >
-      <div
-        onClick={[Function]}
-        style={
-          Object {
-            "display": "inline-block",
-          }
-        }
+      <input
+        aria-label="Type and search"
+        className="search"
+        onChange={[Function]}
+        placeholder="Type and search"
+        type="search"
+      />
+      <ul
+        className="tree-item-group"
       >
-        <ToggleIcon
-          on={true}
-        />
-      </div>
-      Release Notes
-    </li>
-    <li
-      aria-pressed={false}
-      key="releasenotes/desktop-modeler"
-      onClick={[Function]}
-      role="button"
-      style={
-        Object {
-          "background": "none",
-          "borderBottom": "1px solid #ccc",
-          "boxShadow": "none",
-          "color": "#333",
-          "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 2.5rem",
-          "position": "relative",
-          "zIndex": "unset",
-        }
-      }
-    >
-      <div
-        onClick={[Function]}
-        style={
-          Object {
-            "display": "inline-block",
+        <Component
+          active={false}
+          focused={false}
+          hasNodes={true}
+          index={0}
+          isOpen={true}
+          key="releasenotes"
+          label="Release Notes"
+          level={0}
+          onClick={[Function]}
+          openNodes={
+            Array [
+              "releasenotes",
+              "releasenotes/desktop-modeler",
+            ]
           }
-        }
-      >
-        <ToggleIcon
-          on={true}
-        />
-      </div>
-      Desktop Modeler
-    </li>
-    <li
-      aria-pressed={false}
-      key="releasenotes/desktop-modeler/7"
-      onClick={[Function]}
-      role="button"
-      style={
-        Object {
-          "background": "none",
-          "borderBottom": "1px solid #ccc",
-          "boxShadow": "none",
-          "color": "#333",
-          "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 4.25rem",
-          "position": "relative",
-          "zIndex": "unset",
-        }
-      }
-    >
-      <div
-        onClick={[Function]}
-        style={
-          Object {
-            "display": "inline-block",
+          parent=""
+          searchTerm=""
+          toggleNode={[Function]}
+        >
+          <li
+            aria-pressed={false}
+            className="tree-item"
+            onClick={[Function]}
+            role="button"
+            style={
+              Object {
+                "paddingLeft": "0.75rem",
+              }
+            }
+          >
+            <div
+              className="toggle-icon"
+              onClick={[Function]}
+            >
+              <ToggleIcon
+                on={true}
+              >
+                <div
+                  aria-label="Toggle"
+                  className="toggle-icon-symbol"
+                  role="img"
+                >
+                  -
+                </div>
+              </ToggleIcon>
+            </div>
+            Release Notes
+          </li>
+        </Component>
+        <Component
+          active={false}
+          focused={false}
+          hasNodes={true}
+          index={0}
+          isOpen={true}
+          key="releasenotes/desktop-modeler"
+          label="Desktop Modeler"
+          level={1}
+          onClick={[Function]}
+          openNodes={
+            Array [
+              "releasenotes",
+              "releasenotes/desktop-modeler",
+            ]
           }
-        }
-      >
-        <ToggleIcon
-          on={false}
-        />
-      </div>
-      7
-    </li>
-    <li
-      aria-pressed={false}
-      key="atd"
-      onClick={[Function]}
-      role="button"
-      style={
-        Object {
-          "background": "none",
-          "borderBottom": "1px solid #ccc",
-          "boxShadow": "none",
-          "color": "#333",
-          "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 2.75rem",
-          "position": "relative",
-          "zIndex": "unset",
-        }
-      }
-    >
-      ATS Guide
-    </li>
-  </ul>
-</KeyDown>
+          parent="releasenotes"
+          searchTerm=""
+          toggleNode={[Function]}
+        >
+          <li
+            aria-pressed={false}
+            className="tree-item"
+            onClick={[Function]}
+            role="button"
+            style={
+              Object {
+                "paddingLeft": "2.5rem",
+              }
+            }
+          >
+            <div
+              className="toggle-icon"
+              onClick={[Function]}
+            >
+              <ToggleIcon
+                on={true}
+              >
+                <div
+                  aria-label="Toggle"
+                  className="toggle-icon-symbol"
+                  role="img"
+                >
+                  -
+                </div>
+              </ToggleIcon>
+            </div>
+            Desktop Modeler
+          </li>
+        </Component>
+        <Component
+          active={false}
+          focused={false}
+          hasNodes={true}
+          index={0}
+          isOpen={false}
+          key="releasenotes/desktop-modeler/7"
+          label="7"
+          level={2}
+          onClick={[Function]}
+          openNodes={
+            Array [
+              "releasenotes",
+              "releasenotes/desktop-modeler",
+            ]
+          }
+          parent="releasenotes/desktop-modeler"
+          searchTerm=""
+          toggleNode={[Function]}
+        >
+          <li
+            aria-pressed={false}
+            className="tree-item"
+            onClick={[Function]}
+            role="button"
+            style={
+              Object {
+                "paddingLeft": "4.25rem",
+              }
+            }
+          >
+            <div
+              className="toggle-icon"
+              onClick={[Function]}
+            >
+              <ToggleIcon
+                on={false}
+              >
+                <div
+                  aria-label="Toggle"
+                  className="toggle-icon-symbol"
+                  role="img"
+                >
+                  +
+                </div>
+              </ToggleIcon>
+            </div>
+            7
+          </li>
+        </Component>
+        <Component
+          active={false}
+          focused={false}
+          hasNodes={false}
+          index={1}
+          isOpen={false}
+          key="atd"
+          label="ATS Guide"
+          level={0}
+          onClick={[Function]}
+          openNodes={
+            Array [
+              "releasenotes",
+              "releasenotes/desktop-modeler",
+            ]
+          }
+          parent=""
+          searchTerm=""
+        >
+          <li
+            aria-pressed={false}
+            className="tree-item"
+            onClick={[Function]}
+            role="button"
+            style={
+              Object {
+                "paddingLeft": "2.75rem",
+              }
+            }
+          >
+            ATS Guide
+          </li>
+        </Component>
+      </ul>
+    </div>
+  </KeyDown>
+</TreeMenu>
 `;
 
 exports[`TreeViewMenu should render the level-1 nodes by default 1`] = `
-<KeyDown
-  down={[Function]}
-  enter={[Function]}
-  left={[Function]}
-  right={[Function]}
-  up={[Function]}
+<TreeMenu
+  data={
+    Object {
+      "atd": Object {
+        "index": 1,
+        "key": "ats",
+        "label": "ATS Guide",
+      },
+      "releasenotes": Object {
+        "index": 0,
+        "key": "releasenotes",
+        "label": "Release Notes",
+        "nodes": Object {
+          "desktop-modeler": Object {
+            "index": 0,
+            "key": "releasenotes/desktop-modeler",
+            "label": "Desktop Modeler",
+            "nodes": Object {
+              "7": Object {
+                "index": 0,
+                "key": "releasenotes/desktop-modeler/7",
+                "label": "7",
+                "nodes": Object {
+                  "7.0": Object {
+                    "index": 0,
+                    "key": "releasenotes/desktop-modeler/7.0",
+                    "label": "7.0",
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    }
+  }
+  debounceTime={125}
+  hasSearch={true}
+  onClickItem={[Function]}
 >
-  <input
-    aria-label="Type and search"
-    onChange={[Function]}
-    placeholder="Type and search"
-    style={
-      Object {
-        "border": "none",
-        "padding": "1rem 1.5rem",
-        "width": "100%",
-      }
-    }
-    type="search"
-  />
-  <ul
-    style={
-      Object {
-        "borderTop": "1px solid #ccc",
-        "listStyleType": "none",
-        "paddingLeft": 0,
-      }
-    }
+  <KeyDown
+    down={[Function]}
+    enter={[Function]}
+    left={[Function]}
+    right={[Function]}
+    up={[Function]}
   >
-    <li
-      aria-pressed={false}
-      key="releasenotes"
-      onClick={[Function]}
-      role="button"
-      style={
-        Object {
-          "background": "none",
-          "borderBottom": "1px solid #ccc",
-          "boxShadow": "none",
-          "color": "#333",
-          "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 0.75rem",
-          "position": "relative",
-          "zIndex": "unset",
-        }
-      }
+    <div
+      onKeyDown={[Function]}
+      tabIndex={0}
     >
-      <div
-        onClick={[Function]}
-        style={
-          Object {
-            "display": "inline-block",
-          }
-        }
+      <input
+        aria-label="Type and search"
+        className="search"
+        onChange={[Function]}
+        placeholder="Type and search"
+        type="search"
+      />
+      <ul
+        className="tree-item-group"
       >
-        <ToggleIcon
-          on={false}
-        />
-      </div>
-      Release Notes
-    </li>
-    <li
-      aria-pressed={false}
-      key="atd"
-      onClick={[Function]}
-      role="button"
-      style={
-        Object {
-          "background": "none",
-          "borderBottom": "1px solid #ccc",
-          "boxShadow": "none",
-          "color": "#333",
-          "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 2.75rem",
-          "position": "relative",
-          "zIndex": "unset",
-        }
-      }
-    >
-      ATS Guide
-    </li>
-  </ul>
-</KeyDown>
+        <Component
+          active={false}
+          focused={false}
+          hasNodes={true}
+          index={0}
+          isOpen={false}
+          key="releasenotes"
+          label="Release Notes"
+          level={0}
+          onClick={[Function]}
+          openNodes={Array []}
+          parent=""
+          searchTerm=""
+          toggleNode={[Function]}
+        >
+          <li
+            aria-pressed={false}
+            className="tree-item"
+            onClick={[Function]}
+            role="button"
+            style={
+              Object {
+                "paddingLeft": "0.75rem",
+              }
+            }
+          >
+            <div
+              className="toggle-icon"
+              onClick={[Function]}
+            >
+              <ToggleIcon
+                on={false}
+              >
+                <div
+                  aria-label="Toggle"
+                  className="toggle-icon-symbol"
+                  role="img"
+                >
+                  +
+                </div>
+              </ToggleIcon>
+            </div>
+            Release Notes
+          </li>
+        </Component>
+        <Component
+          active={false}
+          focused={false}
+          hasNodes={false}
+          index={1}
+          isOpen={false}
+          key="atd"
+          label="ATS Guide"
+          level={0}
+          onClick={[Function]}
+          openNodes={Array []}
+          parent=""
+          searchTerm=""
+        >
+          <li
+            aria-pressed={false}
+            className="tree-item"
+            onClick={[Function]}
+            role="button"
+            style={
+              Object {
+                "paddingLeft": "2.75rem",
+              }
+            }
+          >
+            ATS Guide
+          </li>
+        </Component>
+      </ul>
+    </div>
+  </KeyDown>
+</TreeMenu>
 `;

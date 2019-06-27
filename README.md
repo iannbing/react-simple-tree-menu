@@ -84,6 +84,8 @@ And then import `TreeMenu` and use it. By default you only need to provide `data
 ```jsx
 import TreeMenu from 'react-simple-tree-menu'
 ...
+// import default minimal styling or your own styling
+import '../node_modules/react-simple-tree-menu/main.css';
 // Use the default minimal UI
 <TreeMenu data={treeData} />
 

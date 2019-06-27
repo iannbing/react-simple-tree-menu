@@ -4,72 +4,51 @@ exports[`defaultChildren should render the toggle icon with "on" equals to false
 Array [
   <input
     aria-label="Type and search"
+    className="search"
     onChange={[Function]}
     placeholder="Type and search"
-    style={
-      Object {
-        "border": "none",
-        "padding": "1rem 1.5rem",
-        "width": "100%",
-      }
-    }
     type="search"
   />,
   <ul
-    style={
-      Object {
-        "borderTop": "1px solid #ccc",
-        "listStyleType": "none",
-        "paddingLeft": 0,
-      }
-    }
+    className="tree-item-group"
   >
-    <li
+    <Component
+      hasNodes={true}
+      isOpen={false}
       key="key"
+      label="foo"
+      level={1}
       onClick={[Function]}
-      role="button"
-      style={
-        Object {
-          "background": "none",
-          "borderBottom": "1px solid #ccc",
-          "boxShadow": "none",
-          "color": "#333",
-          "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 2.5rem",
-          "position": "relative",
-          "zIndex": "unset",
-        }
-      }
     >
-      <div
+      <li
+        className="tree-item"
         onClick={[Function]}
+        role="button"
         style={
           Object {
-            "display": "inline-block",
+            "paddingLeft": "2.5rem",
           }
         }
       >
-        <ToggleIcon
-          on={false}
+        <div
+          className="toggle-icon"
+          onClick={[Function]}
         >
-          <div
-            aria-label="Toggle"
-            role="img"
-            style={
-              Object {
-                "height": "2rem",
-                "lineHeight": "2rem",
-                "textAlign": "center",
-                "width": "2rem",
-              }
-            }
+          <ToggleIcon
+            on={false}
           >
-            +
-          </div>
-        </ToggleIcon>
-      </div>
-      foo
-    </li>
+            <div
+              aria-label="Toggle"
+              className="toggle-icon-symbol"
+              role="img"
+            >
+              +
+            </div>
+          </ToggleIcon>
+        </div>
+        foo
+      </li>
+    </Component>
   </ul>,
 ]
 `;
@@ -78,110 +57,93 @@ exports[`defaultChildren should render the toggle icon with "on" equals to true 
 Array [
   <input
     aria-label="Type and search"
+    className="search"
     onChange={[Function]}
     placeholder="Type and search"
-    style={
-      Object {
-        "border": "none",
-        "padding": "1rem 1.5rem",
-        "width": "100%",
-      }
-    }
     type="search"
   />,
   <ul
-    style={
-      Object {
-        "borderTop": "1px solid #ccc",
-        "listStyleType": "none",
-        "paddingLeft": 0,
-      }
-    }
+    className="tree-item-group"
   >
-    <li
+    <Component
+      hasNodes={true}
+      isOpen={true}
       key="foo"
+      label="foo"
+      level={1}
       onClick={[Function]}
-      role="button"
-      style={
-        Object {
-          "background": "none",
-          "borderBottom": "1px solid #ccc",
-          "boxShadow": "none",
-          "color": "#333",
-          "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 2.5rem",
-          "position": "relative",
-          "zIndex": "unset",
-        }
-      }
     >
-      <div
+      <li
+        className="tree-item"
         onClick={[Function]}
+        role="button"
         style={
           Object {
-            "display": "inline-block",
+            "paddingLeft": "2.5rem",
           }
         }
       >
-        <ToggleIcon
-          on={true}
+        <div
+          className="toggle-icon"
+          onClick={[Function]}
         >
-          <div
-            aria-label="Toggle"
-            role="img"
-            style={
-              Object {
-                "height": "2rem",
-                "lineHeight": "2rem",
-                "textAlign": "center",
-                "width": "2rem",
-              }
-            }
+          <ToggleIcon
+            on={true}
           >
-            -
-          </div>
-        </ToggleIcon>
-      </div>
-      foo
-    </li>
-    <li
+            <div
+              aria-label="Toggle"
+              className="toggle-icon-symbol"
+              role="img"
+            >
+              -
+            </div>
+          </ToggleIcon>
+        </div>
+        foo
+      </li>
+    </Component>
+    <Component
+      hasNodes={false}
+      isOpen={false}
       key="bar"
+      label="bar"
+      level={2}
       onClick={[Function]}
-      role="button"
-      style={
-        Object {
-          "background": "none",
-          "borderBottom": "1px solid #ccc",
-          "boxShadow": "none",
-          "color": "#333",
-          "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 6.25rem",
-          "position": "relative",
-          "zIndex": "unset",
-        }
-      }
     >
-      bar
-    </li>
-    <li
+      <li
+        className="tree-item"
+        onClick={[Function]}
+        role="button"
+        style={
+          Object {
+            "paddingLeft": "6.25rem",
+          }
+        }
+      >
+        bar
+      </li>
+    </Component>
+    <Component
+      hasNodes={false}
+      isOpen={false}
       key="zoo"
+      label="zoo"
+      level={2}
       onClick={[Function]}
-      role="button"
-      style={
-        Object {
-          "background": "none",
-          "borderBottom": "1px solid #ccc",
-          "boxShadow": "none",
-          "color": "#333",
-          "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 6.25rem",
-          "position": "relative",
-          "zIndex": "unset",
-        }
-      }
     >
-      zoo
-    </li>
+      <li
+        className="tree-item"
+        onClick={[Function]}
+        role="button"
+        style={
+          Object {
+            "paddingLeft": "6.25rem",
+          }
+        }
+      >
+        zoo
+      </li>
+    </Component>
   </ul>,
 ]
 `;
@@ -190,45 +152,35 @@ exports[`defaultChildren should render without the toggle icon 1`] = `
 Array [
   <input
     aria-label="Type and search"
+    className="search"
     onChange={[Function]}
     placeholder="Type and search"
-    style={
-      Object {
-        "border": "none",
-        "padding": "1rem 1.5rem",
-        "width": "100%",
-      }
-    }
     type="search"
   />,
   <ul
-    style={
-      Object {
-        "borderTop": "1px solid #ccc",
-        "listStyleType": "none",
-        "paddingLeft": 0,
-      }
-    }
+    className="tree-item-group"
   >
-    <li
+    <Component
+      hasNodes={false}
+      isOpen={false}
       key="key"
+      label="foo"
+      level={0}
       onClick={[Function]}
-      role="button"
-      style={
-        Object {
-          "background": "none",
-          "borderBottom": "1px solid #ccc",
-          "boxShadow": "none",
-          "color": "#333",
-          "cursor": "pointer",
-          "padding": " .75rem  1rem  .75rem 2.75rem",
-          "position": "relative",
-          "zIndex": "unset",
-        }
-      }
     >
-      foo
-    </li>
+      <li
+        className="tree-item"
+        onClick={[Function]}
+        role="button"
+        style={
+          Object {
+            "paddingLeft": "2.75rem",
+          }
+        }
+      >
+        foo
+      </li>
+    </Component>
   </ul>,
 ]
 `;

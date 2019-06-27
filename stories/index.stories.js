@@ -6,8 +6,10 @@ import { linkTo } from '@storybook/addon-links';
 import { withInfo } from '@storybook/addon-info';
 
 import { ListGroupItem, Input, ListGroup } from 'reactstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import TreeMenu from '../src/index';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '../src/sass/index.scss';
 
 const DEFAULT_PADDING = 16;
 const ICON_SIZE = 8;
