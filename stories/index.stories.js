@@ -6,7 +6,7 @@ import { linkTo } from '@storybook/addon-links';
 import { withInfo } from '@storybook/addon-info';
 
 import { ListGroupItem, Input, ListGroup } from 'reactstrap';
-import TreeMenu from '../src/index';
+import TreeMenu, { defaultChildren } from '../src/index';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../src/sass/index.scss';
@@ -222,24 +222,25 @@ storiesOf('TreeMenu', module)
       )}
     </TreeMenu>
   ))
-  .add('reset openNodes', () => (
-    <TreeMenu data={dataInArray} debounceTime={125} onClickItem={action(`on click node`)}>
-      {({ search, items, reset }) => (
-        <>
-          <button
-            onClick={() => {
-              reset(['reptile']);
-            }}
-          >
-            Reset
-          </button>
-          <Input onChange={e => search(e.target.value)} placeholder="Type and search" />
-          <ListGroup>
-            {items.map(({ reset, ...props }) => (
-              <ListItem {...props} />
-            ))}
-          </ListGroup>
-        </>
-      )}
-    </TreeMenu>
-  ));
+  .add('reset openNodes', () => {
+    return (
+      <TreeMenu
+        data={dataInArray}
+        debounceTime={125}
+        onClickItem={action(`on click node`)}
+      >
+        {({ search, items, reset }) => (
+          <>
+            <button
+              onClick={() => {
+                reset(['reptile']);
+              }}
+            >
+              Reset
+            </button>
+            {defaultChildren({ search, items })}
+          </>
+        )}
+      </TreeMenu>
+    );
+  });

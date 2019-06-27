@@ -56,7 +56,7 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
     const { initialOpenNodes } = this.props;
     const openNodes =
       (Array.isArray(newOpenNodes) && newOpenNodes) || initialOpenNodes || [];
-    this.setState({ openNodes });
+    this.setState({ openNodes, searchTerm: '' });
   };
 
   search = (value: string) => {
@@ -105,7 +105,7 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
 
   render() {
     const { children, hasSearch, onClickItem } = this.props;
-    const { focusKey, activeKey, openNodes } = this.state;
+    const { focusKey, activeKey, searchTerm } = this.state;
     const items = this.generateItems();
     const renderedChildren = children || defaultChildren;
     const focusIndex = items.findIndex(item => item.key === (focusKey || activeKey));
@@ -154,7 +154,7 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
       <KeyDown {...keyDownProps}>
         {renderedChildren(
           hasSearch
-            ? { search: this.search, items, reset: this.reset }
+            ? { search: this.search, items, reset: this.reset, searchTerm }
             : { items, reset: this.reset }
         )}
       </KeyDown>

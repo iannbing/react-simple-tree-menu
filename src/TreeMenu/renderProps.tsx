@@ -20,11 +20,12 @@ export interface TreeMenuItem extends Item {
 
 export type TreeMenuChildren = (props: {
   search?: (term: string) => void;
+  searchTerm?: string;
   items: TreeMenuItem[];
   reset?: (openNodes?: string[]) => void;
 }) => JSX.Element;
 
-export const ItemComponent = ({
+export const ItemComponent: React.FunctionComponent<TreeMenuItem> = ({
   hasNodes = false,
   isOpen = false,
   level = 0,
@@ -35,7 +36,7 @@ export const ItemComponent = ({
   key,
   label = 'unknown',
   style = {},
-}: TreeMenuItem) => (
+}) => (
   <li
     className={classNames(
       'tree-item',
