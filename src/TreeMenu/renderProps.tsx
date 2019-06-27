@@ -1,4 +1,6 @@
 import React from 'react';
+import classNames from 'classnames';
+
 import { Item } from './walk';
 
 const DEFAULT_PADDING = 0.75;
@@ -35,7 +37,11 @@ export const ItemComponent = ({
   style = {},
 }: TreeMenuItem) => (
   <li
-    className="tree-item"
+    className={classNames(
+      'tree-item',
+      { 'tree-item--active': active },
+      { 'tree-item--focused': focused }
+    )}
     style={{
       paddingLeft: `${DEFAULT_PADDING +
         ICON_SIZE * (hasNodes ? 0 : 1) +

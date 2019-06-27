@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 
 import TreeViewMenu from '../index';
 
@@ -39,13 +39,13 @@ const mockData = {
 
 describe('TreeViewMenu', () => {
   it('should render the level-1 nodes by default', () => {
-    const wrapper = shallow(<TreeViewMenu data={mockData} />);
+    const wrapper = mount(<TreeViewMenu data={mockData} />);
 
     expect(wrapper).toMatchSnapshot();
     expect(wrapper.find('li').length).toEqual(2);
   });
   it('should open specified nodes', () => {
-    const wrapper = shallow(
+    const wrapper = mount(
       <TreeViewMenu
         data={mockData}
         openNodes={['releasenotes', 'releasenotes/desktop-modeler']}
@@ -57,18 +57,20 @@ describe('TreeViewMenu', () => {
   });
   it('should highlight the active node', () => {
     const activeKey = 'releasenotes/desktop-modeler/7';
-    const highLightColor = 'white';
-    const wrapper = shallow(
+    const wrapper = mount(
       <TreeViewMenu
         data={mockData}
         activeKey={activeKey}
         openNodes={['releasenotes', 'releasenotes/desktop-modeler']}
       />
     );
-    const highlightedElement = wrapper.findWhere(node => node.key() === activeKey).get(0);
+    const highlightedElement = wrapper
+      .findWhere(node => node.key() === activeKey)
+      .childAt(0)
+      .get(0);
 
     expect(wrapper).toMatchSnapshot();
-    expect(highlightedElement.props.style.color).toEqual(highLightColor);
+    expect(highlightedElement.props.className).toContain('tree-item--active');
   });
   it('should trigger onClickItem when a node is clicked', () => {
     const mockOnClickItem = jest.fn();
