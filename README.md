@@ -85,7 +85,7 @@ And then import `TreeMenu` and use it. By default you only need to provide `data
 import TreeMenu from 'react-simple-tree-menu'
 ...
 // import default minimal styling or your own styling
-import '../node_modules/react-simple-tree-menu/main.css';
+import '../node_modules/react-simple-tree-menu/dist/main.css';
 // Use the default minimal UI
 <TreeMenu data={treeData} />
 
@@ -176,11 +176,12 @@ Note the difference between the state `active` and `focused`. ENTER is equivalen
 
 ### ChildrenProps
 
-| props  | description                                                                                              | type                                   | default |
-| ------ | -------------------------------------------------------------------------------------------------------- | -------------------------------------- | ------- |
-| search | A function that takes a string to filter the label of the item (only available if `hasSearch` is `true`) | (value: string) => void                | -       |
-| items  | An array of `TreeMenuItem`                                                                               | TreeMenuItem[]                         | []      |
-| reset  | A function that resets the `openNodes`, by default it will close all nodes                               | (openNodes: string[]) => void          | -       |
+| props      | description                                                                                              | type                                   | default |
+| ---------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------- | ------- |
+| search     | A function that takes a string to filter the label of the item (only available if `hasSearch` is `true`) | (value: string) => void                | -       |
+| searchTerm | the search term that is currently applied (only available if `hasSearch` is `true`)                      | string                                 | -       |
+| items      | An array of `TreeMenuItem`                                                                               | TreeMenuItem[]                         | []      |
+| reset      | A function that resets the `openNodes`, by default it will close all nodes                               | (openNodes: string[]) => void          | -       |
 
 ### TreeMenuItem
 
