@@ -6,8 +6,10 @@ import { linkTo } from '@storybook/addon-links';
 import { withInfo } from '@storybook/addon-info';
 
 import { ListGroupItem, Input, ListGroup } from 'reactstrap';
+import TreeMenu, { defaultChildren } from '../src/index';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
-import TreeMenu from '../src/index';
+import '../src/sass/main.scss';
 
 const DEFAULT_PADDING = 16;
 const ICON_SIZE = 8;
@@ -212,11 +214,33 @@ storiesOf('TreeMenu', module)
         <>
           <Input onChange={e => search(e.target.value)} placeholder="Type and search" />
           <ListGroup>
-            {items.map(props => (
+            {items.map(({ reset, ...props }) => (
               <ListItem {...props} />
             ))}
           </ListGroup>
         </>
       )}
     </TreeMenu>
-  ));
+  ))
+  .add('reset openNodes', () => {
+    return (
+      <TreeMenu
+        data={dataInArray}
+        debounceTime={125}
+        onClickItem={action(`on click node`)}
+      >
+        {({ search, items, reset }) => (
+          <>
+            <button
+              onClick={() => {
+                reset(['reptile']);
+              }}
+            >
+              Reset
+            </button>
+            {defaultChildren({ search, items })}
+          </>
+        )}
+      </TreeMenu>
+    );
+  });

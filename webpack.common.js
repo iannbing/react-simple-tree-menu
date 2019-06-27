@@ -1,12 +1,13 @@
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   mode: 'none',
-  entry: './src/index.tsx',
+  entry: { main: ['./src/index.tsx'] },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'main.js',
+    filename: '[name].js',
     library: 'ReactSimpleTreeMenu',
     libraryTarget: 'umd',
     publicPath: '/dist/',
@@ -28,8 +29,14 @@ module.exports = {
       },
       { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' },
       {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
+        test: /\.scss$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+          },
+          'css-loader',
+          'sass-loader',
+        ],
       },
       {
         test: /\.svg$/,
@@ -50,6 +57,12 @@ module.exports = {
       assets: path.resolve(__dirname, 'assets'),
     },
   },
-  plugins: [new CleanWebpackPlugin(['dist'])],
+  plugins: [
+    new CleanWebpackPlugin(['dist']),
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
+      chunkFilename: '[id].css',
+    }),
+  ],
   externals: ['react', 'react-dom'],
 };

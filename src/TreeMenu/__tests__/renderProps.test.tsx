@@ -2,7 +2,9 @@ import { mount } from 'enzyme';
 
 import { defaultChildren } from '../renderProps';
 
-const search = () => console.log('search');
+const search = (term: string) => {
+  console.log(`search ${term}`);
+};
 
 describe('defaultChildren', () => {
   it('should render without the toggle icon', () => {

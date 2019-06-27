@@ -82,8 +82,10 @@ const treeData = {
 And then import `TreeMenu` and use it. By default you only need to provide `data`. You can have more control over the behaviors of the components using the provided API.
 
 ```jsx
-import TreeMenu from 'react-simple-tree-menu'
+import TreeMenu from 'react-simple-tree-menu';
 ...
+// import default minimal styling or your own styling
+import '../node_modules/react-simple-tree-menu/dist/main.css';
 // Use the default minimal UI
 <TreeMenu data={treeData} />
 
@@ -106,6 +108,35 @@ import TreeMenu from 'react-simple-tree-menu'
             ))}
           </ListGroup>
         </>
+    )}
+</TreeViewMenu>
+
+```
+
+If you want to extend the minial UI components, they are exported at your disposal.
+
+``` jsx
+// you can import and extend the default minial UI
+import TreeMenu, { defaultChildren, ItemComponent } from 'react-simple-tree-menu';
+
+// add custom styling to the list item
+<TreeViewMenu data={treeData}>
+    {({ search, items }) => (
+        <ul>
+            {items.map(props => (
+              <ItemComponent {...props, style: { background: 'pink' }} />
+            ))}
+        </ul>
+    )}
+</TreeViewMenu>
+
+// add a button to do reset
+<TreeViewMenu data={treeData}>
+    {({ search, items, reset }) => (
+      <div>
+        <button onClick={reset} />
+        {defaultChildren({search, items})}
+      </div>
     )}
 </TreeViewMenu>
 
@@ -141,7 +172,7 @@ Note the difference between the state `active` and `focused`. ENTER is equivalen
 | locale              | you can provide a function that converts `label` into `string`                                                                           | ({label, ...other}) => string               | ({label}) => label                 |
 | hasSearch           | Set to `false` then `children` will not have the prop `search`                                                                           | boolean                                     | true                               |
 | matchSearch         | you can define your own search function                                                                                                  | ({label, searchTerm, ...other}) => boolean  | ({label, searchTerm}) => isVisible |
-| children            | a render props that provdes two props: `search` and `items`                                                                              | (ChildrenProps) => React.ReactNode          | -                                  |
+| children            | a render props that provdes two props: `search`, `items` and `reset`                                                                     | (ChildrenProps) => React.ReactNode          | -                                  |
 
 ### TreeNode
 
@@ -174,10 +205,12 @@ Note the difference between the state `active` and `focused`. ENTER is equivalen
 
 ### ChildrenProps
 
-| props  | description                                                                                              | type                    | default |
-| ------ | -------------------------------------------------------------------------------------------------------- | ----------------------- | ------- |
-| search | A function that takes a string to filter the label of the item (only available if `hasSearch` is `true`) | (value: string) => void | -       |
-| items  | An array of `TreeMenuItem`                                                                               | TreeMenuItem[]          | []      |
+| props      | description                                                                                              | type                                   | default |
+| ---------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------- | ------- |
+| search     | A function that takes a string to filter the label of the item (only available if `hasSearch` is `true`) | (value: string) => void                | -       |
+| searchTerm | the search term that is currently applied (only available if `hasSearch` is `true`)                      | string                                 | -       |
+| items      | An array of `TreeMenuItem`                                                                               | TreeMenuItem[]                         | []      |
+| reset      | A function that resets the `openNodes`, by default it will close all nodes                               | (openNodes: string[]) => void          | -       |
 
 ### TreeMenuItem
 

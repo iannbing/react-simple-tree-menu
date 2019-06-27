@@ -1,20 +1,13 @@
 import React from 'react';
+import classNames from 'classnames';
+
 import { Item } from './walk';
 
 const DEFAULT_PADDING = 0.75;
-const LEVEL_SPACE = 1.75;
 const ICON_SIZE = 2;
+const LEVEL_SPACE = 1.75;
 const ToggleIcon = ({ on }: { on: boolean }) => (
-  <div
-    role="img"
-    aria-label="Toggle"
-    style={{
-      width: `${ICON_SIZE}rem`,
-      height: `${ICON_SIZE}rem`,
-      textAlign: 'center',
-      lineHeight: `${ICON_SIZE}rem`,
-    }}
-  >
+  <div role="img" aria-label="Toggle" className="toggle-icon-symbol">
     {on ? '-' : '+'}
   </div>
 );
@@ -25,16 +18,14 @@ export interface TreeMenuItem extends Item {
   toggleNode?: () => void;
 }
 
-export type TreeMenuChildren = (
-  props: {
-    search?: Function;
-    items: TreeMenuItem[];
-  }
-) => JSX.Element;
+export type TreeMenuChildren = (props: {
+  search?: (term: string) => void;
+  searchTerm?: string;
+  items: TreeMenuItem[];
+  reset?: (openNodes?: string[]) => void;
+}) => JSX.Element;
 
-type RenderItem = (props: TreeMenuItem) => JSX.Element;
-
-const renderItem: RenderItem = ({
+export const ItemComponent: React.FunctionComponent<TreeMenuItem> = ({
   hasNodes = false,
   isOpen = false,
   level = 0,
@@ -44,19 +35,19 @@ const renderItem: RenderItem = ({
   focused,
   key,
   label = 'unknown',
+  style = {},
 }) => (
   <li
+    className={classNames(
+      'tree-item',
+      { 'tree-item--active': active },
+      { 'tree-item--focused': focused }
+    )}
     style={{
-      padding: ` .75rem  1rem  .75rem ${DEFAULT_PADDING +
+      paddingLeft: `${DEFAULT_PADDING +
         ICON_SIZE * (hasNodes ? 0 : 1) +
         level * LEVEL_SPACE}rem`,
-      cursor: 'pointer',
-      color: active ? 'white' : '#333',
-      background: active ? '#179ed3' : 'none',
-      borderBottom: active ? 'none' : '1px solid #ccc',
-      boxShadow: focused ? '0px 0px 5px 0px #222' : 'none',
-      zIndex: focused ? 999 : 'unset',
-      position: 'relative',
+      ...style,
     }}
     role="button"
     aria-pressed={active}
@@ -65,7 +56,7 @@ const renderItem: RenderItem = ({
   >
     {hasNodes && (
       <div
-        style={{ display: 'inline-block' }}
+        className="toggle-icon"
         onClick={e => {
           hasNodes && toggleNode && toggleNode();
           e.stopPropagation();
@@ -87,15 +78,17 @@ export const defaultChildren: TreeMenuChildren = ({ search, items }) => {
     <>
       {search && (
         <input
-          style={{ padding: '1rem 1.5rem', border: 'none', width: '100%' }}
+          className="search"
           aria-label="Type and search"
           type="search"
           placeholder="Type and search"
           onChange={onSearch}
         />
       )}
-      <ul style={{ listStyleType: 'none', paddingLeft: 0, borderTop: '1px solid #ccc' }}>
-        {items.map(renderItem)}
+      <ul className="tree-item-group">
+        {items.map(props => (
+          <ItemComponent {...props}></ItemComponent>
+        ))}
       </ul>
     </>
   );

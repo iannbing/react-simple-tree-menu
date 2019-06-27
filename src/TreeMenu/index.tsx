@@ -52,6 +52,13 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
     focusKey: this.props.initialFocusKey || '',
   };
 
+  reset = (newOpenNodes?: string[]) => {
+    const { initialOpenNodes } = this.props;
+    const openNodes =
+      (Array.isArray(newOpenNodes) && newOpenNodes) || initialOpenNodes || [];
+    this.setState({ openNodes, searchTerm: '' });
+  };
+
   search = (value: string) => {
     const { debounceTime } = this.props;
     const search = debounce(
@@ -96,13 +103,10 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
     });
   };
 
-  render() {
-    const { children, hasSearch, onClickItem } = this.props;
-    const { focusKey, activeKey, openNodes } = this.state;
-    const items = this.generateItems();
-    const renderedChildren = children || defaultChildren;
+  getKeyDownProps = (items: TreeMenuItem[]) => {
+    const { onClickItem } = this.props;
+    const { focusKey, activeKey, searchTerm } = this.state;
     const focusIndex = items.findIndex(item => item.key === (focusKey || activeKey));
-
     const getFocusKey = (item: TreeMenuItem) => {
       const keyArray = item.key.split('/');
 
@@ -111,7 +115,7 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
         : item.key;
     };
 
-    const keyDownProps = {
+    return {
       up: () => {
         this.setState(({ focusKey }) => ({
           focusKey: focusIndex > 0 ? items[focusIndex - 1].key : focusKey,
@@ -142,10 +146,23 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
         onClickItem && onClickItem(items[focusIndex]);
       },
     };
+  };
+
+  render() {
+    const { children, hasSearch } = this.props;
+    const { searchTerm } = this.state;
+
+    const items = this.generateItems();
+    const renderedChildren = children || defaultChildren;
+    const keyDownProps = this.getKeyDownProps(items);
 
     return (
       <KeyDown {...keyDownProps}>
-        {renderedChildren(hasSearch ? { search: this.search, items } : { items })}
+        {renderedChildren(
+          hasSearch
+            ? { search: this.search, items, reset: this.reset, searchTerm }
+            : { items, reset: this.reset }
+        )}
       </KeyDown>
     );
   }
