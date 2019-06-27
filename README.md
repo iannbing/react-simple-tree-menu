@@ -82,7 +82,7 @@ const treeData = {
 And then import `TreeMenu` and use it. By default you only need to provide `data`. You can have more control over the behaviors of the components using the provided API.
 
 ```jsx
-import TreeMenu from 'react-simple-tree-menu'
+import TreeMenu from 'react-simple-tree-menu';
 ...
 // import default minimal styling or your own styling
 import '../node_modules/react-simple-tree-menu/dist/main.css';
@@ -108,6 +108,35 @@ import '../node_modules/react-simple-tree-menu/dist/main.css';
             ))}
           </ListGroup>
         </>
+    )}
+</TreeViewMenu>
+
+```
+
+If you want to extend the minial UI components, they are exported at your disposal.
+
+``` jsx
+// you can import and extend the default minial UI
+import TreeMenu, { defaultChildren, ItemComponent } from 'react-simple-tree-menu';
+
+// add custom styling to the list item
+<TreeViewMenu data={treeData}>
+    {({ search, items }) => (
+        <ul>
+            {items.map(props => (
+              <ItemComponent {...props, style: { background: 'pink' }} />
+            ))}
+        </ul>
+    )}
+</TreeViewMenu>
+
+// add a button to do reset
+<TreeViewMenu data={treeData}>
+    {({ search, items, reset }) => (
+      <div>
+        <button onClick={reset} />
+        {defaultChildren({search, items})}
+      </div>
     )}
 </TreeViewMenu>
 
