@@ -9,7 +9,7 @@ import { ListGroupItem, Input, ListGroup } from 'reactstrap';
 import TreeMenu, { defaultChildren } from '../src/index';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../src/sass/index.scss';
+import '../src/sass/main.scss';
 
 const DEFAULT_PADDING = 16;
 const ICON_SIZE = 8;
