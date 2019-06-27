@@ -11,7 +11,7 @@ module.exports = ({ config }) => {
   config.module.rules.push({
     test: /\.scss$/,
     use: ['style-loader', 'css-loader', 'sass-loader'],
-    include: path.resolve(__dirname, '../src/sass/index.scss'),
+    include: path.resolve(__dirname, '../src/sass/main.scss'),
   });
   config.resolve.extensions.push('.ts', '.tsx');
   return config;
