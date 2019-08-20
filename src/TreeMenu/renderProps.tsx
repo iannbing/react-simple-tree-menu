@@ -6,9 +6,13 @@ import { Item } from './walk';
 const DEFAULT_PADDING = 0.75;
 const ICON_SIZE = 2;
 const LEVEL_SPACE = 1.75;
-const ToggleIcon = ({ on }: { on: boolean }) => (
-  <div role="img" aria-label="Toggle" className="toggle-icon-symbol">
-    {on ? '-' : '+'}
+const ToggleIcon = ({ on, openedIcon, closedIcon }: { on: boolean, openedIcon: any, closedIcon: any}) => (  
+  <div role="img" aria-label="Toggle" className="toggle-icon-symbol">    
+    {on ? 
+      openedIcon ? openedIcon()  : '-'
+      : 
+      closedIcon ? closedIcon() : '+'
+    }
   </div>
 );
 
@@ -33,7 +37,9 @@ export const ItemComponent: React.FunctionComponent<TreeMenuItem> = ({
   toggleNode,
   active,
   focused,
-  key,
+  openedIcon,
+  closedIcon,
+  key,  
   label = 'unknown',
   style = {},
 }) => (
@@ -62,7 +68,7 @@ export const ItemComponent: React.FunctionComponent<TreeMenuItem> = ({
           e.stopPropagation();
         }}
       >
-        <ToggleIcon on={isOpen} />
+        <ToggleIcon on={isOpen} openedIcon={openedIcon} closedIcon={closedIcon}/>
       </div>
     )}
     {label}

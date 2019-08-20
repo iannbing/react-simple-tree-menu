@@ -7,6 +7,8 @@ import { withInfo } from '@storybook/addon-info';
 
 import { ListGroupItem, Input, ListGroup } from 'reactstrap';
 import TreeMenu, { defaultChildren } from '../src/index';
+import closedIconImg from '../assets/closedIcon.png';
+import openedIconImg from '../assets/openedIcon.png';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../src/sass/main.scss';
@@ -243,4 +245,21 @@ storiesOf('TreeMenu', module)
         )}
       </TreeMenu>
     );
-  });
+  })
+  .add('Opened/Closed Icon', () => (
+    <TreeMenu 
+      data={dataInArray} 
+      onClickItem={action(`on click node`)} 
+      openedIcon={openedIcon}
+      closedIcon={closedIcon}
+
+      />
+  )); 
+
+  const closedIcon = () => {
+    return <img src={closedIconImg} alt="-"></img>
+  }
+
+  const openedIcon = () => {
+    return <img src={openedIconImg} alt="+"></img>
+  }

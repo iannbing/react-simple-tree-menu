@@ -8,7 +8,11 @@ $DEFAULT_PADDING: 0.75rem;
         height: $ICON_SIZE;
         text-align: center;
         line-height: $ICON_SIZE;
-    }
+    };
+    & img {
+      vertical-align: unset;
+    };
+    vertical-align: middle;
 }
 
 .tree-item-group {
@@ -38,6 +42,8 @@ $DEFAULT_PADDING: 0.75rem;
         z-index: 999;
     }
 }
+
+
 
 .search {
     padding: 1rem 1.5rem;

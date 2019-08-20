@@ -25,6 +25,8 @@ export type TreeMenuProps = {
   children?: TreeMenuChildren;
   locale?: LocaleFunction;
   matchSearch?: MatchSearchFunction;
+  closedIcon?: any;
+  openedIcon?: any;
 };
 
 type TreeMenuState = {
@@ -79,7 +81,7 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
   };
 
   generateItems = (): TreeMenuItem[] => {
-    const { data, onClickItem, locale, matchSearch } = this.props;
+    const { data, onClickItem, locale, matchSearch, openedIcon, closedIcon } = this.props;
     const { searchTerm } = this.state;
     const openNodes = this.props.openNodes || this.state.openNodes;
     const activeKey = this.props.activeKey || this.state.activeKey;
@@ -99,7 +101,7 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
       };
 
       const toggleNode = item.hasNodes ? () => this.toggleNode(item.key) : undefined;
-      return { ...item, focused, active, onClick, toggleNode };
+      return { ...item, focused, active, onClick, toggleNode, openedIcon, closedIcon };
     });
   };
 
