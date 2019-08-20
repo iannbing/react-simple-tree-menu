@@ -10,9 +10,8 @@ $DEFAULT_PADDING: 0.75rem;
         line-height: $ICON_SIZE;
     };
     & img {
-      vertical-align: unset;
-    };
-    vertical-align: middle;
+      vertical-align: text-bottom;
+    };    
 }
 
 .tree-item-group {
