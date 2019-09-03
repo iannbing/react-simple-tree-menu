@@ -79,7 +79,7 @@ export const defaultChildren: TreeMenuChildren = ({ search, items }) => {
   const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     search && search(value);
-  };
+  };  
   return (
     <>
       {search && (
