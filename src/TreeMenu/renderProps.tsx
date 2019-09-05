@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import classNames from 'classnames';
 
 import { Item } from './walk';
@@ -6,13 +6,17 @@ import { Item } from './walk';
 const DEFAULT_PADDING = 0.75;
 const ICON_SIZE = 2;
 const LEVEL_SPACE = 1.75;
-const ToggleIcon = ({ on, openedIcon, closedIcon }: { on: boolean, openedIcon: any, closedIcon: any}) => (  
-  <div role="img" aria-label="Toggle" className="toggle-icon-symbol">    
-    {on ? 
-      openedIcon ? openedIcon()  : '-'
-      : 
-      closedIcon ? closedIcon() : '+'
-    }
+const ToggleIcon = ({
+  on,
+  openedIcon,
+  closedIcon,
+}: {
+  on: boolean;
+  openedIcon: ReactNode;
+  closedIcon: ReactNode;
+}) => (
+  <div role="img" aria-label="Toggle" className="toggle-icon-symbol">
+    {on ? openedIcon : closedIcon}
   </div>
 );
 
@@ -37,9 +41,9 @@ export const ItemComponent: React.FunctionComponent<TreeMenuItem> = ({
   toggleNode,
   active,
   focused,
-  openedIcon,
-  closedIcon,
-  key,  
+  openedIcon = '-',
+  closedIcon = '+',
+  key,
   label = 'unknown',
   style = {},
 }) => (
@@ -68,7 +72,7 @@ export const ItemComponent: React.FunctionComponent<TreeMenuItem> = ({
           e.stopPropagation();
         }}
       >
-        <ToggleIcon on={isOpen} openedIcon={openedIcon} closedIcon={closedIcon}/>
+        <ToggleIcon on={isOpen} openedIcon={openedIcon} closedIcon={closedIcon} />
       </div>
     )}
     {label}
@@ -79,7 +83,7 @@ export const defaultChildren: TreeMenuChildren = ({ search, items }) => {
   const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     search && search(value);
-  };  
+  };
   return (
     <>
       {search && (
