@@ -105,7 +105,9 @@ exports[`TreeViewMenu should highlight the active node 1`] = `
               onClick={[Function]}
             >
               <ToggleIcon
+                closedIcon="+"
                 on={true}
+                openedIcon="-"
               >
                 <div
                   aria-label="Toggle"
@@ -155,7 +157,9 @@ exports[`TreeViewMenu should highlight the active node 1`] = `
               onClick={[Function]}
             >
               <ToggleIcon
+                closedIcon="+"
                 on={true}
+                openedIcon="-"
               >
                 <div
                   aria-label="Toggle"
@@ -205,7 +209,9 @@ exports[`TreeViewMenu should highlight the active node 1`] = `
               onClick={[Function]}
             >
               <ToggleIcon
+                closedIcon="+"
                 on={false}
+                openedIcon="-"
               >
                 <div
                   aria-label="Toggle"
@@ -362,7 +368,9 @@ exports[`TreeViewMenu should open specified nodes 1`] = `
               onClick={[Function]}
             >
               <ToggleIcon
+                closedIcon="+"
                 on={true}
+                openedIcon="-"
               >
                 <div
                   aria-label="Toggle"
@@ -412,7 +420,9 @@ exports[`TreeViewMenu should open specified nodes 1`] = `
               onClick={[Function]}
             >
               <ToggleIcon
+                closedIcon="+"
                 on={true}
+                openedIcon="-"
               >
                 <div
                   aria-label="Toggle"
@@ -462,7 +472,9 @@ exports[`TreeViewMenu should open specified nodes 1`] = `
               onClick={[Function]}
             >
               <ToggleIcon
+                closedIcon="+"
                 on={false}
+                openedIcon="-"
               >
                 <div
                   aria-label="Toggle"
@@ -608,7 +620,9 @@ exports[`TreeViewMenu should render the level-1 nodes by default 1`] = `
               onClick={[Function]}
             >
               <ToggleIcon
+                closedIcon="+"
                 on={false}
+                openedIcon="-"
               >
                 <div
                   aria-label="Toggle"
