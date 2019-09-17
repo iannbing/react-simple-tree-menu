@@ -6,7 +6,9 @@ import { linkTo } from '@storybook/addon-links';
 import { withInfo } from '@storybook/addon-info';
 
 import { ListGroupItem, Input, ListGroup } from 'reactstrap';
-import TreeMenu, { defaultChildren } from '../src/index';
+import TreeMenu, { defaultChildren, ItemComponent } from '../src/index';
+import closedIconImg from './assets/closedIcon.png';
+import openedIconImg from './assets/openedIcon.png';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../src/sass/main.scss';
@@ -14,6 +16,13 @@ import '../src/sass/main.scss';
 const DEFAULT_PADDING = 16;
 const ICON_SIZE = 8;
 const LEVEL_SPACE = 16;
+
+// Icon example
+const iconStyle = {
+  verticalAlign: 'text-bottom',
+};
+const openedIcon = <img src={openedIconImg} alt="-" style={iconStyle}></img>;
+const closedIcon = <img src={closedIconImg} alt="+" style={iconStyle}></img>;
 
 const ToggleIcon = ({ on }) => <span style={{ marginRight: 8 }}>{on ? '-' : '+'}</span>;
 const ListItem = ({
@@ -243,4 +252,15 @@ storiesOf('TreeMenu', module)
         )}
       </TreeMenu>
     );
-  });
+  })
+  .add('Opened/Closed Icon', () => (
+    <TreeMenu data={dataInArray} onClickItem={action(`on click node`)}>
+      {({ items }) => (
+        <ul className="tree-item-group">
+          {items.map(props => (
+            <ItemComponent {...props} openedIcon={openedIcon} closedIcon={closedIcon} />
+          ))}
+        </ul>
+      )}
+    </TreeMenu>
+  ));
