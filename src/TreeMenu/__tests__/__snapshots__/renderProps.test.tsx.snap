@@ -35,7 +35,9 @@ Array [
           onClick={[Function]}
         >
           <ToggleIcon
+            closedIcon="+"
             on={false}
+            openedIcon="-"
           >
             <div
               aria-label="Toggle"
@@ -88,7 +90,9 @@ Array [
           onClick={[Function]}
         >
           <ToggleIcon
+            closedIcon="+"
             on={true}
+            openedIcon="-"
           >
             <div
               aria-label="Toggle"

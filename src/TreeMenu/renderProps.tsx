@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import classNames from 'classnames';
 
 import { Item } from './walk';
@@ -6,9 +6,17 @@ import { Item } from './walk';
 const DEFAULT_PADDING = 0.75;
 const ICON_SIZE = 2;
 const LEVEL_SPACE = 1.75;
-const ToggleIcon = ({ on }: { on: boolean }) => (
+const ToggleIcon = ({
+  on,
+  openedIcon,
+  closedIcon,
+}: {
+  on: boolean;
+  openedIcon: ReactNode;
+  closedIcon: ReactNode;
+}) => (
   <div role="img" aria-label="Toggle" className="toggle-icon-symbol">
-    {on ? '-' : '+'}
+    {on ? openedIcon : closedIcon}
   </div>
 );
 
@@ -33,6 +41,8 @@ export const ItemComponent: React.FunctionComponent<TreeMenuItem> = ({
   toggleNode,
   active,
   focused,
+  openedIcon = '-',
+  closedIcon = '+',
   key,
   label = 'unknown',
   style = {},
@@ -62,7 +72,7 @@ export const ItemComponent: React.FunctionComponent<TreeMenuItem> = ({
           e.stopPropagation();
         }}
       >
-        <ToggleIcon on={isOpen} />
+        <ToggleIcon on={isOpen} openedIcon={openedIcon} closedIcon={closedIcon} />
       </div>
     )}
     {label}
