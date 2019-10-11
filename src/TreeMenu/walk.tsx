@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash';
+import isEmpty from 'is-empty';
 import memoize from 'fast-memoize';
 
 export interface TreeNodeObject {

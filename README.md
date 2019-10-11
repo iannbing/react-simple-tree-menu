@@ -130,11 +130,11 @@ import TreeMenu, { defaultChildren, ItemComponent } from 'react-simple-tree-menu
     )}
 </TreeViewMenu>
 
-// add a button to do reset
+// add a button to do resetOpenNodes
 <TreeViewMenu data={treeData}>
-    {({ search, items, reset }) => (
+    {({ search, items, resetOpenNodes }) => (
       <div>
-        <button onClick={reset} />
+        <button onClick={resetOpenNodes} />
         {defaultChildren({search, items})}
       </div>
     )}
@@ -172,7 +172,7 @@ Note the difference between the state `active` and `focused`. ENTER is equivalen
 | locale              | you can provide a function that converts `label` into `string`                                                                           | ({label, ...other}) => string               | ({label}) => label                 |
 | hasSearch           | Set to `false` then `children` will not have the prop `search`                                                                           | boolean                                     | true                               |
 | matchSearch         | you can define your own search function                                                                                                  | ({label, searchTerm, ...other}) => boolean  | ({label, searchTerm}) => isVisible |
-| children            | a render props that provdes two props: `search`, `items` and `reset`                                                                     | (ChildrenProps) => React.ReactNode          | -                                  |
+| children            | a render props that provdes two props: `search`, `items` and `resetOpenNodes`                                                                     | (ChildrenProps) => React.ReactNode          | -                                  |
 
 ### TreeNode
 
@@ -205,12 +205,12 @@ Note the difference between the state `active` and `focused`. ENTER is equivalen
 
 ### ChildrenProps
 
-| props      | description                                                                                              | type                                   | default |
-| ---------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------- | ------- |
-| search     | A function that takes a string to filter the label of the item (only available if `hasSearch` is `true`) | (value: string) => void                | -       |
-| searchTerm | the search term that is currently applied (only available if `hasSearch` is `true`)                      | string                                 | -       |
-| items      | An array of `TreeMenuItem`                                                                               | TreeMenuItem[]                         | []      |
-| reset      | A function that resets the `openNodes`, by default it will close all nodes                               | (openNodes: string[]) => void          | -       |
+| props          | description                                                                                              | type                                   | default |
+| -------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------- | ------- |
+| search         | A function that takes a string to filter the label of the item (only available if `hasSearch` is `true`) | (value: string) => void                | -       |
+| searchTerm     | the search term that is currently applied (only available if `hasSearch` is `true`)                      | string                                 | -       |
+| items          | An array of `TreeMenuItem`                                                                               | TreeMenuItem[]                         | []      |
+| resetOpenNodes | A function that resets the `openNodes`, by default it will close all nodes                               | (openNodes: string[]) => void          | -       |
 
 ### TreeMenuItem
 

@@ -47,6 +47,7 @@ exports[`TreeViewMenu should highlight the active node 1`] = `
       "releasenotes/desktop-modeler",
     ]
   }
+  resetOpenNodesOnDataUpdate={false}
 >
   <KeyDown
     down={[Function]}
@@ -310,6 +311,7 @@ exports[`TreeViewMenu should open specified nodes 1`] = `
       "releasenotes/desktop-modeler",
     ]
   }
+  resetOpenNodesOnDataUpdate={false}
 >
   <KeyDown
     down={[Function]}
@@ -567,6 +569,7 @@ exports[`TreeViewMenu should render the level-1 nodes by default 1`] = `
   debounceTime={125}
   hasSearch={true}
   onClickItem={[Function]}
+  resetOpenNodesOnDataUpdate={false}
 >
   <KeyDown
     down={[Function]}
