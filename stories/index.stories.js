@@ -159,6 +159,46 @@ storiesOf('TreeMenu', module)
       initialActiveKey="reptile"
     />
   ))
+  .add('set initial state when data is updated', () => {
+    class TreeMenuWrapper extends React.Component {
+      state = { data: dataInArray };
+      updateData = () =>
+        this.setState(({ data }) => ({
+          data: [
+            ...data,
+            {
+              key: 'foo',
+              label: 'Foo',
+              url: 'https://www.google.com/search?q=foo',
+            },
+          ],
+        }));
+      render() {
+        const { data } = this.state;
+        return (
+          <>
+            <div style={{ padding: '12px', background: 'black' }}>
+              <button style={{ margin: '4px' }} onClick={() => this.updateData()}>
+                Add Foo
+              </button>
+            </div>
+            <TreeMenu
+              data={data}
+              onClickItem={action(`on click node`)}
+              initialOpenNodes={[
+                'reptile',
+                'reptile/squamata',
+                'reptile/squamata/lizard',
+              ]}
+              initialActiveKey="reptile"
+              resetOpenNodesOnDataUpdate
+            />
+          </>
+        );
+      }
+    }
+    return <TreeMenuWrapper />;
+  })
   .add('control TreeMenu from its parent', () => {
     class TreeMenuWrapper extends React.Component {
       state = { openNodes: [] };
@@ -218,7 +258,7 @@ storiesOf('TreeMenu', module)
     />
   ))
   .add('apply other UI framework, e.g. bootstrap', () => (
-    <TreeMenu data={dataInArray} debounceTime={125} onClickItem={action(`on click node`)}>
+    <TreeMenu data={dataInArray} debounceTime={500} onClickItem={action(`on click node`)}>
       {({ search, items }) => (
         <>
           <Input onChange={e => search(e.target.value)} placeholder="Type and search" />
@@ -238,11 +278,11 @@ storiesOf('TreeMenu', module)
         debounceTime={125}
         onClickItem={action(`on click node`)}
       >
-        {({ search, items, reset }) => (
+        {({ search, items, resetOpenNodes }) => (
           <>
             <button
               onClick={() => {
-                reset(['reptile']);
+                resetOpenNodes(['reptile']);
               }}
             >
               Reset

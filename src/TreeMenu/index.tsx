@@ -1,5 +1,5 @@
 import React from 'react';
-import { debounce } from 'lodash';
+import debounce from 'tiny-debounce';
 
 import walk, {
   TreeNode,
@@ -19,6 +19,7 @@ export type TreeMenuProps = {
   initialFocusKey?: string;
   initialOpenNodes?: string[];
   openNodes?: string[];
+  resetOpenNodesOnDataUpdate?: boolean;
   hasSearch?: boolean;
   onClickItem?: (props: Item) => void;
   debounceTime?: number;
@@ -43,6 +44,7 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
     debounceTime: 125,
     children: defaultChildren,
     hasSearch: true,
+    resetOpenNodesOnDataUpdate: false,
   };
 
   state: TreeMenuState = {
@@ -52,7 +54,14 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
     focusKey: this.props.initialFocusKey || '',
   };
 
-  reset = (newOpenNodes?: string[]) => {
+  componentDidUpdate(prevProps: TreeMenuProps) {
+    const { data, initialOpenNodes, resetOpenNodesOnDataUpdate } = this.props;
+    if (prevProps.data !== data && resetOpenNodesOnDataUpdate && initialOpenNodes) {
+      this.setState({ openNodes: initialOpenNodes });
+    }
+  }
+
+  resetOpenNodes = (newOpenNodes?: string[]) => {
     const { initialOpenNodes } = this.props;
     const openNodes =
       (Array.isArray(newOpenNodes) && newOpenNodes) || initialOpenNodes || [];
@@ -160,8 +169,13 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
       <KeyDown {...keyDownProps}>
         {renderedChildren(
           hasSearch
-            ? { search: this.search, items, reset: this.reset, searchTerm }
-            : { items, reset: this.reset }
+            ? {
+                search: this.search,
+                items,
+                resetOpenNodes: this.resetOpenNodes,
+                searchTerm,
+              }
+            : { items, resetOpenNodes: this.resetOpenNodes }
         )}
       </KeyDown>
     );

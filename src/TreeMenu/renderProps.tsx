@@ -30,7 +30,7 @@ export type TreeMenuChildren = (props: {
   search?: (term: string) => void;
   searchTerm?: string;
   items: TreeMenuItem[];
-  reset?: (openNodes?: string[]) => void;
+  resetOpenNodes?: (openNodes?: string[]) => void;
 }) => JSX.Element;
 
 export const ItemComponent: React.FunctionComponent<TreeMenuItem> = ({
