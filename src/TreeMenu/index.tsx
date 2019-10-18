@@ -26,6 +26,9 @@ export type TreeMenuProps = {
   children?: TreeMenuChildren;
   locale?: LocaleFunction;
   matchSearch?: MatchSearchFunction;
+  className?: string;
+  style?: object;
+  id?: string;
 };
 
 type TreeMenuState = {
@@ -158,7 +161,7 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
   };
 
   render() {
-    const { children, hasSearch } = this.props;
+    const { className, style, id, children, hasSearch } = this.props;
     const { searchTerm } = this.state;
 
     const items = this.generateItems();
@@ -166,15 +169,20 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
     const keyDownProps = this.getKeyDownProps(items);
 
     return (
-      <KeyDown {...keyDownProps}>
+      <KeyDown
+        className={className}
+        style={style}
+        id={id}
+        {...keyDownProps}
+      >
         {renderedChildren(
           hasSearch
             ? {
-                search: this.search,
-                items,
-                resetOpenNodes: this.resetOpenNodes,
-                searchTerm,
-              }
+              search: this.search,
+              items,
+              resetOpenNodes: this.resetOpenNodes,
+              searchTerm,
+            }
             : { items, resetOpenNodes: this.resetOpenNodes }
         )}
       </KeyDown>

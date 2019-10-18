@@ -7,12 +7,18 @@ interface KeyDownProps {
   left: () => void;
   right: () => void;
   enter: () => void;
+  className?: string;
+  style?: object;
+  id?: string;
 }
 
-const KeyDown = ({ children, up, down, left, right, enter }: KeyDownProps) => {
+const KeyDown = ({ className, style, id, children, up, down, left, right, enter }: KeyDownProps) => {
   return (
     <div
       tabIndex={0}
+      className={className}
+      style={style}
+      id={id}
       onKeyDown={e => {
         switch (e.key) {
           case 'ArrowUp': {
