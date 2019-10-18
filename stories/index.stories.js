@@ -144,6 +144,9 @@ storiesOf('TreeMenu', module)
   .add('default usage', () => (
     <TreeMenu data={dataInArray} onClickItem={action(`on click node`)} />
   ))
+  .add('default usage with extra parameters', () => (
+    <TreeMenu id="tree-menu-id" className="tree-menu-className" style={{color: 'blue'}} data={dataInArray} onClickItem={action(`on click node`)} />
+  ))
   .add('without search', () => (
     <TreeMenu
       data={dataInArray}
