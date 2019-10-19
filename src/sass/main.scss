@@ -2,45 +2,47 @@ $ICON_SIZE: 2rem;
 $DEFAULT_PADDING: 0.75rem;
 
 .toggle-icon {
-    display: inline-block;
-    &-symbol {
-        width: $ICON_SIZE;
-        height: $ICON_SIZE;
-        text-align: center;
-        line-height: $ICON_SIZE;
-    }; 
+  display: inline-block;
+  &-symbol {
+    width: $ICON_SIZE;
+    height: $ICON_SIZE;
+    text-align: center;
+    line-height: $ICON_SIZE;
+  }
 }
 
 .tree-item-group {
-    list-style-type: none;
-    padding-left: 0;
-    border-top: 1px solid #ccc;
+  list-style-type: none;
+  padding-left: 0;
+  border-top: 1px solid #ccc;
+  text-align: left;
+  width: 100vw;
 }
 
 .tree-item {
-    padding: 0.75rem 1rem;
-    cursor: pointer;
-    color: #333;
-    background: none;
-    border-bottom: 1px solid #ccc;
-    box-shadow: none;
-    z-index: unset;
-    position: relative;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  color: #333;
+  background: none;
+  border-bottom: 1px solid #ccc;
+  box-shadow: none;
+  z-index: unset;
+  position: relative;
 
-    &--active {
-        color: white;
-        background: #179ed3;
-        border-bottom: none;
-    }
+  &--active {
+    color: white;
+    background: #179ed3;
+    border-bottom: none;
+  }
 
-    &--focused {
-        box-shadow: 0 0 5px 0 #222;
-        z-index: 999;
-    }
+  &--focused {
+    box-shadow: 0 0 5px 0 #222;
+    z-index: 999;
+  }
 }
 
 .search {
-    padding: 1rem 1.5rem;
-    border: none;
-    width: 100%;
+  padding: 1rem 1.5rem;
+  border: none;
+  width: 100%;
 }
