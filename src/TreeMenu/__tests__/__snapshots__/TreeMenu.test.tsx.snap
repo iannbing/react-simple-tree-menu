@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`TreeViewMenu should highlight the active node 1`] = `
+exports[`TreeMenu should highlight the active node 1`] = `
 <TreeMenu
   activeKey="releasenotes/desktop-modeler/7"
   data={
@@ -265,7 +265,7 @@ exports[`TreeViewMenu should highlight the active node 1`] = `
 </TreeMenu>
 `;
 
-exports[`TreeViewMenu should open specified nodes 1`] = `
+exports[`TreeMenu should open specified nodes 1`] = `
 <TreeMenu
   data={
     Object {
@@ -529,7 +529,7 @@ exports[`TreeViewMenu should open specified nodes 1`] = `
 </TreeMenu>
 `;
 
-exports[`TreeViewMenu should render the level-1 nodes by default 1`] = `
+exports[`TreeMenu should render the level-1 nodes by default 1`] = `
 <TreeMenu
   data={
     Object {

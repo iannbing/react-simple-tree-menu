@@ -90,7 +90,7 @@ import '../node_modules/react-simple-tree-menu/dist/main.css';
 <TreeMenu data={treeData} />
 
 // Use any third-party UI framework
-<TreeViewMenu
+<TreeMenu
   data={treeData}
   onClickItem={({ key, label, ...props }) => {
     this.navigate(props.url); // user defined prop
@@ -109,7 +109,7 @@ import '../node_modules/react-simple-tree-menu/dist/main.css';
           </ListGroup>
         </>
     )}
-</TreeViewMenu>
+</TreeMenu>
 
 ```
 
@@ -120,7 +120,7 @@ If you want to extend the minial UI components, they are exported at your dispos
 import TreeMenu, { defaultChildren, ItemComponent } from 'react-simple-tree-menu';
 
 // add custom styling to the list item
-<TreeViewMenu data={treeData}>
+<TreeMenu data={treeData}>
     {({ search, items }) => (
         <ul>
             {items.map(props => (
@@ -128,17 +128,17 @@ import TreeMenu, { defaultChildren, ItemComponent } from 'react-simple-tree-menu
             ))}
         </ul>
     )}
-</TreeViewMenu>
+</TreeMenu>
 
 // add a button to do resetOpenNodes
-<TreeViewMenu data={treeData}>
+<TreeMenu data={treeData}>
     {({ search, items, resetOpenNodes }) => (
       <div>
         <button onClick={resetOpenNodes} />
         {defaultChildren({search, items})}
       </div>
     )}
-</TreeViewMenu>
+</TreeMenu>
 
 ```
 
@@ -156,7 +156,7 @@ Note the difference between the state `active` and `focused`. ENTER is equivalen
 
 ## API
 
-### TreeViewMenu
+### TreeMenu
 
 | props               | description                                                                                                                              | type                                        | default                            |
 | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- | ---------------------------------- |
