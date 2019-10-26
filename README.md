@@ -9,7 +9,7 @@ Inspired by [Downshift](https://github.com/downshift-js/downshift), a simple, da
 - does not depend on any UI framework
 - fully customizable with `render props` and `control props`
 - allows search
-- support keyboard browsing
+- supports keyboard browsing
 
 Check [Storybook Demo](https://iannbing.github.io/react-simple-tree-menu/).
 
@@ -95,6 +95,7 @@ import '../node_modules/react-simple-tree-menu/dist/main.css';
   onClickItem={({ key, label, ...props }) => {
     this.navigate(props.url); // user defined prop
   }}
+  initialActiveKey='first-level-node-1/second-level-node-1' // the path to the active node
   debounceTime={125}>
     {({ search, items }) => (
         <>
@@ -123,8 +124,8 @@ import TreeMenu, { defaultChildren, ItemComponent } from 'react-simple-tree-menu
 <TreeMenu data={treeData}>
     {({ search, items }) => (
         <ul>
-            {items.map(props => (
-              <ItemComponent {...props, style: { background: 'pink' }} />
+            {items.map(({key, ...props}) => (
+              <ItemComponent key={key} {...props} />
             ))}
         </ul>
     )}
@@ -161,10 +162,10 @@ Note the difference between the state `active` and `focused`. ENTER is equivalen
 | props               | description                                                                                                                              | type                                        | default                            |
 | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- | ---------------------------------- |
 | data                | Data that defines the structure of the tree. You can nest it as many levels as you want, but note that it might cause performance issue. | {[string]:TreeNode} \| TreeNodeInArray[]    | -                                  |
-| activeKey           | the node matching this key will be active                                                                                                | string                                      | ''                                 |
-| focusKey            | the node matching this key will be focused                                                                                               | string                                      | ''                                 |
-| initialActiveKey    | set initial state of `activeKey`                                                                                                         | string                                      | -                                  |
-| initialFocusKey     | set initial state of `focusKey`                                                                                                          | string                                      | -                                  |
+| activeKey           | the node matching this key will be active. Note that you need to provide the compplete path (e.g. node-level-1/node-level-2/target-node).| string                                      | ''                                 |
+| focusKey            | the node matching this key will be focused. Note that you need to provide the compplete path (e.g. node-level-1/node-level-2/target-node)| string                                      | ''                                 |
+| initialActiveKey    | set initial state of `activeKey`. Note that you need to provide the compplete path (e.g. node-level-1/node-level-2/target-node).         | string                                      | -                                  |
+| initialFocusKey     | set initial state of `focusKey`. Note that you need to provide the compplete path (e.g. node-level-1/node-level-2/target-node).          | string                                      | -                                  |
 | onClickItem         | A callback function that defines the behavior when user clicks on an node                                                                | (Item): void                                | `console.warn`                     |
 | debounceTime        | debounce time for searching                                                                                                              | number                                      | 125                                |
 | openNodes           | you can pass an array of node names to control the open state of certain branches                                                        | string[]                                    | -                                  |

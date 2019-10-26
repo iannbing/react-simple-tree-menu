@@ -43,7 +43,6 @@ export const ItemComponent: React.FunctionComponent<TreeMenuItem> = ({
   focused,
   openedIcon = '-',
   closedIcon = '+',
-  key,
   label = 'unknown',
   style = {},
 }) => (
@@ -61,7 +60,6 @@ export const ItemComponent: React.FunctionComponent<TreeMenuItem> = ({
     }}
     role="button"
     aria-pressed={active}
-    key={key}
     onClick={onClick}
   >
     {hasNodes && (
@@ -96,8 +94,8 @@ export const defaultChildren: TreeMenuChildren = ({ search, items }) => {
         />
       )}
       <ul className="tree-item-group">
-        {items.map(props => (
-          <ItemComponent {...props}></ItemComponent>
+        {items.map(({ key, ...props }) => (
+          <ItemComponent key={key} {...props}></ItemComponent>
         ))}
       </ul>
     </>
