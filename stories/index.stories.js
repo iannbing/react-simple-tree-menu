@@ -156,7 +156,7 @@ storiesOf('TreeMenu', module)
       data={dataInArray}
       onClickItem={action(`on click node`)}
       initialOpenNodes={['reptile', 'reptile/squamata', 'reptile/squamata/lizard']}
-      initialActiveKey="reptile"
+      initialActiveKey="reptile/squamata"
     />
   ))
   .add('set initial state when data is updated', () => {
@@ -190,7 +190,7 @@ storiesOf('TreeMenu', module)
                 'reptile/squamata',
                 'reptile/squamata/lizard',
               ]}
-              initialActiveKey="reptile"
+              initialActiveKey="reptile/squamata"
               resetOpenNodesOnDataUpdate
             />
           </>
@@ -297,8 +297,13 @@ storiesOf('TreeMenu', module)
     <TreeMenu data={dataInArray} onClickItem={action(`on click node`)}>
       {({ items }) => (
         <ul className="tree-item-group">
-          {items.map(props => (
-            <ItemComponent {...props} openedIcon={openedIcon} closedIcon={closedIcon} />
+          {items.map(({ key, ...props }) => (
+            <ItemComponent
+              key={key}
+              {...props}
+              openedIcon={openedIcon}
+              closedIcon={closedIcon}
+            />
           ))}
         </ul>
       )}
