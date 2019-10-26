@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 
-import TreeViewMenu from '../index';
+import TreeMenu from '../index';
 
 const mockData = {
   atd: {
@@ -37,16 +37,16 @@ const mockData = {
   },
 };
 
-describe('TreeViewMenu', () => {
+describe('TreeMenu', () => {
   it('should render the level-1 nodes by default', () => {
-    const wrapper = mount(<TreeViewMenu data={mockData} />);
+    const wrapper = mount(<TreeMenu data={mockData} />);
 
     expect(wrapper).toMatchSnapshot();
     expect(wrapper.find('li').length).toEqual(2);
   });
   it('should open specified nodes', () => {
     const wrapper = mount(
-      <TreeViewMenu
+      <TreeMenu
         data={mockData}
         openNodes={['releasenotes', 'releasenotes/desktop-modeler']}
       />
@@ -58,7 +58,7 @@ describe('TreeViewMenu', () => {
   it('should highlight the active node', () => {
     const activeKey = 'releasenotes/desktop-modeler/7';
     const wrapper = mount(
-      <TreeViewMenu
+      <TreeMenu
         data={mockData}
         activeKey={activeKey}
         openNodes={['releasenotes', 'releasenotes/desktop-modeler']}
@@ -75,7 +75,7 @@ describe('TreeViewMenu', () => {
   it('should trigger onClickItem when a node is clicked', () => {
     const mockOnClickItem = jest.fn();
     const wrapper = shallow(
-      <TreeViewMenu data={mockData} onClickItem={mockOnClickItem} />
+      <TreeMenu data={mockData} onClickItem={mockOnClickItem} />
     );
 
     const targetNode = wrapper.findWhere(node => node.key() === 'releasenotes');
