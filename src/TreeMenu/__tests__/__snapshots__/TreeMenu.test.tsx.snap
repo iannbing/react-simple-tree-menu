@@ -39,6 +39,7 @@ exports[`TreeMenu should highlight the active node 1`] = `
     }
   }
   debounceTime={125}
+  disableKeyboard={false}
   hasSearch={true}
   onClickItem={[Function]}
   openNodes={
@@ -303,6 +304,7 @@ exports[`TreeMenu should open specified nodes 1`] = `
     }
   }
   debounceTime={125}
+  disableKeyboard={false}
   hasSearch={true}
   onClickItem={[Function]}
   openNodes={
@@ -567,6 +569,7 @@ exports[`TreeMenu should render the level-1 nodes by default 1`] = `
     }
   }
   debounceTime={125}
+  disableKeyboard={false}
   hasSearch={true}
   onClickItem={[Function]}
   resetOpenNodesOnDataUpdate={false}

@@ -26,6 +26,7 @@ export type TreeMenuProps = {
   children?: TreeMenuChildren;
   locale?: LocaleFunction;
   matchSearch?: MatchSearchFunction;
+  disableKeyboard?: boolean;
 };
 
 type TreeMenuState = {
@@ -45,6 +46,7 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
     children: defaultChildren,
     hasSearch: true,
     resetOpenNodesOnDataUpdate: false,
+    disableKeyboard: false,
   };
 
   state: TreeMenuState = {
@@ -115,6 +117,7 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
   getKeyDownProps = (items: TreeMenuItem[]) => {
     const { onClickItem } = this.props;
     const { focusKey, activeKey, searchTerm } = this.state;
+    
     const focusIndex = items.findIndex(item => item.key === (focusKey || activeKey));
     const getFocusKey = (item: TreeMenuItem) => {
       const keyArray = item.key.split('/');
@@ -136,14 +139,15 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
         }));
       },
       left: () => {
-        this.setState(({ openNodes, ...rest }) => {
-          const item = items[focusIndex];
-          const newOpenNodes = openNodes.filter(node => node !== item.key);
-
-          return item.isOpen
-            ? { ...rest, openNodes: newOpenNodes, focusKey: item.key }
-            : { ...rest, focusKey: getFocusKey(item) };
-        });
+        const item = items[focusIndex];
+        if (item) {
+          this.setState(({ openNodes, ...rest }) => {
+            const newOpenNodes = openNodes.filter(node => node !== item.key);
+            return item.isOpen
+              ? { ...rest, openNodes: newOpenNodes, focusKey: item.key }
+              : { ...rest, focusKey: getFocusKey(item) };
+          });
+        }
       },
       right: () => {
         const { hasNodes, key } = items[focusIndex];
@@ -158,26 +162,27 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
   };
 
   render() {
-    const { children, hasSearch } = this.props;
+    const { children, hasSearch, disableKeyboard } = this.props;
     const { searchTerm } = this.state;
 
+    const search = this.search;
     const items = this.generateItems();
-    const renderedChildren = children || defaultChildren;
-    const keyDownProps = this.getKeyDownProps(items);
+    const resetOpenNodes = this.resetOpenNodes;
+    const render = children || defaultChildren;
 
-    return (
-      <KeyDown {...keyDownProps}>
-        {renderedChildren(
-          hasSearch
-            ? {
-                search: this.search,
-                items,
-                resetOpenNodes: this.resetOpenNodes,
-                searchTerm,
-              }
-            : { items, resetOpenNodes: this.resetOpenNodes }
-        )}
-      </KeyDown>
+    const renderProps = hasSearch
+      ? {
+          search,
+          resetOpenNodes,
+          items,
+          searchTerm,
+        }
+      : { items, resetOpenNodes };
+
+    return disableKeyboard ? (
+      render(renderProps)
+    ) : (
+      <KeyDown {...this.getKeyDownProps(items)}>{render(renderProps)}</KeyDown>
     );
   }
 }
