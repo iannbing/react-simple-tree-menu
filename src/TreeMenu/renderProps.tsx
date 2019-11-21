@@ -86,7 +86,7 @@ export const defaultChildren: TreeMenuChildren = ({ search, items }) => {
     <>
       {search && (
         <input
-          className="search"
+          className="tree-search"
           aria-label="Type and search"
           type="search"
           placeholder="Type and search"

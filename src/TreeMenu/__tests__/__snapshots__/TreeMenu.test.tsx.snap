@@ -63,7 +63,7 @@ exports[`TreeMenu should highlight the active node 1`] = `
     >
       <input
         aria-label="Type and search"
-        className="search"
+        className="tree-search"
         onChange={[Function]}
         placeholder="Type and search"
         type="search"
@@ -328,7 +328,7 @@ exports[`TreeMenu should open specified nodes 1`] = `
     >
       <input
         aria-label="Type and search"
-        className="search"
+        className="tree-search"
         onChange={[Function]}
         placeholder="Type and search"
         type="search"
@@ -587,7 +587,7 @@ exports[`TreeMenu should render the level-1 nodes by default 1`] = `
     >
       <input
         aria-label="Type and search"
-        className="search"
+        className="tree-search"
         onChange={[Function]}
         placeholder="Type and search"
         type="search"

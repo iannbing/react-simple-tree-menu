@@ -4,7 +4,7 @@ exports[`defaultChildren should render the toggle icon with "on" equals to false
 Array [
   <input
     aria-label="Type and search"
-    className="search"
+    className="tree-search"
     onChange={[Function]}
     placeholder="Type and search"
     type="search"
@@ -59,7 +59,7 @@ exports[`defaultChildren should render the toggle icon with "on" equals to true 
 Array [
   <input
     aria-label="Type and search"
-    className="search"
+    className="tree-search"
     onChange={[Function]}
     placeholder="Type and search"
     type="search"
@@ -156,7 +156,7 @@ exports[`defaultChildren should render without the toggle icon 1`] = `
 Array [
   <input
     aria-label="Type and search"
-    className="search"
+    className="tree-search"
     onChange={[Function]}
     placeholder="Type and search"
     type="search"
