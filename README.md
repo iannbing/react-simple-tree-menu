@@ -173,7 +173,8 @@ Note the difference between the state `active` and `focused`. ENTER is equivalen
 | locale              | you can provide a function that converts `label` into `string`                                                                           | ({label, ...other}) => string               | ({label}) => label                 |
 | hasSearch           | Set to `false` then `children` will not have the prop `search`                                                                           | boolean                                     | true                               |
 | matchSearch         | you can define your own search function                                                                                                  | ({label, searchTerm, ...other}) => boolean  | ({label, searchTerm}) => isVisible |
-| children            | a render props that provdes two props: `search`, `items` and `resetOpenNodes`                                                                     | (ChildrenProps) => React.ReactNode          | -                                  |
+| disableKeyboard     | Disable keyboard navigation                                                                                                              | boolean                                     | false                              |
+| children            | a render props that provdes two props: `search`, `items` and `resetOpenNodes`                                                            | (ChildrenProps) => React.ReactNode          | -                                  |
 
 ### TreeNode
 
