@@ -1,7 +1,7 @@
 $ICON_SIZE: 2rem;
 $DEFAULT_PADDING: 0.75rem;
 
-.toggle-icon {
+.rstm-toggle-icon {
   display: inline-block;
   &-symbol {
     width: $ICON_SIZE;
@@ -11,7 +11,7 @@ $DEFAULT_PADDING: 0.75rem;
   }
 }
 
-.tree-item-group {
+.rstm-tree-item-group {
   list-style-type: none;
   padding-left: 0;
   border-top: 1px solid #ccc;
@@ -19,7 +19,7 @@ $DEFAULT_PADDING: 0.75rem;
   width: 100vw;
 }
 
-.tree-item {
+.rstm-tree-item {
   padding: 0.75rem 1rem;
   cursor: pointer;
   color: #333;
@@ -41,7 +41,7 @@ $DEFAULT_PADDING: 0.75rem;
   }
 }
 
-.search {
+.rstm-search {
   padding: 1rem 1.5rem;
   border: none;
   width: 100%;
