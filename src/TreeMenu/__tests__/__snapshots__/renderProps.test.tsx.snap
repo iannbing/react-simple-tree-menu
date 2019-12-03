@@ -4,13 +4,13 @@ exports[`defaultChildren should render the toggle icon with "on" equals to false
 Array [
   <input
     aria-label="Type and search"
-    className="search"
+    className="rstm-search"
     onChange={[Function]}
     placeholder="Type and search"
     type="search"
   />,
   <ul
-    className="tree-item-group"
+    className="rstm-tree-item-group"
   >
     <Component
       hasNodes={true}
@@ -21,7 +21,7 @@ Array [
       onClick={[Function]}
     >
       <li
-        className="tree-item"
+        className="rstm-tree-item"
         onClick={[Function]}
         role="button"
         style={
@@ -31,7 +31,7 @@ Array [
         }
       >
         <div
-          className="toggle-icon"
+          className="rstm-toggle-icon"
           onClick={[Function]}
         >
           <ToggleIcon
@@ -41,7 +41,7 @@ Array [
           >
             <div
               aria-label="Toggle"
-              className="toggle-icon-symbol"
+              className="rstm-toggle-icon-symbol"
               role="img"
             >
               +
@@ -59,13 +59,13 @@ exports[`defaultChildren should render the toggle icon with "on" equals to true 
 Array [
   <input
     aria-label="Type and search"
-    className="search"
+    className="rstm-search"
     onChange={[Function]}
     placeholder="Type and search"
     type="search"
   />,
   <ul
-    className="tree-item-group"
+    className="rstm-tree-item-group"
   >
     <Component
       hasNodes={true}
@@ -76,7 +76,7 @@ Array [
       onClick={[Function]}
     >
       <li
-        className="tree-item"
+        className="rstm-tree-item"
         onClick={[Function]}
         role="button"
         style={
@@ -86,7 +86,7 @@ Array [
         }
       >
         <div
-          className="toggle-icon"
+          className="rstm-toggle-icon"
           onClick={[Function]}
         >
           <ToggleIcon
@@ -96,7 +96,7 @@ Array [
           >
             <div
               aria-label="Toggle"
-              className="toggle-icon-symbol"
+              className="rstm-toggle-icon-symbol"
               role="img"
             >
               -
@@ -115,7 +115,7 @@ Array [
       onClick={[Function]}
     >
       <li
-        className="tree-item"
+        className="rstm-tree-item"
         onClick={[Function]}
         role="button"
         style={
@@ -136,7 +136,7 @@ Array [
       onClick={[Function]}
     >
       <li
-        className="tree-item"
+        className="rstm-tree-item"
         onClick={[Function]}
         role="button"
         style={
@@ -156,13 +156,13 @@ exports[`defaultChildren should render without the toggle icon 1`] = `
 Array [
   <input
     aria-label="Type and search"
-    className="search"
+    className="rstm-search"
     onChange={[Function]}
     placeholder="Type and search"
     type="search"
   />,
   <ul
-    className="tree-item-group"
+    className="rstm-tree-item-group"
   >
     <Component
       hasNodes={false}
@@ -173,7 +173,7 @@ Array [
       onClick={[Function]}
     >
       <li
-        className="tree-item"
+        className="rstm-tree-item"
         onClick={[Function]}
         role="button"
         style={
