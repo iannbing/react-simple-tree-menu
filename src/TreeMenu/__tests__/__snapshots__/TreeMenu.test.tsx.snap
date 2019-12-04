@@ -63,13 +63,13 @@ exports[`TreeMenu should highlight the active node 1`] = `
     >
       <input
         aria-label="Type and search"
-        className="search"
+        className="rstm-search"
         onChange={[Function]}
         placeholder="Type and search"
         type="search"
       />
       <ul
-        className="tree-item-group"
+        className="rstm-tree-item-group"
       >
         <Component
           active={false}
@@ -93,7 +93,7 @@ exports[`TreeMenu should highlight the active node 1`] = `
         >
           <li
             aria-pressed={false}
-            className="tree-item"
+            className="rstm-tree-item"
             onClick={[Function]}
             role="button"
             style={
@@ -103,7 +103,7 @@ exports[`TreeMenu should highlight the active node 1`] = `
             }
           >
             <div
-              className="toggle-icon"
+              className="rstm-toggle-icon"
               onClick={[Function]}
             >
               <ToggleIcon
@@ -113,7 +113,7 @@ exports[`TreeMenu should highlight the active node 1`] = `
               >
                 <div
                   aria-label="Toggle"
-                  className="toggle-icon-symbol"
+                  className="rstm-toggle-icon-symbol"
                   role="img"
                 >
                   -
@@ -145,7 +145,7 @@ exports[`TreeMenu should highlight the active node 1`] = `
         >
           <li
             aria-pressed={false}
-            className="tree-item"
+            className="rstm-tree-item"
             onClick={[Function]}
             role="button"
             style={
@@ -155,7 +155,7 @@ exports[`TreeMenu should highlight the active node 1`] = `
             }
           >
             <div
-              className="toggle-icon"
+              className="rstm-toggle-icon"
               onClick={[Function]}
             >
               <ToggleIcon
@@ -165,7 +165,7 @@ exports[`TreeMenu should highlight the active node 1`] = `
               >
                 <div
                   aria-label="Toggle"
-                  className="toggle-icon-symbol"
+                  className="rstm-toggle-icon-symbol"
                   role="img"
                 >
                   -
@@ -197,7 +197,7 @@ exports[`TreeMenu should highlight the active node 1`] = `
         >
           <li
             aria-pressed={true}
-            className="tree-item tree-item--active"
+            className="rstm-tree-item rstm-tree-item--active"
             onClick={[Function]}
             role="button"
             style={
@@ -207,7 +207,7 @@ exports[`TreeMenu should highlight the active node 1`] = `
             }
           >
             <div
-              className="toggle-icon"
+              className="rstm-toggle-icon"
               onClick={[Function]}
             >
               <ToggleIcon
@@ -217,7 +217,7 @@ exports[`TreeMenu should highlight the active node 1`] = `
               >
                 <div
                   aria-label="Toggle"
-                  className="toggle-icon-symbol"
+                  className="rstm-toggle-icon-symbol"
                   role="img"
                 >
                   +
@@ -248,7 +248,7 @@ exports[`TreeMenu should highlight the active node 1`] = `
         >
           <li
             aria-pressed={false}
-            className="tree-item"
+            className="rstm-tree-item"
             onClick={[Function]}
             role="button"
             style={
@@ -328,13 +328,13 @@ exports[`TreeMenu should open specified nodes 1`] = `
     >
       <input
         aria-label="Type and search"
-        className="search"
+        className="rstm-search"
         onChange={[Function]}
         placeholder="Type and search"
         type="search"
       />
       <ul
-        className="tree-item-group"
+        className="rstm-tree-item-group"
       >
         <Component
           active={false}
@@ -358,7 +358,7 @@ exports[`TreeMenu should open specified nodes 1`] = `
         >
           <li
             aria-pressed={false}
-            className="tree-item"
+            className="rstm-tree-item"
             onClick={[Function]}
             role="button"
             style={
@@ -368,7 +368,7 @@ exports[`TreeMenu should open specified nodes 1`] = `
             }
           >
             <div
-              className="toggle-icon"
+              className="rstm-toggle-icon"
               onClick={[Function]}
             >
               <ToggleIcon
@@ -378,7 +378,7 @@ exports[`TreeMenu should open specified nodes 1`] = `
               >
                 <div
                   aria-label="Toggle"
-                  className="toggle-icon-symbol"
+                  className="rstm-toggle-icon-symbol"
                   role="img"
                 >
                   -
@@ -410,7 +410,7 @@ exports[`TreeMenu should open specified nodes 1`] = `
         >
           <li
             aria-pressed={false}
-            className="tree-item"
+            className="rstm-tree-item"
             onClick={[Function]}
             role="button"
             style={
@@ -420,7 +420,7 @@ exports[`TreeMenu should open specified nodes 1`] = `
             }
           >
             <div
-              className="toggle-icon"
+              className="rstm-toggle-icon"
               onClick={[Function]}
             >
               <ToggleIcon
@@ -430,7 +430,7 @@ exports[`TreeMenu should open specified nodes 1`] = `
               >
                 <div
                   aria-label="Toggle"
-                  className="toggle-icon-symbol"
+                  className="rstm-toggle-icon-symbol"
                   role="img"
                 >
                   -
@@ -462,7 +462,7 @@ exports[`TreeMenu should open specified nodes 1`] = `
         >
           <li
             aria-pressed={false}
-            className="tree-item"
+            className="rstm-tree-item"
             onClick={[Function]}
             role="button"
             style={
@@ -472,7 +472,7 @@ exports[`TreeMenu should open specified nodes 1`] = `
             }
           >
             <div
-              className="toggle-icon"
+              className="rstm-toggle-icon"
               onClick={[Function]}
             >
               <ToggleIcon
@@ -482,7 +482,7 @@ exports[`TreeMenu should open specified nodes 1`] = `
               >
                 <div
                   aria-label="Toggle"
-                  className="toggle-icon-symbol"
+                  className="rstm-toggle-icon-symbol"
                   role="img"
                 >
                   +
@@ -513,7 +513,7 @@ exports[`TreeMenu should open specified nodes 1`] = `
         >
           <li
             aria-pressed={false}
-            className="tree-item"
+            className="rstm-tree-item"
             onClick={[Function]}
             role="button"
             style={
@@ -587,13 +587,13 @@ exports[`TreeMenu should render the level-1 nodes by default 1`] = `
     >
       <input
         aria-label="Type and search"
-        className="search"
+        className="rstm-search"
         onChange={[Function]}
         placeholder="Type and search"
         type="search"
       />
       <ul
-        className="tree-item-group"
+        className="rstm-tree-item-group"
       >
         <Component
           active={false}
@@ -612,7 +612,7 @@ exports[`TreeMenu should render the level-1 nodes by default 1`] = `
         >
           <li
             aria-pressed={false}
-            className="tree-item"
+            className="rstm-tree-item"
             onClick={[Function]}
             role="button"
             style={
@@ -622,7 +622,7 @@ exports[`TreeMenu should render the level-1 nodes by default 1`] = `
             }
           >
             <div
-              className="toggle-icon"
+              className="rstm-toggle-icon"
               onClick={[Function]}
             >
               <ToggleIcon
@@ -632,7 +632,7 @@ exports[`TreeMenu should render the level-1 nodes by default 1`] = `
               >
                 <div
                   aria-label="Toggle"
-                  className="toggle-icon-symbol"
+                  className="rstm-toggle-icon-symbol"
                   role="img"
                 >
                   +
@@ -658,7 +658,7 @@ exports[`TreeMenu should render the level-1 nodes by default 1`] = `
         >
           <li
             aria-pressed={false}
-            className="tree-item"
+            className="rstm-tree-item"
             onClick={[Function]}
             role="button"
             style={

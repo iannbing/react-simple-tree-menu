@@ -70,7 +70,7 @@ describe('TreeMenu', () => {
       .get(0);
 
     expect(wrapper).toMatchSnapshot();
-    expect(highlightedElement.props.className).toContain('tree-item--active');
+    expect(highlightedElement.props.className).toContain('rstm-tree-item--active');
   });
   it('should trigger onClickItem when a node is clicked', () => {
     const mockOnClickItem = jest.fn();

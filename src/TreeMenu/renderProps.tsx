@@ -15,7 +15,7 @@ const ToggleIcon = ({
   openedIcon: ReactNode;
   closedIcon: ReactNode;
 }) => (
-  <div role="img" aria-label="Toggle" className="toggle-icon-symbol">
+  <div role="img" aria-label="Toggle" className="rstm-toggle-icon-symbol">
     {on ? openedIcon : closedIcon}
   </div>
 );
@@ -48,9 +48,9 @@ export const ItemComponent: React.FunctionComponent<TreeMenuItem> = ({
 }) => (
   <li
     className={classNames(
-      'tree-item',
-      { 'tree-item--active': active },
-      { 'tree-item--focused': focused }
+      'rstm-tree-item',
+      { 'rstm-tree-item--active': active },
+      { 'rstm-tree-item--focused': focused }
     )}
     style={{
       paddingLeft: `${DEFAULT_PADDING +
@@ -64,7 +64,7 @@ export const ItemComponent: React.FunctionComponent<TreeMenuItem> = ({
   >
     {hasNodes && (
       <div
-        className="toggle-icon"
+        className="rstm-toggle-icon"
         onClick={e => {
           hasNodes && toggleNode && toggleNode();
           e.stopPropagation();
@@ -86,14 +86,14 @@ export const defaultChildren: TreeMenuChildren = ({ search, items }) => {
     <>
       {search && (
         <input
-          className="search"
+          className="rstm-search"
           aria-label="Type and search"
           type="search"
           placeholder="Type and search"
           onChange={onSearch}
         />
       )}
-      <ul className="tree-item-group">
+      <ul className="rstm-tree-item-group">
         {items.map(({ key, ...props }) => (
           <ItemComponent key={key} {...props}></ItemComponent>
         ))}
