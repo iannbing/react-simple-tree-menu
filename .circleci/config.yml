@@ -1,6 +1,16 @@
 version: 2.1
 
 commands:
+  config_git_user:
+    description: 'Configure git user'
+    steps:
+      - run:
+          name: 'Configure Git user name'
+          command: git config user.email "$GIT_USER_NAME"
+      - run:
+          name: 'Configure Git user email'
+          command: git config user.email "$GIT_USER_EMAIL"
+
   install:
     description: 'Install packages'
     steps:
@@ -91,6 +101,7 @@ jobs:
       - image: circleci/node:10.15
     working_directory: ~/react-simple-tree-menu
     steps:
+      - config_git_user
       - install
       - run_tests
       - build_story
@@ -103,6 +114,7 @@ jobs:
       - image: circleci/node:10.15
     working_directory: ~/react-simple-tree-menu
     steps:
+      - config_git_user
       - install
       - run_tests
       - build_story
