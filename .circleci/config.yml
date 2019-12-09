@@ -2,76 +2,76 @@ version: 2.1
 
 commands:
   install:
-    description: 'Install packages'
+    description: "Install packages"
     steps:
       - checkout
       - run:
-          name: 'Update NPM'
-          command: 'sudo npm install -g npm@latest'
+          name: "Update NPM"
+          command: "sudo npm install -g npm@latest"
       - restore_cache:
           keys:
             - dependency-cache-{{ checksum "package.json" }}
       - run:
-          name: 'Install NPM'
+          name: "Install NPM"
           command: npm install
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - node_modules
   run_tests:
-    description: 'Run tests'
+    description: "Run tests"
     steps:
       - run:
-          name: 'Run tests'
+          name: "Run tests"
           command: npm run test:ci
           environment:
-            JEST_JUNIT_OUTPUT: 'reports/junit/js-test-results.xml'
+            JEST_JUNIT_OUTPUT: "reports/junit/js-test-results.xml"
       - store_test_results:
           path: reports/junit
       - store_artifacts:
           path: reports/junit
   build:
-    description: 'Build the bundle'
+    description: "Build the bundle"
     parameters:
       environment:
         type: string
-        default: 'dev'
+        default: "dev"
     steps:
       - run:
-          name: 'Build'
+          name: "Build"
           command: npm run build:<< parameters.environment >>
   bump_beta_version:
-    description: 'Bump version to beta'
+    description: "Bump version to beta"
     steps:
       - run:
-          name: 'Bump rc version'
+          name: "Bump rc version"
           command: npm run add-version-suffix
 
   publish:
-    description: 'Publish to npmjs'
+    description: "Publish to npmjs"
     parameters:
       environment:
         type: string
-        default: 'dev'
+        default: "dev"
     steps:
       - run:
-          name: 'Authenticate with registry'
+          name: "Authenticate with registry"
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
       - run:
-          name: 'Publish package'
+          name: "Publish package"
           command: npm run publish:<< parameters.environment >>
 
   build_story:
-    description: 'Build the story'
+    description: "Build the story"
     steps:
       - run:
-          name: 'build storybook'
+          name: "build storybook"
           command: npm run build-storybook
   deploy_story:
-    description: 'Deploy the story'
+    description: "Deploy the story"
     steps:
       - run:
-          name: 'deploy storybook'
+          name: "deploy storybook"
           command: npm run deploy-storybook
 
 jobs:
@@ -84,9 +84,9 @@ jobs:
       - run_tests
       - build_story
       - build:
-          environment: 'dev'
+          environment: "dev"
       - build:
-          environment: 'prod'
+          environment: "prod"
   release_rc:
     docker:
       - image: circleci/node:10.15
@@ -97,9 +97,9 @@ jobs:
       - build_story
       - bump_beta_version
       - build:
-          environment: 'dev'
+          environment: "dev"
       - publish:
-          environment: 'dev'
+          environment: "dev"
 
   release:
     docker:
@@ -110,12 +110,12 @@ jobs:
       - run_tests
       - build_story
       - build:
-          environment: 'prod'
+          environment: "prod"
       - publish:
-          environment: 'prod'
+          environment: "prod"
 
 workflows:
-  version: 2.1
+  version: 2.
   build:
     jobs:
       - build:
