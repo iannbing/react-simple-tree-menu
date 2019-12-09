@@ -6,10 +6,10 @@ commands:
     steps:
       - run:
           name: 'Configure Git user name'
-          command: git config user.email "$GIT_USER_NAME"
+          command: git config --global user.email "$GIT_USER_NAME"
       - run:
           name: 'Configure Git user email'
-          command: git config user.email "$GIT_USER_EMAIL"
+          command: git config --global user.email "$GIT_USER_EMAIL"
 
   install:
     description: 'Install packages'
