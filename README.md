@@ -231,11 +231,3 @@ Note the difference between the state `active` and `focused`. ENTER is equivalen
 | onClick          | a callback function that is run when the node is clicked              | Function                  | -       |
 | toggleNode       | a function that toggles the node (only availavble if it has children) | Function                  | -       |
 | ...other         | User defined props                                                    | {[string]: any}           | -       |
-
-## Dependencies
-
-- [lodash](https://lodash.com/): some light-weight utility functions are used, e.g. `get`, `isEmpty`, and `merge`. [babel-plugin-import](https://github.com/ant-design/babel-plugin-import) is used for only importing used modules to reduce bundle size; only the used functions are bundled.
-
-## Code conventions
-
-- [eslint-config-react-airbnb-prettier](https://github.com/iannbing/eslint-config-react-airbnb-prettier).
