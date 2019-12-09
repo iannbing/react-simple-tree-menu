@@ -18,7 +18,7 @@ commands:
     description: 'Install packages'
     steps:
       - checkout
-      - update_npm:
+      - run:
           name: 'Update NPM'
           command: sudo npm install -g npm@latest
       - restore_cache:
