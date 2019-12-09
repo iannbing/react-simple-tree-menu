@@ -32,34 +32,36 @@ commands:
           path: reports/junit
   build:
     description: 'Build the bundle'
-    parameters:
-      environment:
-        type: string
-        default: 'dev'
     steps:
       - run:
           name: 'Build'
-          command: npm run build:<< parameters.environment >>
+          command: npm run build
   bump_beta_version:
     description: 'Bump version to beta'
     steps:
       - run:
-          name: 'Bump rc version'
+          name: 'Bump beta version'
           command: npm run add-version-suffix
 
-  publish:
-    description: 'Publish to npmjs'
-    parameters:
-      environment:
-        type: string
-        default: 'dev'
+  publish_beta:
+    description: 'Publish beta version to npmjs'
     steps:
       - run:
           name: 'Authenticate with registry'
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
       - run:
           name: 'Publish package'
-          command: npm run publish:<< parameters.environment >>
+          command: npm run publish:beta
+
+  publish:
+    description: 'Publish to npmjs'
+    steps:
+      - run:
+          name: 'Authenticate with registry'
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
+      - run:
+          name: 'Publish package'
+          command: npm run publish
 
   build_story:
     description: 'Build the story'
@@ -83,11 +85,8 @@ jobs:
       - install
       - run_tests
       - build_story
-      - build:
-          environment: 'dev'
-      - build:
-          environment: 'prod'
-  release_rc:
+      - build
+  release_beta:
     docker:
       - image: circleci/node:10.15
     working_directory: ~/react-simple-tree-menu
@@ -96,10 +95,8 @@ jobs:
       - run_tests
       - build_story
       - bump_beta_version
-      - build:
-          environment: 'dev'
-      - publish:
-          environment: 'dev'
+      - build
+      - publish_beta
 
   release:
     docker:
@@ -109,13 +106,11 @@ jobs:
       - install
       - run_tests
       - build_story
-      - build:
-          environment: 'prod'
-      - publish:
-          environment: 'prod'
+      - build
+      - publish
 
 workflows:
-  version: 2.1
+  version: 2.
   build:
     jobs:
       - build:
@@ -126,7 +121,7 @@ workflows:
                 - master
   release:
     jobs:
-      - release_rc:
+      - release_beta:
           filters:
             branches:
               only: development
