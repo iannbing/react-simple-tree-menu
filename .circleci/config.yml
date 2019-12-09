@@ -1,18 +1,12 @@
 version: 2.1
 
 commands:
-  # config_git_user:
-  #   description: 'Configure git user'
-  #   steps:
-  #     - config_name:
-  #         name: 'Configure Git user name'
-  #         command: git config user.email $GIT_NAME
-  #     - config_email:
-  #         name: 'Configure Git user email'
-  #         command: git config user.email $GIT_EMAIL
-  #     - log_user:
-  #         name: 'log user'
-  #         command: cat .git/config
+  config_git_user:
+    description: 'Configure git user'
+    steps:
+      - run: git config user.email $GIT_NAME
+      - run: git config user.email $GIT_EMAIL
+      - run: cat .git/config
 
   install:
     description: 'Install packages'
@@ -113,7 +107,7 @@ jobs:
       - run_tests
       - build_story
       - build
-      # - config_git_user
+      - config_git_user
       - bump_beta_version
       - publish_beta
 
@@ -126,7 +120,7 @@ jobs:
       - run_tests
       - build_story
       - build
-      # - config_git_user
+      - config_git_user
       - publish
 
 workflows:
