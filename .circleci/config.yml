@@ -6,7 +6,6 @@ commands:
     steps:
       - run: git config user.name "$GIT_NAME"
       - run: git config user.email "$GIT_EMAIL"
-      - run: cat .git/config
 
   install:
     description: 'Install packages'
@@ -97,7 +96,6 @@ jobs:
       - run_tests
       - build_story
       - build
-      - config_git_user
   release_beta:
     docker:
       - image: circleci/node:10.15
