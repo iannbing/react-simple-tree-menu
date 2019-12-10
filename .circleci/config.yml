@@ -87,8 +87,6 @@ jobs:
     docker:
       - image: circleci/node:10.15
     working_directory: ~/react-simple-tree-menu
-    requires:
-      - build
     steps:
       - authenticate
       - publish_beta
@@ -97,8 +95,6 @@ jobs:
     docker:
       - image: circleci/node:10.15
     working_directory: ~/react-simple-tree-menu
-    # requires:
-    #   - build
     steps:
       - authenticate
       - publish
@@ -116,12 +112,16 @@ workflows:
   release:
     jobs:
       - release_beta:
+          requires:
+            - build
           filters:
             tags:
               only: /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)-(0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(\.(0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*$/
             # branches:
             #   only: master
       - release:
+          requires:
+            - build
           filters:
             tags:
               only: /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
