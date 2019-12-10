@@ -42,8 +42,11 @@ commands:
     description: 'Build the bundle'
     steps:
       - run: npm run build
-      - store_artifacts:
-          path: dist
+      - save_cache:
+          key: repo-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ./dist
+            - ./package.json
 
   authenticate:
     description: 'Authenticate with registry'
@@ -110,13 +113,13 @@ workflows:
             branches:
               ignore:
                 - gh-pages
-                - master
+                - development
   release:
     jobs:
       - build:
           filters:
             branches:
-              only: master
+              only: development
       - release_beta:
           requires:
             - build
@@ -124,7 +127,7 @@ workflows:
             tags:
               only: /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)-(0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(\.(0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*$/
             branches:
-              only: master
+              only: development
       - release:
           requires:
             - build
