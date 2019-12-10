@@ -56,6 +56,9 @@ commands:
   publish_beta:
     description: 'Publish beta version to npmjs'
     steps:
+      - restore_cache:
+          keys:
+            - repo-{{ .Branch }}-{{ .Revision }}
       - run:
           name: 'Publish package'
           command: npm run publish:beta
@@ -63,6 +66,9 @@ commands:
   publish:
     description: 'Publish to npmjs'
     steps:
+      - restore_cache:
+          keys:
+            - repo-{{ .Branch }}-{{ .Revision }}
       - run:
           name: 'Publish package'
           command: npm run publish
