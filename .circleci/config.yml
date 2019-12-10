@@ -111,6 +111,7 @@ workflows:
                 - master
   release:
     jobs:
+      - build
       - release_beta:
           requires:
             - build
