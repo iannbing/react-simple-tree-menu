@@ -113,16 +113,18 @@ workflows:
                 - master
   release:
     jobs:
-      - build
+      - build:
+          filters:
+            branches:
+              only: master
       - release_beta:
           requires:
             - build
           filters:
             tags:
-              # only: /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)-(0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(\.(0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*$/
-              only: /foo/
-            # branches:
-            #   only: master
+              only: /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)-(0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(\.(0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*$/
+            branches:
+              only: master
       - release:
           requires:
             - build
