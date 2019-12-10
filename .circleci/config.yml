@@ -42,6 +42,8 @@ commands:
     description: 'Build the bundle'
     steps:
       - run: npm run build
+      - store_artifacts:
+          path: dist
 
   authenticate:
     description: 'Authenticate with registry'
@@ -117,7 +119,8 @@ workflows:
             - build
           filters:
             tags:
-              only: /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)-(0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(\.(0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*$/
+              # only: /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)-(0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(\.(0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*$/
+              only: /foo/
             # branches:
             #   only: master
       - release:
