@@ -1,78 +1,78 @@
 version: 2.1
 
 commands:
+  config_git_user:
+    description: 'Configure git user'
+    steps:
+      - run: git config user.name "$GIT_NAME"
+      - run: git config user.email "$GIT_EMAIL"
+
   install:
-    description: "Install packages"
+    description: 'Install packages'
     steps:
       - checkout
       - run:
-          name: "Update NPM"
-          command: "sudo npm install -g npm@latest"
+          name: 'Update NPM'
+          command: sudo npm install -g npm@latest
       - restore_cache:
           keys:
             - dependency-cache-{{ checksum "package.json" }}
       - run:
-          name: "Install NPM"
+          name: 'Install NPM'
           command: npm install
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - node_modules
+
   run_tests:
-    description: "Run tests"
+    description: 'Run tests'
     steps:
       - run:
-          name: "Run tests"
+          name: 'Run tests'
           command: npm run test:ci
           environment:
-            JEST_JUNIT_OUTPUT: "reports/junit/js-test-results.xml"
+            JEST_JUNIT_OUTPUT: 'reports/junit/js-test-results.xml'
       - store_test_results:
           path: reports/junit
       - store_artifacts:
           path: reports/junit
+
   build:
-    description: "Build the bundle"
-    parameters:
-      environment:
-        type: string
-        default: "dev"
+    description: 'Build the bundle'
+    steps:
+      - run: npm run build
+      - store_artifacts:
+          path: dist
+
+  authenticate:
+    description: 'Authenticate with registry'
+    steps:
+      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
+
+  publish_beta:
+    description: 'Publish beta version to npmjs'
     steps:
       - run:
-          name: "Build"
-          command: npm run build:<< parameters.environment >>
-  bump_beta_version:
-    description: "Bump version to beta"
-    steps:
-      - run:
-          name: "Bump rc version"
-          command: npm run add-version-suffix
+          name: 'Publish package'
+          command: npm run publish:beta
 
   publish:
-    description: "Publish to npmjs"
-    parameters:
-      environment:
-        type: string
-        default: "dev"
+    description: 'Publish to npmjs'
     steps:
       - run:
-          name: "Authenticate with registry"
-          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
-      - run:
-          name: "Publish package"
-          command: npm run publish:<< parameters.environment >>
+          name: 'Publish package'
+          command: npm run publish
 
   build_story:
-    description: "Build the story"
+    description: 'Build storybook'
     steps:
-      - run:
-          name: "build storybook"
-          command: npm run build-storybook
+      - run: npm run build-storybook
+
   deploy_story:
-    description: "Deploy the story"
+    description: 'Deploy storybook'
     steps:
-      - run:
-          name: "deploy storybook"
-          command: npm run deploy-storybook
+      - run: npm run deploy-storybook
 
 jobs:
   build:
@@ -83,36 +83,23 @@ jobs:
       - install
       - run_tests
       - build_story
-      - build:
-          environment: "dev"
-      - build:
-          environment: "prod"
-  release_rc:
+      - build
+
+  release_beta:
     docker:
       - image: circleci/node:10.15
     working_directory: ~/react-simple-tree-menu
     steps:
-      - install
-      - run_tests
-      - build_story
-      - bump_beta_version
-      - build:
-          environment: "dev"
-      - publish:
-          environment: "dev"
+      - authenticate
+      - publish_beta
 
   release:
     docker:
       - image: circleci/node:10.15
     working_directory: ~/react-simple-tree-menu
     steps:
-      - install
-      - run_tests
-      - build_story
-      - build:
-          environment: "prod"
-      - publish:
-          environment: "prod"
+      - authenticate
+      - publish
 
 workflows:
   version: 2.
@@ -126,11 +113,23 @@ workflows:
                 - master
   release:
     jobs:
-      - release_rc:
+      - build:
           filters:
             branches:
-              only: development
-      - release:
+              only: master
+      - release_beta:
+          requires:
+            - build
           filters:
+            tags:
+              only: /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)-(0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(\.(0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*$/
+            branches:
+              only: master
+      - release:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
             branches:
               only: master

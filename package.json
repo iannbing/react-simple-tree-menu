@@ -21,16 +21,17 @@
     "test": "jest",
     "test:ci": "jest --ci --runInBand --reporters=jest-junit",
     "build:dev": "webpack --config webpack.dev.js && npm run sass-build",
-    "build:prod": "webpack --config webpack.prod.js && npm run sass-build",
+    "build": "webpack --config webpack.prod.js && npm run sass-build",
     "style:compile-sass": "node-sass-chokidar --source-map true src/sass/ -o dist",
     "style:autoprefixer": "postcss dist/*.css --use autoprefixer -d dist",
     "sass-build": "npm-run-all -p style:*",
     "storybook": "start-storybook -p 9001 -c .storybook",
     "build-storybook": "build-storybook && node .storybook/deploy-helper.js",
     "deploy-storybook": "storybook-to-ghpages -e storybook-static",
-    "publish:dev": "npm publish --tag beta",
-    "publish:prod": "npm publish",
-    "add-version-suffix": "npm version --prerelease --preid=rc"
+    "publish:beta": "npm publish --tag beta",
+    "publish": "npm publish",
+    "bump-version": "npm version",
+    "bump-version:beta": "npm version prerelease --preid=rc"
   },
   "repository": {
     "type": "git",
@@ -48,17 +49,16 @@
     "@babel/preset-env": "^7.2.3",
     "@babel/preset-react": "^7.0.0",
     "@babel/runtime": "^7.2.0",
-    "@storybook/addon-actions": "^5.2.1",
-    "@storybook/addon-info": "^5.2.1",
-    "@storybook/addon-links": "^5.2.1",
-    "@storybook/addons": "^5.2.1",
-    "@storybook/react": "^5.2.1",
+    "@storybook/addon-actions": "^5.2.8",
+    "@storybook/addon-info": "^5.2.8",
+    "@storybook/addon-links": "^5.2.8",
+    "@storybook/addons": "^5.2.8",
+    "@storybook/react": "^5.2.8",
     "@storybook/storybook-deployer": "^2.8.1",
-    "@storybook/theming": "^5.2.1",
+    "@storybook/theming": "^5.2.8",
     "@types/classnames": "^2.2.8",
     "@types/enzyme": "^3.1.15",
     "@types/jest": "^24.0.15",
-    "@types/lodash": "^4.14.132",
     "@types/react": "^16.7.18",
     "@types/react-dom": "^16.0.11",
     "autoprefixer": "^9.6.0",
@@ -102,13 +102,16 @@
     "webpack-merge": "^4.1.4"
   },
   "peerDependencies": {
-    "react": "^16.6.3",
-    "react-dom": "^16.6.3"
+    "react": ">=16.6.3",
+    "react-dom": ">=16.6.3"
   },
   "dependencies": {
     "classnames": "^2.2.6",
     "fast-memoize": "^2.5.1",
     "is-empty": "^1.2.0",
     "tiny-debounce": "^0.1.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
