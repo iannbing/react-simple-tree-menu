@@ -1,6 +1,6 @@
 {
   "name": "react-simple-tree-menu",
-  "version": "1.1.10",
+  "version": "1.1.9",
   "description": "A simple React tree menu component",
   "keywords": [
     "react",
@@ -30,8 +30,8 @@
     "deploy-storybook": "storybook-to-ghpages -e storybook-static",
     "publish:beta": "npm publish --tag beta",
     "publish": "npm publish",
-    "postpublish": "git push --tags",
-    "add-version-suffix": "npm version prerelease --preid=rc"
+    "bump-version": "npm version",
+    "bump-version:beta": "npm version prerelease --preid=rc"
   },
   "repository": {
     "type": "git",

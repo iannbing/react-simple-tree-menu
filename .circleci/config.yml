@@ -41,23 +41,16 @@ commands:
   build:
     description: 'Build the bundle'
     steps:
-      - run:
-          name: 'Build'
-          command: npm run build
+      - run: npm run build
 
-  bump_beta_version:
-    description: 'Bump version to beta'
+  authenticate:
+    description: 'Authenticate with registry'
     steps:
-      - run:
-          name: 'Bump beta version'
-          command: npm run add-version-suffix
+      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
 
   publish_beta:
     description: 'Publish beta version to npmjs'
     steps:
-      - run:
-          name: 'Authenticate with registry'
-          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
       - run:
           name: 'Publish package'
           command: npm run publish:beta
@@ -66,25 +59,18 @@ commands:
     description: 'Publish to npmjs'
     steps:
       - run:
-          name: 'Authenticate with registry'
-          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
-      - run:
           name: 'Publish package'
           command: npm run publish
 
   build_story:
-    description: 'Build the story'
+    description: 'Build storybook'
     steps:
-      - run:
-          name: 'build storybook'
-          command: npm run build-storybook
+      - run: npm run build-storybook
 
   deploy_story:
-    description: 'Deploy the story'
+    description: 'Deploy storybook'
     steps:
-      - run:
-          name: 'deploy storybook'
-          command: npm run deploy-storybook
+      - run: npm run deploy-storybook
 
 jobs:
   build:
@@ -96,29 +82,25 @@ jobs:
       - run_tests
       - build_story
       - build
+
   release_beta:
     docker:
       - image: circleci/node:10.15
     working_directory: ~/react-simple-tree-menu
+    # requires:
+    #   - build
     steps:
-      - install
-      - run_tests
-      - build_story
-      - build
-      - config_git_user
-      - bump_beta_version
+      - authenticate
       - publish_beta
 
   release:
     docker:
       - image: circleci/node:10.15
     working_directory: ~/react-simple-tree-menu
+    # requires:
+    #   - build
     steps:
-      - install
-      - run_tests
-      - build_story
-      - build
-      - config_git_user
+      - authenticate
       - publish
 
 workflows:
@@ -131,13 +113,17 @@ workflows:
               ignore:
                 - gh-pages
                 - master
-  release:
-    jobs:
-      - release_beta:
-          filters:
-            branches:
-              only: development
-      - release:
-          filters:
-            branches:
-              only: master
+  # release:
+  #   jobs:
+  #     - release_beta:
+  #         filters:
+  #           tags:
+  #             only: /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)-(0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(\.(0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*$/
+  #           branches:
+  #             only: master
+  #     - release:
+  #         filters:
+  #           tags:
+  #             only: /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
+  #           branches:
+  #             only: master
