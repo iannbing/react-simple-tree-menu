@@ -1,22 +1,8 @@
 {
   "presets": [
-    [
-      "@babel/preset-env",
-      {
-        "modules": "commonjs",
-        "targets": {
-          "node": "current"
-        }
-      }
-    ],
-    [
-      "@babel/preset-react",
-      {
-        "modules": "commonjs",
-        "targets": {
-          "node": "current"
-        }
-      }
-    ]
-  ]
+    "@babel/preset-env",
+    ["@babel/typescript", { "isTSX": true, "allExtensions": true }],
+    "@babel/preset-react"
+  ],
+  "plugins": ["@babel/proposal-class-properties"]
 }
