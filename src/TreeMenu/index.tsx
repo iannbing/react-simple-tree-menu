@@ -63,11 +63,11 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
     }
   }
 
-  resetOpenNodes = (newOpenNodes?: string[], key?: string) => {
+  resetOpenNodes = (newOpenNodes?: string[], activeKey?: string, focusKey?: string) => {
     const { initialOpenNodes } = this.props;
     const openNodes =
       (Array.isArray(newOpenNodes) && newOpenNodes) || initialOpenNodes || [];
-    this.setState({ openNodes, searchTerm: '', activeKey: key || '', focusKey: '' });
+    this.setState({ openNodes, searchTerm: '', activeKey: activeKey || '', focusKey: focusKey || activeKey || '' });
   };
 
   search = (value: string) => {
