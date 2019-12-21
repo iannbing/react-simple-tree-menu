@@ -199,7 +199,7 @@ storiesOf('TreeMenu', module)
     }
     return <TreeMenuWrapper />;
   })
-  .add('control TreeMenu from its parent', () => {
+  .add('control TreeMenu only from its parent', () => {
     class TreeMenuWrapper extends React.Component {
       state = { openNodes: [] };
       render() {
@@ -239,6 +239,50 @@ storiesOf('TreeMenu', module)
               activeKey={this.state.activeKey}
               onClickItem={action(`on click node`)}
               openNodes={this.state.openNodes}
+            />
+          </>
+        );
+      }
+    }
+    return <TreeMenuWrapper />;
+  })
+  .add('control TreeMenu from both its parent and openNodes', () => {
+    class TreeMenuWrapper extends React.Component {
+      state = { openNodes: [] };
+      childRef = React.createRef();
+      render() {
+        return (
+          <>
+            <div style={{ padding: '12px', background: 'black' }}>
+              <button
+                style={{ margin: '4px' }}
+                onClick={() =>
+                    this.childRef.current.resetOpenNodes(['reptile'], 'reptile')
+                }
+              >
+                Open Reptile from Ref
+              </button>
+              <button
+                style={{ margin: '4px' }}
+                onClick={() =>
+                  this.childRef.current.resetOpenNodes(["mammal", "mammal/canidae"], 'mammal/canidae') 
+                }
+              >
+                Open/Highlight Canidae
+              </button>
+              <button
+                style={{ margin: '4px' }}
+                onClick={() =>
+                    this.childRef.current.resetOpenNodes(["reptile", "reptile/squamata", "reptile/squamata/lizard"], "reptile/squamata/lizard", "reptile/squamata")
+                }
+              >
+                Open/Highlight Lizard, focus Squamata
+              </button>
+            </div>
+            <TreeMenu
+              data={dataInArray}
+              onClickItem={action(`on click node`)}
+              ref={this.childRef}  
             />
           </>
         );
