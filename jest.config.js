@@ -20,6 +20,7 @@ module.exports = {
   ],
   snapshotSerializers: ['enzyme-to-json/serializer'],
   setupFilesAfterEnv: ['./jest.setup.js'],
+  modulePathIgnorePatterns: ['<rootDir>/dist/'],
   collectCoverageFrom: [
     'src/**/*.{ts,tsx,js,jsx}',
     '!<rootDir>/jest.config',
