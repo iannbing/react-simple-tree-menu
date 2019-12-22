@@ -47,6 +47,7 @@ commands:
           paths:
             - ./dist
             - ./package.json
+            - ./README.md
 
   authenticate:
     description: "Authenticate with registry"
