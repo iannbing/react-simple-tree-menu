@@ -2,23 +2,23 @@ version: 2.1
 
 commands:
   config_git_user:
-    description: 'Configure git user'
+    description: "Configure git user"
     steps:
       - run: git config user.name "$GIT_NAME"
       - run: git config user.email "$GIT_EMAIL"
 
   install:
-    description: 'Install packages'
+    description: "Install packages"
     steps:
       - checkout
       - run:
-          name: 'Update NPM'
+          name: "Update NPM"
           command: sudo npm install -g npm@latest
       - restore_cache:
           keys:
             - dependency-cache-{{ checksum "package.json" }}
       - run:
-          name: 'Install NPM'
+          name: "Install NPM"
           command: npm install
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
@@ -26,20 +26,20 @@ commands:
             - node_modules
 
   run_tests:
-    description: 'Run tests'
+    description: "Run tests"
     steps:
       - run:
-          name: 'Run tests'
+          name: "Run tests"
           command: npm run test:ci
           environment:
-            JEST_JUNIT_OUTPUT: 'reports/junit/js-test-results.xml'
+            JEST_JUNIT_OUTPUT: "reports/junit/js-test-results.xml"
       - store_test_results:
           path: reports/junit
       - store_artifacts:
           path: reports/junit
 
   build:
-    description: 'Build the bundle'
+    description: "Build the bundle"
     steps:
       - run: npm run build
       - save_cache:
@@ -49,37 +49,37 @@ commands:
             - ./package.json
 
   authenticate:
-    description: 'Authenticate with registry'
+    description: "Authenticate with registry"
     steps:
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
 
   publish_beta:
-    description: 'Publish beta version to npmjs'
+    description: "Publish beta version to npmjs"
     steps:
       - restore_cache:
           keys:
             - repo-{{ .Branch }}-{{ .Revision }}
       - run:
-          name: 'Publish package'
+          name: "Publish package"
           command: npm run publish:beta
 
   publish:
-    description: 'Publish to npmjs'
+    description: "Publish to npmjs"
     steps:
       - restore_cache:
           keys:
             - repo-{{ .Branch }}-{{ .Revision }}
       - run:
-          name: 'Publish package'
-          command: npm run publish
+          name: "Publish package"
+          command: npm publish
 
   build_story:
-    description: 'Build storybook'
+    description: "Build storybook"
     steps:
       - run: npm run build-storybook
 
   deploy_story:
-    description: 'Deploy storybook'
+    description: "Deploy storybook"
     steps:
       - run: npm run deploy-storybook
 
