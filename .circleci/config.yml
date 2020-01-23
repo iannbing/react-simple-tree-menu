@@ -1,12 +1,6 @@
 version: 2.1
 
 commands:
-  config_git_user:
-    description: "Configure git user"
-    steps:
-      - run: git config user.name "$GIT_NAME"
-      - run: git config user.email "$GIT_EMAIL"
-
   install:
     description: "Install packages"
     steps:
