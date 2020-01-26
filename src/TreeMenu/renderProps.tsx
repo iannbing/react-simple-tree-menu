@@ -49,6 +49,7 @@ export const ItemComponent: React.FunctionComponent<TreeMenuItem> = ({
   <li
     className={classNames(
       'rstm-tree-item',
+      `rstm-tree-item-level${level}`,
       { 'rstm-tree-item--active': active },
       { 'rstm-tree-item--focused': focused }
     )}
