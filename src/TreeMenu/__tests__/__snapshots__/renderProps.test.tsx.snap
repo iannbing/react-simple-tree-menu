@@ -21,7 +21,7 @@ Array [
       onClick={[Function]}
     >
       <li
-        className="rstm-tree-item"
+        className="rstm-tree-item rstm-tree-item-level1"
         onClick={[Function]}
         role="button"
         style={
@@ -76,7 +76,7 @@ Array [
       onClick={[Function]}
     >
       <li
-        className="rstm-tree-item"
+        className="rstm-tree-item rstm-tree-item-level1"
         onClick={[Function]}
         role="button"
         style={
@@ -115,7 +115,7 @@ Array [
       onClick={[Function]}
     >
       <li
-        className="rstm-tree-item"
+        className="rstm-tree-item rstm-tree-item-level2"
         onClick={[Function]}
         role="button"
         style={
@@ -136,7 +136,7 @@ Array [
       onClick={[Function]}
     >
       <li
-        className="rstm-tree-item"
+        className="rstm-tree-item rstm-tree-item-level2"
         onClick={[Function]}
         role="button"
         style={
@@ -173,7 +173,7 @@ Array [
       onClick={[Function]}
     >
       <li
-        className="rstm-tree-item"
+        className="rstm-tree-item rstm-tree-item-level0"
         onClick={[Function]}
         role="button"
         style={
