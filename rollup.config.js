@@ -3,6 +3,7 @@ import resolve from 'rollup-plugin-node-resolve';
 import babel from 'rollup-plugin-babel';
 import typescript from 'rollup-plugin-typescript2';
 import del from 'rollup-plugin-delete';
+import strip from '@rollup/plugin-strip';
 import pkg from './package.json';
 
 const extensions = ['.js', '.jsx', '.ts', '.tsx'];
@@ -24,6 +25,7 @@ export default {
     typescript(),
     // Compile TypeScript/JavaScript files
     babel({ extensions, include: ['src/**/*'] }),
+    strip(),
   ],
 
   output: [
