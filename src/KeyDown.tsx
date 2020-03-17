@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { KeyboardEvent } from 'react';
 
-interface KeyDownProps {
+export interface KeyDownProps {
   children: JSX.Element | string;
   up: () => void;
   down: () => void;
   left: () => void;
   right: () => void;
   enter: () => void;
+  onKeyDown?: (event: KeyboardEvent<HTMLDivElement>) => any;
 }
 
-const KeyDown = ({ children, up, down, left, right, enter }: KeyDownProps) => {
+const KeyDown = ({ children, up, down, left, right, enter, onKeyDown }: KeyDownProps) => {
   return (
     <div
       tabIndex={0}
@@ -37,6 +38,7 @@ const KeyDown = ({ children, up, down, left, right, enter }: KeyDownProps) => {
             break;
           }
         }
+        onKeyDown?.(e);
       }}
     >
       {children}
