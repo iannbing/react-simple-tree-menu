@@ -68,9 +68,6 @@ commands:
           keys:
             - repo-{{ .Branch }}-{{ .Revision }}
       - run:
-          name: 'Bump Version'
-          command: npm run bump-version
-      - run:
           name: 'Publish package'
           command: npm publish
 
