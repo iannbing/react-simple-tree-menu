@@ -1,7 +1,9 @@
 import React from 'react';
 import debounce from 'tiny-debounce';
 
-import walk, {
+import  {
+  fastWalk,
+  slowWalk,
   TreeNode,
   Item,
   TreeNodeInArray,
@@ -21,6 +23,7 @@ export type TreeMenuProps = {
   openNodes?: string[];
   resetOpenNodesOnDataUpdate?: boolean;
   hasSearch?: boolean;
+  cacheSearch?: boolean;
   onClickItem?: (props: Item) => void;
   debounceTime?: number;
   children?: TreeMenuChildren;
@@ -45,6 +48,7 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
     debounceTime: 125,
     children: defaultChildren,
     hasSearch: true,
+    cacheSearch:true,
     resetOpenNodesOnDataUpdate: false,
     disableKeyboard: false,
   };
@@ -95,9 +99,9 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
     const openNodes = this.props.openNodes || this.state.openNodes;
     const activeKey = this.props.activeKey || this.state.activeKey;
     const focusKey = this.props.focusKey || this.state.focusKey;
-
+    const defaultSearch = this.props.cacheSearch ? fastWalk : slowWalk;
     const items: Item[] = data
-      ? walk({ data, openNodes, searchTerm, locale, matchSearch })
+      ? defaultSearch({ data, openNodes, searchTerm, locale, matchSearch })
       : [];
 
     return items.map(item => {
