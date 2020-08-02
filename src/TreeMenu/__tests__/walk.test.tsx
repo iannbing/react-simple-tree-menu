@@ -1,4 +1,4 @@
-import walk, { TreeNode, TreeNodeObject, TreeNodeInArray } from '../walk';
+import {slowWalk,fastWalk, TreeNode, TreeNodeObject, TreeNodeInArray } from '../walk';
 
 const mockDataInObject: TreeNodeObject = {
   atd: {
@@ -97,13 +97,24 @@ const expectedOutcome = [
   },
 ];
 
-describe('walk', () => {
+describe('slowWalk', () => {
   it('should transpose the data object to a desired shape', () => {
-    const result = walk({ data: mockDataInObject, openNodes: [], searchTerm: '7' });
+    const result = slowWalk({ data: mockDataInObject, openNodes: [], searchTerm: '7' });
     expect(result).toEqual(expectedOutcome);
   });
   it('should transpose the data array to a desired shape', () => {
-    const result = walk({ data: mockDataInArray, openNodes: [], searchTerm: '7' });
+    const result = slowWalk({ data: mockDataInArray, openNodes: [], searchTerm: '7' });
+    expect(result).toEqual(expectedOutcome);
+  });
+});
+
+describe('fastWalk', () => {
+  it('should transpose the data object to a desired shape', () => {
+    const result = fastWalk({ data: mockDataInObject, openNodes: [], searchTerm: '7' });
+    expect(result).toEqual(expectedOutcome);
+  });
+  it('should transpose the data array to a desired shape', () => {
+    const result = fastWalk({ data: mockDataInArray, openNodes: [], searchTerm: '7' });
     expect(result).toEqual(expectedOutcome);
   });
 });

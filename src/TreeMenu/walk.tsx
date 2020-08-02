@@ -123,4 +123,5 @@ const generateBranch = ({
   return isVisible ? [currentItem, ...nextLevelItems] : nextLevelItems;
 };
 
-export default memoize(walk);
+export const fastWalk = memoize(walk);
+export const slowWalk = walk;
