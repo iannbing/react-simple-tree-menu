@@ -3,6 +3,7 @@
 exports[`TreeMenu should highlight the active node 1`] = `
 <TreeMenu
   activeKey="releasenotes/desktop-modeler/7"
+  cacheSearch={true}
   data={
     Object {
       "atd": Object {
@@ -268,6 +269,7 @@ exports[`TreeMenu should highlight the active node 1`] = `
 
 exports[`TreeMenu should open specified nodes 1`] = `
 <TreeMenu
+  cacheSearch={true}
   data={
     Object {
       "atd": Object {
@@ -533,6 +535,7 @@ exports[`TreeMenu should open specified nodes 1`] = `
 
 exports[`TreeMenu should render the level-1 nodes by default 1`] = `
 <TreeMenu
+  cacheSearch={true}
   data={
     Object {
       "atd": Object {
