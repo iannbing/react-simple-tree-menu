@@ -176,6 +176,7 @@ Note the difference between the state `active` and `focused`. ENTER is equivalen
 | matchSearch         | you can define your own search function                                                                                                  | ({label, searchTerm, ...other}) => boolean  | ({label, searchTerm}) => isVisible |
 | disableKeyboard     | Disable keyboard navigation                                                                                                              | boolean                                     | false                              |
 | children            | a render props that provdes two props: `search`, `items` and `resetOpenNodes`                                                            | (ChildrenProps) => React.ReactNode          | -                                  |
+| keySeparator        | an alternative separator for keys in case `/` regularly occurs in your data                                                              | string                                      | '/'                                |
 
 ### TreeNode
 

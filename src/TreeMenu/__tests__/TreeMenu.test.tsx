@@ -36,6 +36,26 @@ const mockData = {
     },
   },
 };
+const mockDataWithSlashes = [
+  {
+    key: 'item1/a',
+    label: 'Item 1 (a)',
+  },
+  {
+    key: 'item2/a',
+    label: 'Item 2 (a)',
+    nodes: [
+      {
+        key: 'b',
+        label: 'Item 2 ab',
+      },
+      {
+        key: 'c',
+        label: 'Item 2 ac',
+      },
+    ]
+  },
+];
 
 describe('TreeMenu', () => {
   it('should render the level-1 nodes by default', () => {
@@ -72,6 +92,19 @@ describe('TreeMenu', () => {
     expect(wrapper).toMatchSnapshot();
     expect(highlightedElement.props.className).toContain('rstm-tree-item--active');
   });
+  it('should work with an alternative key separator', () => {
+    const wrapper = mount(
+      <TreeMenu
+        data={mockDataWithSlashes}
+        openNodes={['item2/a']}
+        keySeparator=";"
+      />
+    );
+    const targetNodeWithAlternativeKey = wrapper.findWhere(node => node.key() === 'item2/a;b').get(0);
+    expect(targetNodeWithAlternativeKey).not.toBeUndefined();
+    const targetNodeWithDefaultKey = wrapper.findWhere(node => node.key() === 'item2/a/b').get(0);
+    expect(targetNodeWithDefaultKey).toBeUndefined();
+  });
   it('should trigger onClickItem when a node is clicked', () => {
     const mockOnClickItem = jest.fn();
     const wrapper = shallow(
@@ -86,6 +119,7 @@ describe('TreeMenu', () => {
       index: 0,
       isOpen: false,
       key: 'releasenotes',
+      keySeparator: '/',
       label: 'Release Notes',
       level: 0,
       openNodes: [],
