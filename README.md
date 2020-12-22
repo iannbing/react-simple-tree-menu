@@ -114,10 +114,10 @@ import '../node_modules/react-simple-tree-menu/dist/main.css';
 
 ```
 
-If you want to extend the minial UI components, they are exported at your disposal.
+If you want to extend the minimal UI components, they are exported at your disposal.
 
 ``` jsx
-// you can import and extend the default minial UI
+// you can import and extend the default minimal UI
 import TreeMenu, { defaultChildren, ItemComponent } from 'react-simple-tree-menu';
 
 // add custom styling to the list item
