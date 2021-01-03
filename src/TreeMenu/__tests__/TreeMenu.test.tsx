@@ -74,9 +74,7 @@ describe('TreeMenu', () => {
   });
   it('should trigger onClickItem when a node is clicked', () => {
     const mockOnClickItem = jest.fn();
-    const wrapper = shallow(
-      <TreeMenu data={mockData} onClickItem={mockOnClickItem} />
-    );
+    const wrapper = shallow(<TreeMenu data={mockData} onClickItem={mockOnClickItem} />);
 
     const targetNode = wrapper.findWhere(node => node.key() === 'releasenotes');
     targetNode.simulate('click');

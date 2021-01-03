@@ -11,7 +11,7 @@ import  {
   MatchSearchFunction,
 } from './walk';
 import { defaultChildren, TreeMenuChildren, TreeMenuItem } from './renderProps';
-import KeyDown from '../KeyDown';
+import KeyDown, { KeyDownProps } from '../KeyDown';
 
 export type TreeMenuProps = {
   data: { [name: string]: TreeNode } | TreeNodeInArray[];
@@ -30,7 +30,8 @@ export type TreeMenuProps = {
   locale?: LocaleFunction;
   matchSearch?: MatchSearchFunction;
   disableKeyboard?: boolean;
-};
+  onKeyDown?: () => any;
+} & Pick<KeyDownProps, 'onKeyDown'>;
 
 type TreeMenuState = {
   openNodes: string[];
@@ -71,7 +72,13 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
     const { initialOpenNodes } = this.props;
     const openNodes =
       (Array.isArray(newOpenNodes) && newOpenNodes) || initialOpenNodes || [];
-    this.setState({ openNodes, searchTerm: '', activeKey: activeKey || '', focusKey: focusKey || activeKey || '' });
+
+    this.setState({
+      openNodes,
+      searchTerm: '',
+      activeKey: activeKey || '',
+      focusKey: focusKey || activeKey || '',
+    });
   };
 
   search = (value: string) => {
@@ -121,7 +128,7 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
   getKeyDownProps = (items: TreeMenuItem[]) => {
     const { onClickItem } = this.props;
     const { focusKey, activeKey, searchTerm } = this.state;
-    
+
     const focusIndex = items.findIndex(item => item.key === (focusKey || activeKey));
     const getFocusKey = (item: TreeMenuItem) => {
       const keyArray = item.key.split('/');
@@ -166,7 +173,7 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
   };
 
   render() {
-    const { children, hasSearch, disableKeyboard } = this.props;
+    const { children, hasSearch, disableKeyboard, onKeyDown } = this.props;
     const { searchTerm } = this.state;
 
     const search = this.search;
@@ -186,7 +193,9 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
     return disableKeyboard ? (
       render(renderProps)
     ) : (
-      <KeyDown {...this.getKeyDownProps(items)}>{render(renderProps)}</KeyDown>
+      <KeyDown {...this.getKeyDownProps(items)} onKeyDown={onKeyDown}>
+        {render(renderProps)}
+      </KeyDown>
     );
   }
 }
