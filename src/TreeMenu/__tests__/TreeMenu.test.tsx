@@ -48,12 +48,22 @@ const mockDataWithSlashes = [
       {
         key: 'b',
         label: 'Item 2 ab',
+        nodes:[
+          {
+            key: 'b/1',
+            label: 'Item 2 ab:1'
+          },
+          {
+            key: 'b/2',
+            label: 'Item 2 ab:2'
+          },
+        ],
       },
       {
         key: 'c',
         label: 'Item 2 ac',
       },
-    ]
+    ],
   },
 ];
 
@@ -96,12 +106,14 @@ describe('TreeMenu', () => {
     const wrapper = mount(
       <TreeMenu
         data={mockDataWithSlashes}
-        openNodes={['item2/a']}
+        openNodes={['item2/a', 'item2/a;b']}
         keySeparator=";"
       />
     );
     const targetNodeWithAlternativeKey = wrapper.findWhere(node => node.key() === 'item2/a;b').get(0);
     expect(targetNodeWithAlternativeKey).not.toBeUndefined();
+    const targetNodeWithAlternativeKey2 = wrapper.findWhere(node => node.key() === 'item2/a;b;b/2').get(0);
+    expect(targetNodeWithAlternativeKey2).not.toBeUndefined();
     const targetNodeWithDefaultKey = wrapper.findWhere(node => node.key() === 'item2/a/b').get(0);
     expect(targetNodeWithDefaultKey).toBeUndefined();
   });
