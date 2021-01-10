@@ -36,6 +36,7 @@ interface WalkProps {
   level?: number;
   openNodes: string[];
   searchTerm: string;
+  keySeparator?: string;
   locale?: LocaleFunction;
   matchSearch?: MatchSearchFunction;
 }
@@ -48,6 +49,7 @@ interface BranchProps {
   node: TreeNode | TreeNodeInArray;
   nodeName: string;
   index?: number;
+  keySeparator?: string;
   locale?: LocaleFunction;
   matchSearch?: MatchSearchFunction;
 }
@@ -68,7 +70,7 @@ const getValidatedData = (data: Data | undefined) =>
 const walk = ({ data, ...props }: WalkProps): Item[] => {
   const validatedData = getValidatedData(data);
 
-  const propsWithDefaultValues = { parent: '', level: 0, ...props };
+  const propsWithDefaultValues = { parent: '', level: 0, keySeparator: '/', ...props };
   const handleArray = (dataAsArray: TreeNodeInArray[]) =>
     dataAsArray.reduce((all: Item[], node: TreeNodeInArray, index) => {
       const branchProps = { node, index, nodeName: node.key, ...propsWithDefaultValues };
@@ -107,7 +109,7 @@ const generateBranch = ({
   const { parent, level, openNodes, searchTerm } = props;
 
   const { nodes, label: rawLabel = 'unknown', ...nodeProps } = node;
-  const key = [parent, nodeName].filter(x => x).join('/');
+  const key = [parent, nodeName].filter(x => x).join(props.keySeparator);
   const hasNodes = validateData(nodes);
   const isOpen = hasNodes && (openNodes.includes(key) || !!searchTerm);
 
