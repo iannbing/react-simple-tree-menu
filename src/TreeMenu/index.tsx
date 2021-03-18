@@ -121,7 +121,7 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
   getKeyDownProps = (items: TreeMenuItem[]) => {
     const { onClickItem } = this.props;
     const { focusKey, activeKey, searchTerm } = this.state;
-    
+
     const focusIndex = items.findIndex(item => item.key === (focusKey || activeKey));
     const getFocusKey = (item: TreeMenuItem) => {
       const keyArray = item.key.split('/');

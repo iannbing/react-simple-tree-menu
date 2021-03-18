@@ -1,5 +1,6 @@
 import isEmpty from 'is-empty';
 import memoize from 'fast-memoize';
+import hash from './fastSerializer';
 
 export interface TreeNodeObject {
   [name: string]: TreeNode;
@@ -123,5 +124,12 @@ const generateBranch = ({
   return isVisible ? [currentItem, ...nextLevelItems] : nextLevelItems;
 };
 
-export const fastWalk = memoize(walk);
+function specialSerializer() {
+  return hash(arguments);
+};
+
+export const fastWalk = memoize(walk, {
+  serializer: specialSerializer
+});
+
 export const slowWalk = walk;

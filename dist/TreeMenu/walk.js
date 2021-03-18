@@ -29,6 +29,7 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
 };
 import isEmpty from 'is-empty';
 import memoize from 'fast-memoize';
+import hash from './fastSerializer';
 var validateData = function (data) { return !!data && !isEmpty(data); };
 var getValidatedData = function (data) {
     return validateData(data) ? data : [];
@@ -83,6 +84,12 @@ var generateBranch = function (_a) {
         : [];
     return isVisible ? __spreadArrays([currentItem], nextLevelItems) : nextLevelItems;
 };
-export var fastWalk = memoize(walk);
+function specialSerializer() {
+    return hash(arguments);
+}
+;
+export var fastWalk = memoize(walk, {
+    serializer: specialSerializer
+});
 export var slowWalk = walk;
 //# sourceMappingURL=walk.js.map
