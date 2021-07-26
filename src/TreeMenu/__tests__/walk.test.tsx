@@ -1,4 +1,4 @@
-import {slowWalk,fastWalk, TreeNode, TreeNodeObject, TreeNodeInArray } from '../walk';
+import { slowWalk, fastWalk, TreeNode, TreeNodeObject, TreeNodeInArray } from '../walk';
 
 const mockDataInObject: TreeNodeObject = {
   atd: {
@@ -97,6 +97,68 @@ const expectedOutcome = [
   },
 ];
 
+const hasNodesMockDataInObject: TreeNodeObject = {
+  A: {
+    label: 'A',
+    index: 0,
+    nodes: {
+      B: {
+        label: 'B',
+        index: 0,
+      },
+    },
+  },
+  C: {
+    label: 'C',
+    index: 1,
+    hasNodes: true,
+  },
+};
+
+const hasNodesMockDataInArray: TreeNodeInArray[] = [
+  {
+    key: 'A',
+    label: 'A',
+    nodes: [
+      {
+        key: 'B',
+        label: 'B',
+        nodes: [],
+      },
+    ],
+  },
+  {
+    key: 'C',
+    label: 'C',
+    hasNodes: true,
+  },
+];
+
+const hasNodesExpectedOutcome = [
+  {
+    index: 0,
+    isOpen: false,
+    key: 'A',
+    label: 'A',
+    level: 0,
+    hasNodes: true,
+    openNodes: [],
+    parent: '',
+    searchTerm: '',
+  },
+  {
+    index: 1,
+    isOpen: false,
+    key: 'C',
+    label: 'C',
+    level: 0,
+    hasNodes: true,
+    openNodes: [],
+    parent: '',
+    searchTerm: '',
+  },
+];
+
 describe('slowWalk', () => {
   it('should transpose the data object to a desired shape', () => {
     const result = slowWalk({ data: mockDataInObject, openNodes: [], searchTerm: '7' });
@@ -105,6 +167,23 @@ describe('slowWalk', () => {
   it('should transpose the data array to a desired shape', () => {
     const result = slowWalk({ data: mockDataInArray, openNodes: [], searchTerm: '7' });
     expect(result).toEqual(expectedOutcome);
+  });
+
+  it('should transpose the data object with supplied hasNodes', () => {
+    const result = slowWalk({
+      data: hasNodesMockDataInObject,
+      openNodes: [],
+      searchTerm: '',
+    });
+    expect(result).toEqual(hasNodesExpectedOutcome);
+  });
+  it('should transpose the data array with supplied hasNodes', () => {
+    const result = slowWalk({
+      data: hasNodesMockDataInArray,
+      openNodes: [],
+      searchTerm: '',
+    });
+    expect(result).toEqual(hasNodesExpectedOutcome);
   });
 });
 
@@ -116,5 +195,22 @@ describe('fastWalk', () => {
   it('should transpose the data array to a desired shape', () => {
     const result = fastWalk({ data: mockDataInArray, openNodes: [], searchTerm: '7' });
     expect(result).toEqual(expectedOutcome);
+  });
+
+  it('should transpose the data object with supplied hasNodes', () => {
+    const result = fastWalk({
+      data: hasNodesMockDataInObject,
+      openNodes: [],
+      searchTerm: '',
+    });
+    expect(result).toEqual(hasNodesExpectedOutcome);
+  });
+  it('should transpose the data array with supplied hasNodes', () => {
+    const result = fastWalk({
+      data: hasNodesMockDataInArray,
+      openNodes: [],
+      searchTerm: '',
+    });
+    expect(result).toEqual(hasNodesExpectedOutcome);
   });
 });

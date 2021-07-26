@@ -183,6 +183,7 @@ Note the difference between the state `active` and `focused`. ENTER is equivalen
 | -------- | ---------------------------------------------------------------------------------------------------------------------- | --------------------------------- | ------- |
 | label    | the rendered text of a Node                                                                                            | string                            | ''      |
 | index    | a number that defines the rendering order of this node on the same level; this is not needed if `data` is `TreeNode[]` | number                            | -       |
+| hasNodes    | If passed, its value will be used to decide whether the node can be expanded. Otherwise, it will be decided based on if `nodes` contains any value | boolean                            | -       |
 | nodes    | a node without this property means that it is the last child of its branch                                             | {[string]:TreeNode} \| TreeNode[] | -       |
 | ...other | User defined props                                                                                                     | any                               | -       |
 
@@ -192,6 +193,7 @@ Note the difference between the state `active` and `focused`. ENTER is equivalen
 | -------- | ---------------------------------------------------------------------------------------------------------------------- | --------------------------------- | ------- |
 | key      | Node name                                                                                                              | string                            | -       |
 | label    | the rendered text of a Node                                                                                            | string                            | ''      |
+| hasNodes    | If passed, its value will be used to decide whether the node can be expanded. Otherwise, it will be decided based on if `nodes` contains any value | boolean     
 | nodes    | a node without this property means that it is the last child of its branch                                             | {[string]:TreeNode} \| TreeNode[] | -       |
 | ...other | User defined props                                                                                                     | any                               | -       |
 

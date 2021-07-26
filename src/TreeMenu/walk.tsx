@@ -10,16 +10,20 @@ interface LocaleFunctionProps {
   [name: string]: any;
 }
 
-interface MatchSearchFunctionProps extends LocaleFunctionProps {
+interface OverrideProps extends LocaleFunctionProps {
+  hasNodes?: boolean;
+}
+
+interface MatchSearchFunctionProps extends OverrideProps {
   searchTerm: string;
 }
 
-export interface TreeNode extends LocaleFunctionProps {
+export interface TreeNode extends OverrideProps {
   index: number;
   nodes?: TreeNodeObject;
 }
 
-export interface TreeNodeInArray extends LocaleFunctionProps {
+export interface TreeNodeInArray extends OverrideProps {
   key: string;
   nodes?: TreeNodeInArray[];
 }
@@ -106,9 +110,14 @@ const generateBranch = ({
 }: BranchProps): Item[] => {
   const { parent, level, openNodes, searchTerm } = props;
 
-  const { nodes, label: rawLabel = 'unknown', ...nodeProps } = node;
+  const {
+    nodes,
+    label: rawLabel = 'unknown',
+    hasNodes: nodeHasNodes,
+    ...nodeProps
+  } = node;
   const key = [parent, nodeName].filter(x => x).join('/');
-  const hasNodes = validateData(nodes);
+  const hasNodes = nodeHasNodes || validateData(nodes);
   const isOpen = hasNodes && (openNodes.includes(key) || !!searchTerm);
 
   const label = locale({ label: rawLabel, ...nodeProps });
