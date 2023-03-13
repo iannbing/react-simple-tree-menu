@@ -1,124 +1,77 @@
 {
-  "name": "react-simple-tree-menu",
-  "version": "1.1.18",
-  "description": "A simple React tree menu component",
-  "keywords": [
-    "react",
-    "tree",
-    "menu",
-    "react-component",
-    "tree menu",
-    "render-props",
-    "control-props",
-    "downshift"
-  ],
-  "main": "dist/main.cjs.js",
-  "module": "dist/main.esm.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist/"
-  ],
-  "scripts": {
-    "test": "jest",
-    "test:ci": "jest --ci --runInBand --reporters=jest-junit",
-    "build:types": "tsc --emitDeclarationOnly",
-    "build:js": "rollup -c",
-    "build": "npm run build:types && npm run build:js && npm run sass-build",
-    "style:compile-sass": "node-sass-chokidar --source-map true src/sass/ -o dist",
-    "style:autoprefixer": "postcss dist/*.css --use autoprefixer -d dist",
-    "sass-build": "npm-run-all -p style:*",
-    "storybook": "start-storybook -p 9001 -c .storybook",
-    "build-storybook": "build-storybook && node .storybook/deploy-helper.js",
-    "deploy-storybook": "storybook-to-ghpages -e storybook-static",
-    "publish:beta": "npm publish --tag beta",
-    "bump-version": "npm version",
-    "bump-version:beta": "npm version prerelease --preid=rc"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/iannbing/react-simple-tree-menu.git"
-  },
-  "author": "Huang-Ming Chang <huang.m.chang@gmail.com>",
+  "version": "1.2.0",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/iannbing/react-simple-tree-menu/issues"
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "engines": {
+    "node": ">=10"
   },
-  "homepage": "https://github.com/iannbing/react-simple-tree-menu#readme",
-  "devDependencies": {
-    "@babel/core": "^7.10.2",
-    "@babel/plugin-proposal-class-properties": "^7.7.4",
-    "@babel/preset-env": "^7.7.6",
-    "@babel/preset-react": "^7.7.4",
-    "@babel/preset-typescript": "^7.7.4",
-    "@rollup/plugin-strip": "^1.3.3",
-    "@storybook/addon-actions": "^5.2.8",
-    "@storybook/addon-info": "^5.2.8",
-    "@storybook/addon-links": "^5.2.8",
-    "@storybook/addons": "^5.2.8",
-    "@storybook/react": "^5.2.8",
-    "@storybook/storybook-deployer": "^2.8.1",
-    "@storybook/theming": "^5.2.8",
-    "@types/classnames": "^2.2.8",
-    "@types/enzyme": "^3.1.15",
-    "@types/jest": "^24.0.15",
-    "@types/react": "^16.7.18",
-    "@types/react-dom": "^16.0.11",
-    "autoprefixer": "^9.6.0",
-    "awesome-typescript-loader": "^5.2.1",
-    "babel-loader": "^8.1.0",
-    "babel-plugin-import": "^1.11.2",
-    "babel-preset-react-app": "^9.1.2",
-    "bootstrap": "^4.3.1",
-    "chokidar-cli": "^2.1.0",
-    "clean-webpack-plugin": "^1.0.0",
-    "cross-env": "^5.2.0",
-    "css-loader": "^1.0.1",
-    "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.2",
-    "enzyme-to-json": "^3.4.3",
-    "escape-string-regexp": "^2.0.0",
-    "fs-extra": "^8.0.1",
-    "jest": "^26.0.1",
-    "jest-junit": "^6.4.0",
-    "jquery": "^3.5.1",
-    "mini-css-extract-plugin": "^0.7.0",
-    "node-sass": "^4.12.0",
-    "node-sass-chokidar": "^1.5.0",
-    "npm-run-all": "^4.1.5",
-    "postcss-cli": "^7.1.1",
-    "prettier": "^1.15.2",
-    "react": "^16.6.3",
-    "react-dom": "^16.6.3",
-    "react-test-renderer": "^16.7.0",
-    "reactstrap": "^8.0.0",
-    "rollup": "^1.27.10",
-    "rollup-plugin-babel": "^4.3.3",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-delete": "^1.1.0",
-    "rollup-plugin-jsx": "^1.0.3",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-typescript2": "^0.25.3",
-    "sass-loader": "^7.1.0",
-    "source-map-loader": "^0.2.4",
-    "style-loader": "^0.23.1",
-    "stylelint": "^13.6.1",
-    "stylelint-config-prettier": "^5.2.0",
-    "stylelint-config-standard": "^18.3.0",
-    "stylelint-scss": "^3.8.0",
-    "ts-jest": "^26.1.0",
-    "typescript": "^3.9.5"
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "tsdx test --passWithNoTests",
+    "lint": "tsdx lint",
+    "prepare": "tsdx build",
+    "size": "size-limit",
+    "analyze": "size-limit --why",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "peerDependencies": {
-    "react": ">=16.6.3",
-    "react-dom": ">=16.6.3"
+    "react": ">=16"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "name": "react-simple-tree-menu",
+  "author": "Huang-Ming Chang",
+  "module": "dist/react-simple-tree-menu.esm.js",
+  "size-limit": [
+    {
+      "path": "dist/react-simple-tree-menu.cjs.production.min.js",
+      "limit": "10 KB"
+    },
+    {
+      "path": "dist/react-simple-tree-menu.esm.js",
+      "limit": "10 KB"
+    }
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.21.0",
+    "@size-limit/preset-small-lib": "^8.2.4",
+    "@storybook/addon-essentials": "^6.5.16",
+    "@storybook/addon-info": "^5.3.21",
+    "@storybook/addon-links": "^6.5.16",
+    "@storybook/addons": "^6.5.16",
+    "@storybook/react": "^6.5.16",
+    "@types/react": "^18.0.28",
+    "@types/react-dom": "^18.0.11",
+    "babel-loader": "^9.1.2",
+    "husky": "^8.0.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-is": "^18.2.0",
+    "size-limit": "^8.2.4",
+    "tsdx": "^0.14.1",
+    "tslib": "^2.5.0",
+    "typescript": "^4.9.5"
   },
   "dependencies": {
-    "classnames": "^2.2.6",
-    "fast-memoize": "^2.5.1",
+    "classnames": "^2.3.2",
+    "fast-memoize": "^2.5.2",
     "is-empty": "^1.2.0",
     "tiny-debounce": "^0.1.1"
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }

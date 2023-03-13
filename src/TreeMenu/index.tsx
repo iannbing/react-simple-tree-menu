@@ -1,17 +1,13 @@
 import React from 'react';
 import debounce from 'tiny-debounce';
 
-import  {
-  fastWalk,
-  slowWalk,
-  TreeNode,
-  Item,
-  TreeNodeInArray,
-  LocaleFunction,
-  MatchSearchFunction,
-} from './walk';
-import { defaultChildren, TreeMenuChildren, TreeMenuItem } from './renderProps';
 import KeyDown from '../KeyDown';
+import { defaultChildren, TreeMenuChildren, TreeMenuItem } from './renderProps';
+import {
+  fastWalk, Item, LocaleFunction,
+  MatchSearchFunction, slowWalk,
+  TreeNode, TreeNodeInArray
+} from './walk';
 
 export type TreeMenuProps = {
   data: { [name: string]: TreeNode } | TreeNodeInArray[];
@@ -120,8 +116,8 @@ class TreeMenu extends React.Component<TreeMenuProps, TreeMenuState> {
 
   getKeyDownProps = (items: TreeMenuItem[]) => {
     const { onClickItem } = this.props;
-    const { focusKey, activeKey, searchTerm } = this.state;
-    
+    const { focusKey, activeKey,  } = this.state;
+
     const focusIndex = items.findIndex(item => item.key === (focusKey || activeKey));
     const getFocusKey = (item: TreeMenuItem) => {
       const keyArray = item.key.split('/');
