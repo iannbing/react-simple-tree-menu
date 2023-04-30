@@ -55,7 +55,7 @@
     "@storybook/addon-info": "^5.2.8",
     "@storybook/addon-links": "^5.2.8",
     "@storybook/addons": "^5.2.8",
-    "@storybook/react": "^5.2.8",
+    "@storybook/react": "^7.0.7",
     "@storybook/storybook-deployer": "^2.8.1",
     "@storybook/theming": "^5.2.8",
     "@types/classnames": "^2.2.8",
