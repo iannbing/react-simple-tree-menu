@@ -81,13 +81,22 @@ export function walk(props: WalkProps): Item[] {
     //   - `index`    — object-format sort key, meaningful only pre-walk
     //   - `key`      — array-format's own node key; we emit the computed path
     // Anything else a consumer attached (url, icon, whatever) flows through.
+    //
+    // Cast to a permissive record: the public types forbid `index` on
+    // array-form nodes and `key` on object-form, but at runtime we may see
+    // either so we destructure both and discard them uniformly.
     const {
       nodes,
       label: rawLabel = DEFAULT_LABEL,
       index: _discardIndex,
       key: _discardKey,
       ...custom
-    } = node as TreeNode & TreeNodeInArray;
+    } = node as Record<string, unknown> & {
+      nodes?: TreeNodeObject | TreeNodeInArray[];
+      label?: string;
+      index?: number;
+      key?: string;
+    };
     const key = parentKey
       ? parentKey + KEY_DELIMITER + nodeKey
       : nodeKey;

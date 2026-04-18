@@ -18,8 +18,14 @@ export interface MatchSearchFunctionProps extends LocaleFunctionProps {
   searchTerm: string;
 }
 
+/**
+ * Object-format tree node. The enclosing object's property name is the
+ * node's key, and `index` orders siblings inside walk(). `key` is
+ * forbidden here — it lives on the outer object, not the value.
+ */
 export interface TreeNode extends LocaleFunctionProps {
   index: number;
+  key?: never;
   nodes?: TreeNodeObject;
 }
 
@@ -27,8 +33,13 @@ export interface TreeNodeObject {
   [name: string]: TreeNode;
 }
 
+/**
+ * Array-format tree node. Siblings are ordered by array position, so
+ * `index` is forbidden — it would be meaningless and silently ignored.
+ */
 export interface TreeNodeInArray extends LocaleFunctionProps {
   key: string;
+  index?: never;
   nodes?: TreeNodeInArray[];
 }
 

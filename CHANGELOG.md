@@ -34,6 +34,13 @@ with a single `npm install` and no code changes.
   props on `ItemComponent` in a custom render-prop.
 - **Default active color** softened from `#179ed3` to indigo-500
   (`#6366f1`). Override `--rstm-active-bg` for the old hue.
+- **`TreeNode` and `TreeNodeInArray` types tightened.**
+  `TreeNode` (object-form) now forbids `key` via `key?: never`, and
+  `TreeNodeInArray` (array-form) forbids `index` via `index?: never`.
+  Under v1 both fields were silently accepted on the wrong shape via
+  the open index signature. v2 rejects the mismatch at compile time —
+  correctly typed v1 code is unaffected; code that accidentally set
+  both now gets a clear TS error pointing at the one that's ignored.
 
 None of the above changes the public `.d.ts` export shape for
 symbols or props that remained.
