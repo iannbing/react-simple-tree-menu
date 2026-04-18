@@ -233,20 +233,20 @@ describe('search', () => {
 
   it('hasSearch renders a search input by default', () => {
     render(<TreeMenu data={arrayData} />);
-    expect(screen.getByPlaceholderText('Type and search')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Search')).toBeInTheDocument();
   });
 
   it('hasSearch={false} hides the search input', () => {
     render(<TreeMenu data={arrayData} hasSearch={false} />);
     expect(
-      screen.queryByPlaceholderText('Type and search')
+      screen.queryByPlaceholderText('Search')
     ).not.toBeInTheDocument();
   });
 
   it('typing in the search box filters items after the debounce window', async () => {
     const user = setupWithFakeTimers();
     render(<TreeMenu data={arrayData} debounceTime={125} />);
-    await user.type(screen.getByPlaceholderText('Type and search'), 'carrot');
+    await user.type(screen.getByPlaceholderText('Search'), 'carrot');
     act(() => {
       vi.advanceTimersByTime(200);
     });
@@ -257,7 +257,7 @@ describe('search', () => {
   it('auto-opens ancestors of matching items during search', async () => {
     const user = setupWithFakeTimers();
     render(<TreeMenu data={arrayData} debounceTime={0} />);
-    await user.type(screen.getByPlaceholderText('Type and search'), 'apple');
+    await user.type(screen.getByPlaceholderText('Search'), 'apple');
     act(() => {
       vi.advanceTimersByTime(50);
     });
@@ -304,7 +304,7 @@ describe('locale + matchSearch', () => {
       <TreeMenu data={localData} matchSearch={matchSearch} debounceTime={0} />
     );
     await user.type(
-      screen.getByPlaceholderText('Type and search'),
+      screen.getByPlaceholderText('Search'),
       'Fruits'
     );
     act(() => {
@@ -312,8 +312,8 @@ describe('locale + matchSearch', () => {
     });
     expect(screen.getByText('Fruits')).toBeInTheDocument();
     // "Fru" should NOT match under the exact-match custom rule.
-    await user.clear(screen.getByPlaceholderText('Type and search'));
-    await user.type(screen.getByPlaceholderText('Type and search'), 'Fru');
+    await user.clear(screen.getByPlaceholderText('Search'));
+    await user.type(screen.getByPlaceholderText('Search'), 'Fru');
     act(() => {
       vi.advanceTimersByTime(50);
     });

@@ -5,18 +5,29 @@
 // Memoized — renders only when the Item (and its wrapper props) change.
 
 import { memo, type CSSProperties, type MouseEvent, type ReactNode } from 'react';
-import type { TreeMenuItem } from './types';
+import type { TreeMenuClassNames, TreeMenuItem } from './types';
 
+// Left-padding math. CSS handles vertical padding, cursor, hover, etc.;
+// only horizontal indentation varies per-level so we inject it inline.
+// Tighter than v1's 0.75 + 2/1.75 — looks less cramped at deep levels.
 const DEFAULT_PADDING = 0.75;
-const ICON_SIZE = 2;
-const LEVEL_SPACE = 1.75;
+const LEVEL_SPACE = 1;
+const LEAF_OFFSET = 1.5; // extra indent for leaf nodes (no toggle icon)
 
-// ItemComponentProps = TreeMenuItem + three renderer-only props. posInSet
-// and setSize already live on Item via walk(), so no need to re-declare.
+// Subset of TreeMenuClassNames this component cares about.
+export type ItemClassNames = Pick<
+  TreeMenuClassNames,
+  'item' | 'active' | 'focused' | 'toggleIcon' | 'toggleIconSymbol'
+>;
+
+// ItemComponentProps = TreeMenuItem + renderer-only props. posInSet and
+// setSize already live on Item via walk(), so no need to re-declare.
 export interface ItemComponentProps extends TreeMenuItem {
   openedIcon?: ReactNode;
   closedIcon?: ReactNode;
   style?: CSSProperties;
+  /** Appended to the `rstm-*` anchor classes. */
+  classNames?: ItemClassNames | undefined;
 }
 
 function cx(...tokens: Array<string | false | null | undefined>): string {
@@ -36,18 +47,22 @@ function ItemComponentImpl({
   toggleNode,
   active,
   focused,
-  openedIcon = '-',
-  closedIcon = '+',
+  openedIcon = '\u25BE', // ▾  down-pointing small triangle
+  closedIcon = '\u25B8', // ▸  right-pointing small triangle
   label = 'unknown',
   style,
   posInSet,
   setSize,
+  classNames,
 }: ItemComponentProps) {
   const className = cx(
     'rstm-tree-item',
     `rstm-tree-item-level${level}`,
     active && 'rstm-tree-item--active',
-    focused && 'rstm-tree-item--focused'
+    focused && 'rstm-tree-item--focused',
+    classNames?.item,
+    active && classNames?.active,
+    focused && classNames?.focused
   );
 
   const handleToggleClick = (e: MouseEvent<HTMLDivElement>) => {
@@ -74,7 +89,7 @@ function ItemComponentImpl({
       className={className}
       style={{
         paddingLeft: `${
-          DEFAULT_PADDING + ICON_SIZE * (hasNodes ? 0 : 1) + level * LEVEL_SPACE
+          DEFAULT_PADDING + (hasNodes ? 0 : LEAF_OFFSET) + level * LEVEL_SPACE
         }rem`,
         ...style,
       }}
@@ -85,8 +100,18 @@ function ItemComponentImpl({
         // already drive expand/collapse via KeyDown. The div is a mouse-only
         // convenience; screen reader users navigate via aria-expanded.
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-        <div className="rstm-toggle-icon" onClick={handleToggleClick}>
-          <div className="rstm-toggle-icon-symbol" role="img" aria-label="Toggle">
+        <div
+          className={cx('rstm-toggle-icon', classNames?.toggleIcon)}
+          onClick={handleToggleClick}
+        >
+          <div
+            className={cx(
+              'rstm-toggle-icon-symbol',
+              classNames?.toggleIconSymbol
+            )}
+            role="img"
+            aria-label="Toggle"
+          >
             {isOpen ? openedIcon : closedIcon}
           </div>
         </div>

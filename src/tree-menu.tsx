@@ -24,7 +24,9 @@ import type {
   MatchSearchFunction,
   Item,
   TreeMenuChildren,
+  TreeMenuClassNames,
   TreeMenuItem,
+  TreeMenuLabels,
 } from './types';
 
 export interface TreeMenuProps {
@@ -52,6 +54,19 @@ export interface TreeMenuProps {
    */
   matchSearch?: MatchSearchFunction;
   disableKeyboard?: boolean;
+  /**
+   * Per-slot CSS class names to append alongside the default `rstm-*`
+   * anchors. Use this to style the default UI with Tailwind (or any other
+   * utility framework) without importing the library's CSS file — the
+   * `rstm-*` anchors remain as inert strings and your utility classes
+   * provide the styles.
+   */
+  classNames?: TreeMenuClassNames;
+  /**
+   * Human-readable copy for the default UI. Use for i18n or brand voice
+   * without writing a custom `children` render-prop.
+   */
+  labels?: TreeMenuLabels;
 }
 
 // Imperative API for consumers who prefer refs over render-props for the
@@ -90,6 +105,8 @@ export const TreeMenu = forwardRef<TreeMenuHandle, TreeMenuProps>(
       resetOpenNodesOnDataUpdate = false,
       hasSearch = true,
       onClickItem = defaultOnClickItem,
+      classNames,
+      labels,
       debounceTime = 125,
       children = defaultChildren,
       locale,
@@ -245,8 +262,15 @@ export const TreeMenu = forwardRef<TreeMenuHandle, TreeMenuProps>(
     };
 
     const renderProps = hasSearch
-      ? { search, searchTerm: state.searchTerm, items, resetOpenNodes }
-      : { items, resetOpenNodes };
+      ? {
+          search,
+          searchTerm: state.searchTerm,
+          items,
+          resetOpenNodes,
+          classNames,
+          labels,
+        }
+      : { items, resetOpenNodes, classNames, labels };
 
     const rendered = children(renderProps);
 

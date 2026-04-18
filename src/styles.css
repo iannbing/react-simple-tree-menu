@@ -1,61 +1,149 @@
-/* react-simple-tree-menu default styles. Hand-written plain CSS — no
-   preprocessor, no runtime dep. Exposed via the package subpath
-   `react-simple-tree-menu/styles`.
+/* react-simple-tree-menu default styles. Single hand-written file — no
+   preprocessor, no runtime dep.
 
-   Theming: override any of the CSS custom properties on .rstm-tree-item-group
-   or a parent selector. */
+   Theming model (SPEC §15):
+   - Every color / typography / spacing value is a CSS custom property
+     on `.rstm-tree-item-group`.
+   - Each default resolves via a `var()` chain that reads Tailwind v4's
+     auto-exposed theme variables when present, then falls back to the
+     library's own palette.
+   - Tailwind v4 users therefore get brand-aligned colors with zero
+     config beyond `import 'react-simple-tree-menu/styles'`.
+   - Everyone else gets sensible, modern defaults; override any token
+     in their own CSS. */
+
+/* Shared token scope. `:where()` has zero specificity so consumers can
+   still override any `--rstm-*` via a direct selector (e.g. their own
+   `.rstm-tree-item-group { --rstm-active-bg: ... }`). Tokens are
+   declared on both anchor classes so `.rstm-search`, a sibling of
+   `.rstm-tree-item-group` in the defaultChildren fragment, can still
+   read them. */
+:where(.rstm-tree-item-group, .rstm-search) {
+  /* Scale & spacing */
+  --rstm-icon-size: 1rem;
+  --rstm-radius: 0.25rem;
+  /* Instant state flips by default. Consumers can opt into animation by
+     overriding this token (e.g. `80ms ease-out` for a subtle fade). */
+  --rstm-transition: 0ms;
+
+  /* Typography — default to the consumer's body font when available
+     (Tailwind v4 exposes this), else the system sans-serif stack. */
+  --rstm-font-family: var(
+    --font-sans,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    sans-serif
+  );
+
+  /* Colors — prefer Tailwind theme vars if the consumer is on v4,
+     else the library's baseline palette. */
+  --rstm-text-color: var(--color-gray-800, #1f2937);
+  --rstm-muted-color: var(--color-gray-500, #6b7280);
+  --rstm-border-color: var(--color-gray-200, #e5e7eb);
+  --rstm-hover-bg: var(--color-gray-100, #f3f4f6);
+  --rstm-active-bg: var(--color-primary, var(--color-indigo-500, #6366f1));
+  --rstm-active-fg: var(--color-white, #fff);
+  --rstm-focus-ring-color: var(
+    --color-primary,
+    var(--color-indigo-400, #818cf8)
+  );
+  --rstm-focus-shadow: inset 0 0 0 2px var(--rstm-focus-ring-color);
+}
 
 .rstm-tree-item-group {
-  --rstm-icon-size: 2rem;
-  --rstm-default-padding: 0.75rem;
-  --rstm-border-color: #ccc;
-  --rstm-text-color: #333;
-  --rstm-active-bg: #179ed3;
-  --rstm-active-fg: #fff;
-  --rstm-focus-shadow: 0 0 5px 0 #222;
-
-  list-style-type: none;
-  padding-left: 0;
-  border-top: 1px solid var(--rstm-border-color);
+  font-family: var(--rstm-font-family);
+  color: var(--rstm-text-color);
+  list-style: none;
+  margin: 0;
+  padding: 0.25rem;
   text-align: left;
-  width: 100%;
-}
-
-.rstm-toggle-icon {
-  display: inline-block;
-}
-
-.rstm-toggle-icon-symbol {
-  width: var(--rstm-icon-size, 2rem);
-  height: var(--rstm-icon-size, 2rem);
-  text-align: center;
-  line-height: var(--rstm-icon-size, 2rem);
 }
 
 .rstm-tree-item {
-  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
   cursor: pointer;
-  color: var(--rstm-text-color, #333);
-  background: none;
-  border-bottom: 1px solid var(--rstm-border-color, #ccc);
-  box-shadow: none;
-  z-index: unset;
-  position: relative;
+  border-radius: var(--rstm-radius);
+  user-select: none;
+  transition:
+    background-color var(--rstm-transition),
+    color var(--rstm-transition),
+    box-shadow var(--rstm-transition);
 }
 
-.rstm-tree-item--active {
-  color: var(--rstm-active-fg, #fff);
-  background: var(--rstm-active-bg, #179ed3);
-  border-bottom: none;
+.rstm-tree-item:hover {
+  background-color: var(--rstm-hover-bg);
+}
+
+.rstm-tree-item--active,
+.rstm-tree-item--active:hover {
+  color: var(--rstm-active-fg);
+  background-color: var(--rstm-active-bg);
 }
 
 .rstm-tree-item--focused {
-  box-shadow: var(--rstm-focus-shadow, 0 0 5px 0 #222);
-  z-index: 999;
+  box-shadow: var(--rstm-focus-shadow);
+  outline: none;
+}
+
+.rstm-toggle-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--rstm-icon-size);
+  height: var(--rstm-icon-size);
+  color: var(--rstm-muted-color);
+  transition: transform var(--rstm-transition);
+}
+
+.rstm-tree-item--active .rstm-toggle-icon {
+  color: currentColor;
+}
+
+.rstm-toggle-icon-symbol {
+  display: block;
+  font-size: 1.2em;
+  line-height: 1;
 }
 
 .rstm-search {
-  padding: 1rem 1.5rem;
-  border: none;
   width: 100%;
+  /* Match .rstm-tree-item's padding exactly so the search box aligns
+     visually with the tree items it sits above. */
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.25rem;
+  border: 1px solid var(--rstm-border-color);
+  border-radius: var(--rstm-radius);
+  background: transparent;
+  /* Explicit typography — the <input> is a sibling of .rstm-tree-item-group
+     in the defaultChildren fragment, so `font: inherit` alone inherits
+     from whatever ancestor the consumer placed us in (browser serif
+     default in a bare host). Pull the tokens directly from the library so
+     the search always matches the tree list regardless of host font. */
+  color: var(--rstm-text-color);
+  font-family: var(--rstm-font-family);
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  transition:
+    border-color var(--rstm-transition),
+    box-shadow var(--rstm-transition);
+}
+
+.rstm-search:focus {
+  outline: none;
+  border-color: var(--rstm-focus-ring-color);
+  box-shadow: 0 0 0 3px rgb(from var(--rstm-focus-ring-color) r g b / 0.2);
+}
+
+.rstm-search::placeholder {
+  color: var(--rstm-muted-color);
 }

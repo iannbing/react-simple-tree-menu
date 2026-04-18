@@ -10,6 +10,8 @@ export type { TreeMenuProps, TreeMenuHandle } from './tree-menu';
 export type {
   TreeMenuItem,
   TreeMenuChildren,
+  TreeMenuClassNames,
+  TreeMenuLabels,
   TreeNode,
   TreeNodeObject,
   TreeNodeInArray,

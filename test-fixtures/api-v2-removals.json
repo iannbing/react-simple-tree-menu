@@ -11,6 +11,24 @@
   },
   "removedExports": [],
   "renamedExports": [],
-  "addedExports": [],
-  "addedProps": {}
+  "addedExports": [
+    {
+      "name": "TreeMenuHandle",
+      "reason": "Imperative handle type for the `useImperativeHandle` ref shape. Additive — consumers who don't use refs aren't affected."
+    },
+    {
+      "name": "TreeMenuClassNames",
+      "reason": "Per-slot CSS class names appended to the default `rstm-*` anchors. Enables headless Tailwind-style usage without importing the default CSS."
+    },
+    {
+      "name": "TreeMenuLabels",
+      "reason": "i18n-friendly label overrides for the default UI (search placeholder / aria-label)."
+    }
+  ],
+  "addedProps": {
+    "TreeMenuProps": {
+      "classNames": "Optional per-slot class names appended to the default `rstm-*` anchors (M4.5c).",
+      "labels": "Optional i18n-friendly copy overrides for default UI strings (M4.5d)."
+    }
+  }
 }

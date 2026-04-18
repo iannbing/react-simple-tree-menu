@@ -61,6 +61,46 @@ export interface TreeMenuItem extends Item {
 export type LocaleFunction = (props: LocaleFunctionProps) => string;
 export type MatchSearchFunction = (props: MatchSearchFunctionProps) => boolean;
 
+/**
+ * Human-readable copy for the default UI. Used for i18n / brand voice
+ * without dropping into custom render-props.
+ */
+export interface TreeMenuLabels {
+  /** Placeholder inside the search input. Default: `"Search"`. */
+  searchPlaceholder?: string | undefined;
+  /** `aria-label` on the search input. Default: `"Search"`. */
+  searchAriaLabel?: string | undefined;
+}
+
+/**
+ * Optional per-slot class names that are **appended** to the library's
+ * default `rstm-*` anchors. Intended for consumers who want Tailwind (or
+ * any other utility-class) styling without importing the default CSS.
+ *
+ * The `rstm-*` classes remain on the DOM regardless; they're inert
+ * strings when the default CSS isn't imported, so there's zero style
+ * cost but backward-compat overrides on those selectors keep working.
+ */
+// Internal convenience — fields annotated with `| undefined` so they
+// round-trip through destructure/spread under exactOptionalPropertyTypes.
+// Public-facing, this is equivalent to `{ [slot]?: string }`.
+export interface TreeMenuClassNames {
+  /** `<ul>` tree container */
+  group?: string | undefined;
+  /** `<li>` item in any state */
+  item?: string | undefined;
+  /** Appended to `item` when the item is active */
+  active?: string | undefined;
+  /** Appended to `item` when the item is keyboard-focused */
+  focused?: string | undefined;
+  /** `<input type="search">` */
+  search?: string | undefined;
+  /** The `<div>` wrapper around the toggle icon (on items with children) */
+  toggleIcon?: string | undefined;
+  /** The inner `<div role="img">` that holds the open/closed symbol */
+  toggleIconSymbol?: string | undefined;
+}
+
 export type TreeMenuChildren = (props: {
   search?: (term: string) => void;
   searchTerm?: string;
@@ -70,4 +110,8 @@ export type TreeMenuChildren = (props: {
     activeKey?: string,
     focusKey?: string
   ) => void;
+  /** Passed through from TreeMenu's `classNames` prop. */
+  classNames?: TreeMenuClassNames | undefined;
+  /** Passed through from TreeMenu's `labels` prop. */
+  labels?: TreeMenuLabels | undefined;
 }) => ReactElement;
