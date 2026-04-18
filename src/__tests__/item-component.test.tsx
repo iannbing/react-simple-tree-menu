@@ -96,6 +96,21 @@ describe('ItemComponent (new, direct) — SPEC §12', () => {
     expect(screen.getByRole('treeitem').getAttribute('tabindex')).toBe('0');
   });
 
+  it('moves DOM focus to the <li> when `focused` flips true', () => {
+    const { rerender } = renderIn({ focused: false });
+    const treeitem = screen.getByRole('treeitem');
+    // Focus starts on <body> (nothing focused).
+    expect(document.activeElement).not.toBe(treeitem);
+    rerender(
+      <ul>
+        <ItemComponent {...(baseItem as unknown as TreeMenuItem)} focused />
+      </ul>
+    );
+    // After focused flips true, DOM focus must land on the treeitem —
+    // screen readers rely on the focus event to announce the row.
+    expect(document.activeElement).toBe(treeitem);
+  });
+
   it('preserves legacy rstm-* class names', () => {
     renderIn({ level: 2, active: true, focused: true });
     const treeitem = screen.getByRole('treeitem');

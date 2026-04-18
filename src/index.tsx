@@ -4,9 +4,11 @@ export { TreeMenu as default } from './tree-menu';
 export { ItemComponent } from './item-component';
 export { defaultChildren } from './default-children';
 export { KeyDown } from './key-down';
+export { unflatten } from './tree/unflatten';
 
 // Types
 export type { TreeMenuProps, TreeMenuHandle } from './tree-menu';
+export type { UnflattenResult } from './tree/unflatten';
 export type {
   TreeMenuItem,
   TreeMenuChildren,

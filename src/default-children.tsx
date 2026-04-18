@@ -8,6 +8,7 @@
 
 import { useEffect, useState, type ChangeEvent, type ReactElement } from 'react';
 import { ItemComponent, type ItemClassNames } from './item-component';
+import { unflatten } from './tree/unflatten';
 import type {
   TreeMenuChildren,
   TreeMenuClassNames,
@@ -39,32 +40,6 @@ const toItemClassNames = (
     toggleIcon,
     toggleIconSymbol,
   }))(cn);
-
-// Reconstruct the tree from the flat items[] via slash-delimited key
-// paths. The flat shape is load-bearing for virtualization / custom
-// render-props; this is a pure local operation used only when rendering
-// the default UI as a nested <ul>/<li>/<ul> structure.
-interface UnflattenResult {
-  roots: TreeMenuItem[];
-  childrenByParent: Map<string, TreeMenuItem[]>;
-}
-
-function unflatten(items: TreeMenuItem[]): UnflattenResult {
-  const roots: TreeMenuItem[] = [];
-  const childrenByParent = new Map<string, TreeMenuItem[]>();
-  for (const item of items) {
-    const slash = item.key.lastIndexOf('/');
-    if (slash === -1) {
-      roots.push(item);
-    } else {
-      const parent = item.key.slice(0, slash);
-      const siblings = childrenByParent.get(parent);
-      if (siblings) siblings.push(item);
-      else childrenByParent.set(parent, [item]);
-    }
-  }
-  return { roots, childrenByParent };
-}
 
 function renderNode(
   item: TreeMenuItem,

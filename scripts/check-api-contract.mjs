@@ -78,6 +78,9 @@ const expectedExports = [
   'LocaleFunction',
   'MatchSearchFunction',
   'Item',
+  // v2 additions — mirrored in api-v2-removals.json `addedExports`.
+  'unflatten',
+  'UnflattenResult',
 ];
 
 for (const name of expectedExports) {

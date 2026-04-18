@@ -1,11 +1,10 @@
-// Forward suite. These tests assert v2-only behavior — WAI-ARIA tree
-// pattern, roving tabindex, SSR safety. They are **red against legacy**
-// (marked with `.fails`) and will turn green incrementally as new modules
-// land in M4–M5.
+// Forward suite. Asserts v2-only behavior — WAI-ARIA tree pattern,
+// roving tabindex, SSR safety — against the new implementation.
 //
-// TDD discipline: when a test starts passing (i.e., M4 adds the behavior),
-// vitest will alert us via "expected to fail but passed" and we remove the
-// `.fails` marker. No implementation commit merges without this step.
+// Historical note: during the strangulation window (M2–M4) these tests
+// were marked `.fails` (red against the still-shipping legacy code) and
+// flipped green incrementally as new modules landed. All `.fails`
+// markers were lifted at M5 cutover.
 
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';

@@ -73,28 +73,14 @@ need full canonical compliance, use Pattern B or add `aria-owns`.
 
 ## Pattern B — Nested DOM (canonical)
 
-Reconstruct hierarchy from the slash-joined `key`. This matches exactly
-what the built-in `defaultChildren` does internally.
+Reconstruct hierarchy from the slash-joined `key`. The library exposes
+`unflatten` — the same helper `defaultChildren` uses internally — so you
+don't need to re-implement the grouping:
 
 ```tsx
+import TreeMenu, { unflatten } from 'react-simple-tree-menu';
 import type { ReactElement } from 'react';
 import type { TreeMenuItem } from 'react-simple-tree-menu';
-
-function unflatten(items: TreeMenuItem[]) {
-  const roots: TreeMenuItem[] = [];
-  const byParent = new Map<string, TreeMenuItem[]>();
-  for (const item of items) {
-    const slash = item.key.lastIndexOf('/');
-    if (slash === -1) roots.push(item);
-    else {
-      const parent = item.key.slice(0, slash);
-      const siblings = byParent.get(parent) ?? [];
-      siblings.push(item);
-      byParent.set(parent, siblings);
-    }
-  }
-  return { roots, byParent };
-}
 
 function renderNode(
   item: TreeMenuItem,
@@ -122,15 +108,18 @@ function renderNode(
 
 <TreeMenu data={data}>
   {({ items }) => {
-    const { roots, byParent } = unflatten(items);
+    const { roots, childrenByParent } = unflatten(items);
     return (
       <ul role="tree">
-        {roots.map((r) => renderNode(r, byParent))}
+        {roots.map((r) => renderNode(r, childrenByParent))}
       </ul>
     );
   }}
 </TreeMenu>
 ```
+
+`unflatten` is generic — it works with any `{ key: string }` shape, so
+your own projected item type (e.g., after `items.map(...)`) works too.
 
 ### Accessibility notes (nested)
 

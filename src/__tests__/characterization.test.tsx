@@ -284,10 +284,6 @@ describe('locale + matchSearch', () => {
   });
 
   it('locale transforms the displayed label', () => {
-    // Use a fresh data reference — legacy's fast-memoize serializer stringifies
-    // args, and functions (locale/matchSearch) become undefined in JSON, so
-    // sharing data refs with other tests can return cached un-localed labels.
-    // This caching quirk is precisely why `cacheSearch` is being removed in v2.
     const localData: TreeNodeInArray[] = [
       { key: 'fruits', label: 'Fruits' },
       { key: 'vegetables', label: 'Vegetables' },
@@ -299,7 +295,6 @@ describe('locale + matchSearch', () => {
 
   it('matchSearch replaces the default substring matcher', async () => {
     const user = setupWithFakeTimers();
-    // Fresh data ref to dodge the legacy fast-memoize cache-key quirk.
     const localData: TreeNodeInArray[] = [
       { key: 'fruits', label: 'Fruits' },
       { key: 'vegetables', label: 'Vegetables' },

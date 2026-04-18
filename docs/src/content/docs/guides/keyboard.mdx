@@ -13,9 +13,14 @@ including the required keyboard model and ARIA attributes.
 | ------------ | --------------------------------------------------------- |
 | `↓`          | Focus next visible item                                   |
 | `↑`          | Focus previous visible item                               |
-| `→`          | Open a closed branch, or focus first child if already open |
-| `←`          | Close an open branch, or focus parent if already closed   |
+| `→`          | Open a closed branch (no-op on leaves and already-open branches) |
+| `←`          | Close an open branch; on a closed item, focus parent      |
 | `Enter`      | Activate the focused item (fires `onClickItem`)           |
+
+The `→`-on-open-branch-focuses-first-child and similar "deep" WAI-ARIA
+tree behaviors are intentional omissions for v2 — the current model
+matches v1's keyboard semantics for zero-migration compatibility.
+[Issue tracking the richer model.](https://github.com/iannbing/react-simple-tree-menu/issues)
 
 ## ARIA attributes
 

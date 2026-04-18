@@ -21,10 +21,10 @@ import TreeMenu from 'react-simple-tree-menu';
 | `openNodes`                    | `string[]`                                                | —            | Controlled open-nodes list.                                                                  |
 | `hasSearch`                    | `boolean`                                                 | `true`       | Whether to pass a `search` callback to the render-props function.                            |
 | `debounceTime`                 | `number`                                                  | `125`        | Milliseconds between last keystroke and filter.                                              |
-| `locale`                       | `(label: string) => string`                               | —            | Transform labels before matching/render.                                                     |
-| `matchSearch`                  | `(c: { label: string; searchTerm: string }) => boolean`   | —            | Replace the default substring matcher.                                                       |
-| `disableKeyboard`              | `boolean`                                                 | `false`      | Skip the `<div tabIndex={0}>` keyboard wrapper.                                              |
-| `resetOpenNodesOnDataUpdate`   | `boolean \| string[]`                                     | `false`      | Reset open nodes when `data` identity changes.                                               |
+| `locale`                       | `LocaleFunction`                                          | —            | Transform labels before matching/render. See [Types](/api/types/#localefunction).             |
+| `matchSearch`                  | `MatchSearchFunction`                                     | —            | Replace the default substring matcher. See [Types](/api/types/#matchsearchfunction).          |
+| `disableKeyboard`              | `boolean`                                                 | `false`      | Skip the `<div>` keyboard wrapper.                                                           |
+| `resetOpenNodesOnDataUpdate`   | `boolean`                                                 | `false`      | Reset open nodes when `data` identity changes.                                               |
 | `classNames`                   | `TreeMenuClassNames`                                      | `{}`         | Class names appended to `rstm-*` anchors. See [Theming](/guides/theming/#full-classnames-shape). |
 | `labels`                       | `TreeMenuLabels`                                          | `{}`         | Customize the default UI's i18n strings.                                                     |
 | `children`                     | `(props: TreeMenuChildren) => ReactNode`                  | `defaultChildren` | Render-props function.                                                                    |
@@ -68,23 +68,57 @@ type TreeMenuChildren = {
 };
 ```
 
-### `Item`
+### `Item` / `TreeMenuItem`
 
-Each row in `items` is:
+Each entry in `items` is a `TreeMenuItem` — an `Item` (what `walk()`
+emits) decorated with per-render handlers and state flags:
 
 ```ts
-type Item = {
+import type { MouseEvent } from 'react';
+
+interface Item {
   key: string;                   // Unique key path, e.g. "fruit/apple"
   label: string;                 // Display label (after `locale` if provided)
   hasNodes: boolean;             // True if the item has children
   isOpen: boolean;               // True if the item is expanded
   level: number;                 // 0-indexed depth
-  active: boolean;               // Matches `activeKey`
-  focused: boolean;              // Matches `focusKey`
-  posInSet: number;              // 1-based position among siblings (WAI-ARIA)
-  setSize: number;               // Number of siblings (WAI-ARIA)
-  onClick: () => void;           // Fires `onClickItem` + sets active + focuses
-  toggleNode?: () => void;       // Toggles open state (present only on branches)
-  // ...plus any custom fields you put on the original tree node
-};
+  posInSet?: number;             // 1-based position among siblings (WAI-ARIA)
+  setSize?: number;              // Number of siblings (WAI-ARIA)
+  [name: string]: unknown;       // Any custom fields from the original node
+}
+
+interface TreeMenuItem extends Item {
+  active?: boolean;              // Matches `activeKey`
+  focused?: boolean;              // Matches `focusKey`
+  onClick: (event: MouseEvent<HTMLLIElement>) => void;
+  toggleNode?: () => void;       // Toggles open state (branches only)
+}
 ```
+
+The default UI fires `onClick` from a `<div>`, not a `<li>` — the type
+describes what `<ItemComponent>` was historically placed on. If you pass
+the handler to a different element in a custom render-prop, you may need
+an event-type cast.
+
+## `unflatten`
+
+Helper for custom render-props that reconstructs a nested tree shape
+from the flat `items` array `walk()` emits. Group-by-parent, zero React.
+
+```ts
+import { unflatten } from 'react-simple-tree-menu';
+
+function unflatten<T extends { key: string }>(
+  items: readonly T[]
+): { roots: T[]; childrenByParent: Map<string, T[]> };
+```
+
+- **Generic over `T extends { key: string }`** — pass raw `Item`,
+  `TreeMenuItem`, or any consumer-projected shape.
+- **`childrenByParent`** is a `Map` from each parent's key to its
+  ordered children (input order preserved).
+- Same helper `defaultChildren` uses internally, so your custom
+  render-props share the same grouping contract as the default UI.
+
+See the [render-props guide](/guides/render-props/#pattern-b--nested-dom-canonical)
+for a complete nested-DOM example.

@@ -61,6 +61,12 @@ symbols or props that remained.
 - **`TreeMenuHandle` ref shape.** `useImperativeHandle` exposes
   `resetOpenNodes` for consumers who prefer refs to render-props
   (mirrors v1's class-component ref pattern).
+- **`unflatten` helper + `UnflattenResult<T>` type.** Public export of
+  the grouping function `defaultChildren` uses internally — reconstructs
+  a nested tree from the flat `items[]` via slash-joined key paths.
+  Generic over `T extends { key: string }`. Custom render-props that
+  want to emit a nested `<ul>/<li>/<ul>` DOM can now call one library
+  function instead of copy-pasting the algorithm.
 - **Tailwind v4 theming out of the box.** Every color/typography
   CSS custom property resolves via a `var()` chain that prefers
   Tailwind v4's auto-exposed theme variables (`--color-primary`,
@@ -107,8 +113,8 @@ Consumers don't need to uninstall — these were transitive.
 - Test stack: Vitest + React Testing Library (replaces Jest + Enzyme).
 - Build: tsup (replaces Rollup 1).
 - Lint: ESLint 9 flat config.
-- Bundle size: **2.55 KB** minified + brotli
-  (enforced via `size-limit` in CI, 3 KB budget).
+- Bundle size: **3.01 KB** minified + brotli
+  (enforced via `size-limit` in CI, 3.5 KB budget).
 
 ### Fixed
 

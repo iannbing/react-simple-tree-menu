@@ -200,7 +200,32 @@ up to you:
 
 **Nested `<ul>`/`<li>`/`<ul>`**: reconstruct hierarchy from each item's
 slash-joined `key`. Matches the WAI-ARIA tree pattern's preferred DOM
-shape (children inside `role="group"`). See the
+shape (children inside `role="group"`). The library exports `unflatten`
+— the same helper `defaultChildren` uses internally — so you don't have
+to reimplement the grouping:
+
+```tsx
+import TreeMenu, { unflatten } from 'react-simple-tree-menu';
+
+<TreeMenu data={data}>
+  {({ items }) => {
+    const { roots, childrenByParent } = unflatten(items);
+    const renderNode = (it) => (
+      <li key={it.key} role="treeitem" aria-level={it.level + 1}>
+        <div onClick={it.onClick}>{it.label}</div>
+        {childrenByParent.get(it.key) && (
+          <ul role="group">
+            {childrenByParent.get(it.key)!.map(renderNode)}
+          </ul>
+        )}
+      </li>
+    );
+    return <ul role="tree">{roots.map(renderNode)}</ul>;
+  }}
+</TreeMenu>
+```
+
+See the
 [render-props guide](https://iannbing.github.io/react-simple-tree-menu/guides/render-props/)
 for the full recipe and a11y notes, or the Storybook **TreeMenu / Render-props** stories for runnable versions of both.
 
@@ -224,6 +249,7 @@ Class-component v1 ref patterns keep working via the new `TreeMenuHandle` — `r
 All types are published alongside the JS. Exported:
 
 ```ts
+// Types
 (TreeMenuProps,
   TreeMenuHandle,
   TreeMenuItem,
@@ -235,7 +261,11 @@ All types are published alongside the JS. Exported:
   TreeNodeInArray,
   LocaleFunction,
   MatchSearchFunction,
-  Item);
+  Item,
+  UnflattenResult);
+
+// Values
+(ItemComponent, defaultChildren, KeyDown, unflatten);
 ```
 
 ## License

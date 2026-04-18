@@ -6,15 +6,20 @@
 // the consumer is how they render it.
 
 import type { Meta, StoryObj } from '@storybook/react';
-import type { CSSProperties, MouseEventHandler, ReactElement } from 'react';
-import TreeMenu from './index';
+import {
+  useEffect,
+  useRef,
+  type CSSProperties,
+  type MouseEventHandler,
+  type ReactElement,
+} from 'react';
+import TreeMenu, { unflatten } from './index';
 import type { TreeMenuItem, TreeNodeInArray } from './types';
 
-// Visual focus ring. KeyDown (on the outer wrapper) captures arrow keys
-// and dispatches focus state; browser focus stays on the wrapper while
-// `item.focused` is what marks the "current" row. Without a style for
-// `item.focused`, arrow-key navigation runs silently and the user sees
-// nothing move — that's the bug the previous revision of this file had.
+// Visual focus ring. Paired with programmatic DOM focus (below) so
+// screen readers announce row changes as arrow keys move focus — the
+// library's ItemComponent does the same thing; a custom render-prop has
+// to replicate the pattern since it doesn't render through ItemComponent.
 const rowStyle = (item: TreeMenuItem, base: CSSProperties): CSSProperties => ({
   ...base,
   background: item.active ? '#6366f1' : undefined,
@@ -22,6 +27,19 @@ const rowStyle = (item: TreeMenuItem, base: CSSProperties): CSSProperties => ({
   boxShadow: item.focused ? 'inset 0 0 0 2px #818cf8' : undefined,
   outline: 'none',
 });
+
+// Shared hook that moves DOM focus to the element ref when `focused`
+// flips true. Required for WAI-ARIA tree compliance — tabIndex alone
+// doesn't trigger focus events for assistive tech.
+function useRovingFocus<T extends HTMLElement>(focused: boolean | undefined) {
+  const ref = useRef<T>(null);
+  useEffect(() => {
+    if (focused && ref.current && document.activeElement !== ref.current) {
+      ref.current.focus({ preventScroll: false });
+    }
+  }, [focused]);
+  return ref;
+}
 
 const data: TreeNodeInArray[] = [
   {
@@ -62,6 +80,34 @@ type Story = StoryObj<typeof TreeMenu>;
 // custom render and the one shown in the README.
 // --------------------------------------------------------------------------
 
+function FlatRow({ item }: { item: TreeMenuItem }) {
+  const ref = useRovingFocus<HTMLLIElement>(item.focused);
+  return (
+    // Keyboard events are handled by the outer KeyDown wrapper the
+    // library injects around our render-prop output.
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events
+    <li
+      ref={ref}
+      role="treeitem"
+      aria-level={item.level + 1}
+      aria-selected={!!item.active}
+      aria-expanded={item.hasNodes ? item.isOpen : undefined}
+      // Roving tabindex: focused row is 0, everyone else is -1.
+      tabIndex={item.focused ? 0 : -1}
+      style={rowStyle(item, {
+        paddingLeft: 10 + item.level * 18,
+        paddingTop: 4,
+        paddingBottom: 4,
+        cursor: 'pointer',
+      })}
+      onClick={item.onClick}
+    >
+      {item.hasNodes ? (item.isOpen ? '\u25BE ' : '\u25B8 ') : ''}
+      {item.label}
+    </li>
+  );
+}
+
 export const Flat: Story = {
   name: 'Flat list (README example)',
   render: () => (
@@ -81,28 +127,7 @@ export const Flat: Story = {
               role="tree"
             >
               {items.map((item) => (
-                // Keyboard events are handled by the outer KeyDown wrapper
-                // the library injects around our render-prop output.
-                // eslint-disable-next-line jsx-a11y/click-events-have-key-events
-                <li
-                  key={item.key}
-                  role="treeitem"
-                  aria-level={item.level + 1}
-                  aria-selected={!!item.active}
-                  aria-expanded={item.hasNodes ? item.isOpen : undefined}
-                  // Roving tabindex: focused row is 0, everyone else is -1.
-                  tabIndex={item.focused ? 0 : -1}
-                  style={rowStyle(item, {
-                    paddingLeft: 10 + item.level * 18,
-                    paddingTop: 4,
-                    paddingBottom: 4,
-                    cursor: 'pointer',
-                  })}
-                  onClick={item.onClick}
-                >
-                  {item.hasNodes ? (item.isOpen ? '\u25BE ' : '\u25B8 ') : ''}
-                  {item.label}
-                </li>
+                <FlatRow key={item.key} item={item} />
               ))}
             </ul>
           </>
@@ -113,41 +138,23 @@ export const Flat: Story = {
 };
 
 // --- Variant 2 -------------------------------------------------------------
-// Nested <ul>/<li>/<ul> reconstructed from the flat items[]. Same pattern
-// defaultChildren uses internally — parses the slash-joined key to find
-// each item's parent, then renders depth-first.
+// Nested <ul>/<li>/<ul> reconstructed from the flat items[]. Uses the
+// library's public `unflatten` helper — same function defaultChildren
+// uses internally, so custom renderers get the same grouping contract.
 // --------------------------------------------------------------------------
 
-interface Grouped {
-  roots: TreeMenuItem[];
+function NestedRow({
+  item,
+  byParent,
+}: {
+  item: TreeMenuItem;
   byParent: Map<string, TreeMenuItem[]>;
-}
-
-function unflatten(items: TreeMenuItem[]): Grouped {
-  const roots: TreeMenuItem[] = [];
-  const byParent = new Map<string, TreeMenuItem[]>();
-  for (const item of items) {
-    const slash = item.key.lastIndexOf('/');
-    if (slash === -1) {
-      roots.push(item);
-    } else {
-      const parent = item.key.slice(0, slash);
-      const siblings = byParent.get(parent);
-      if (siblings) siblings.push(item);
-      else byParent.set(parent, [item]);
-    }
-  }
-  return { roots, byParent };
-}
-
-function renderNode(
-  item: TreeMenuItem,
-  byParent: Map<string, TreeMenuItem[]>
-): ReactElement {
+}): ReactElement {
+  const ref = useRovingFocus<HTMLLIElement>(item.focused);
   const children = byParent.get(item.key);
   return (
     <li
-      key={item.key}
+      ref={ref}
       role="treeitem"
       aria-level={item.level + 1}
       aria-selected={!!item.active}
@@ -171,7 +178,9 @@ function renderNode(
           role="group"
           style={{ listStyle: 'none', margin: 0, paddingLeft: 18 }}
         >
-          {children.map((c) => renderNode(c, byParent))}
+          {children.map((c) => (
+            <NestedRow key={c.key} item={c} byParent={byParent} />
+          ))}
         </ul>
       )}
     </li>
@@ -184,7 +193,7 @@ export const Nested: Story = {
     <div style={{ width: 280 }}>
       <TreeMenu data={data} initialOpenNodes={['fruit', 'fruit/berry']}>
         {({ search, items }) => {
-          const { roots, byParent } = unflatten(items);
+          const { roots, childrenByParent } = unflatten(items);
           return (
             <>
               {search && (
@@ -202,7 +211,13 @@ export const Nested: Story = {
                 role="tree"
                 style={{ listStyle: 'none', margin: 0, padding: 0 }}
               >
-                {roots.map((r) => renderNode(r, byParent))}
+                {roots.map((r) => (
+                  <NestedRow
+                    key={r.key}
+                    item={r}
+                    byParent={childrenByParent}
+                  />
+                ))}
               </ul>
             </>
           );

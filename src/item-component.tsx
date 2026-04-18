@@ -4,7 +4,14 @@
 //
 // Memoized — renders only when the Item (and its wrapper props) change.
 
-import { memo, type CSSProperties, type MouseEvent, type ReactNode } from 'react';
+import {
+  memo,
+  useEffect,
+  useRef,
+  type CSSProperties,
+  type MouseEvent,
+  type ReactNode,
+} from 'react';
 import type { TreeMenuClassNames, TreeMenuItem } from './types';
 
 // Left-padding math. CSS handles vertical padding, cursor, hover, etc.;
@@ -96,8 +103,23 @@ function ItemComponentImpl({
     onClick(e as unknown as MouseEvent<HTMLLIElement>);
   };
 
+  // Roving tabindex requires *DOM focus* to track the focused item, not
+  // just the tabIndex attribute. Without this, arrow-key navigation
+  // silently updates focusKey state but screen readers (JAWS, NVDA in
+  // browse mode, VoiceOver) never fire a focus event and users hear
+  // nothing move. Programmatically focus the <li> whenever `focused`
+  // flips true; preventScroll avoids surprise page-scroll on initial
+  // mount when a controlled `initialFocusKey` is deep in a long tree.
+  const liRef = useRef<HTMLLIElement>(null);
+  useEffect(() => {
+    if (focused && liRef.current && document.activeElement !== liRef.current) {
+      liRef.current.focus({ preventScroll: false });
+    }
+  }, [focused]);
+
   return (
     <li
+      ref={liRef}
       role="treeitem"
       tabIndex={focused ? 0 : -1}
       aria-level={level + 1}

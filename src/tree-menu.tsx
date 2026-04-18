@@ -250,9 +250,11 @@ export const TreeMenu = forwardRef<TreeMenuHandle, TreeMenuProps>(
         const item = items[focusIndex];
         if (!item) return;
         if (item.isOpen) {
+          // Close the branch; focus stays on the same item.
           dispatch({ type: 'TOGGLE', key: item.key });
-          dispatch({ type: 'FOCUS', key: item.key });
         } else {
+          // Already closed (or leaf) — jump focus to parent. No-op on
+          // roots since parentKeyOf returns the same key.
           dispatch({ type: 'FOCUS', key: parentKeyOf(item.key) });
         }
       },

@@ -19,19 +19,34 @@ import type {
   LocaleFunction,
   MatchSearchFunction,
   Item,
+  UnflattenResult,
 } from 'react-simple-tree-menu';
+```
+
+## `LocaleFunctionProps`
+
+Argument to [`LocaleFunction`](#localefunction). The open index signature
+is how arbitrary user-attached fields (`url`, `icon`, …) flow through.
+
+```ts
+interface LocaleFunctionProps {
+  label: string;
+  [name: string]: unknown;
+}
 ```
 
 ## `TreeNode`
 
-Shared shape for a node in either data format. Label is optional — nodes
-without a label render as `"unknown"`.
+Object-format node. The enclosing object's property name is the key;
+`index` orders siblings inside walk(). `key` is forbidden here (lives on
+the outer object). Extends `LocaleFunctionProps` so custom fields pass
+through.
 
 ```ts
-interface TreeNode {
-  label?: string;
-  nodes?: TreeNodeObject | TreeNodeInArray[];
-  // ...any custom user properties
+interface TreeNode extends LocaleFunctionProps {
+  index: number;
+  key?: never;
+  nodes?: TreeNodeObject;
 }
 ```
 
@@ -41,17 +56,20 @@ Object data format. Keys become node `key`s.
 
 ```ts
 interface TreeNodeObject {
-  [key: string]: TreeNode;
+  [name: string]: TreeNode;
 }
 ```
 
 ## `TreeNodeInArray`
 
-Array data format. Every node must supply a unique `key`.
+Array-format node. Ordered by array position, so `index` is forbidden.
+Extends `LocaleFunctionProps`.
 
 ```ts
-interface TreeNodeInArray extends TreeNode {
+interface TreeNodeInArray extends LocaleFunctionProps {
   key: string;
+  index?: never;
+  nodes?: TreeNodeInArray[];
 }
 ```
 
@@ -75,14 +93,33 @@ interface TreeMenuLabels {
 ## `LocaleFunction`
 
 ```ts
-type LocaleFunction = (label: string) => string;
+type LocaleFunction = (props: LocaleFunctionProps) => string;
 ```
+
+Receives the **entire node** (not just the label) so a transformer can
+branch on custom fields. Pass a **stable reference** — the internal
+walk memo keys on identity.
 
 ## `MatchSearchFunction`
 
 ```ts
-type MatchSearchFunction = (config: {
-  label: string;
+interface MatchSearchFunctionProps extends LocaleFunctionProps {
   searchTerm: string;
-}) => boolean;
+}
+
+type MatchSearchFunction = (props: MatchSearchFunctionProps) => boolean;
+```
+
+Same shape as the locale argument with `searchTerm` added. Also should
+be a stable reference.
+
+## `UnflattenResult<T>`
+
+Return type of [`unflatten`](/api/tree-menu/#unflatten):
+
+```ts
+interface UnflattenResult<T> {
+  roots: T[];
+  childrenByParent: Map<string, T[]>;
+}
 ```

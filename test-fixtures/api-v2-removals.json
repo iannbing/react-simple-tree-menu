@@ -23,6 +23,14 @@
     {
       "name": "TreeMenuLabels",
       "reason": "i18n-friendly label overrides for the default UI (search placeholder / aria-label)."
+    },
+    {
+      "name": "unflatten",
+      "reason": "Public helper to rebuild a nested-tree shape from the flat Item[] that walk() emits. Extracted from an internal default-children utility so custom render-props consumers can do nested-DOM rendering without re-implementing the slash-path grouping. Generic over { key: string } — works with Item, TreeMenuItem, or any consumer shape."
+    },
+    {
+      "name": "UnflattenResult",
+      "reason": "Return type of `unflatten`: `{ roots: T[]; childrenByParent: Map<string, T[]> }`."
     }
   ],
   "addedProps": {
