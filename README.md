@@ -168,15 +168,24 @@ treeRef.current?.resetOpenNodes(['fruits'], 'fruits/apple');
 
 ### Custom render-props
 
+The `items` array is **always flat** — one entry per visible node in
+depth-first order, with a `level` field for depth. How you render it is
+up to you:
+
+**Flat**: one `<ul>`, `paddingLeft: level * N` for indent. Simplest.
+
 ```tsx
 <TreeMenu data={data}>
   {({ search, items, resetOpenNodes }) => (
     <div>
       <input onChange={(e) => search?.(e.target.value)} />
       <ul>
-        {items.map(({ key, label, active, onClick }) => (
+        {items.map(({ key, label, level, active, onClick }) => (
           <li
             key={key}
+            aria-level={level + 1}
+            aria-selected={!!active}
+            style={{ paddingLeft: 8 + level * 16 }}
             className={active ? 'bg-indigo-500 text-white' : ''}
             onClick={onClick}
           >
@@ -188,6 +197,16 @@ treeRef.current?.resetOpenNodes(['fruits'], 'fruits/apple');
   )}
 </TreeMenu>
 ```
+
+**Nested `<ul>`/`<li>`/`<ul>`**: reconstruct hierarchy from each item's
+slash-joined `key`. Matches the WAI-ARIA tree pattern's preferred DOM
+shape (children inside `role="group"`). See the
+[render-props guide](https://iannbing.github.io/react-simple-tree-menu/guides/render-props/)
+for the full recipe and a11y notes, or the Storybook **TreeMenu / Render-props** stories for runnable versions of both.
+
+If you don't need custom rendering, the default `defaultChildren` already
+emits the canonical nested DOM with full ARIA attributes and keyboard
+support — prefer it unless you need to swap the outer layout.
 
 ## Migrating from v1.1.x
 

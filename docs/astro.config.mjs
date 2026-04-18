@@ -40,6 +40,7 @@ export default defineConfig({
             { label: 'Controlled vs. uncontrolled', link: '/guides/controlled/' },
             { label: 'Search', link: '/guides/search/' },
             { label: 'Keyboard & accessibility', link: '/guides/keyboard/' },
+            { label: 'Custom render-props', link: '/guides/render-props/' },
             { label: 'Theming', link: '/guides/theming/' },
             { label: 'Next.js App Router', link: '/guides/nextjs/' },
             { label: 'Virtualization', link: '/guides/virtualization/' },
