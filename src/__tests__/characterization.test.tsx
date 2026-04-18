@@ -51,12 +51,15 @@ const objectData: TreeMenuProps['data'] = {
   },
 };
 
-// Helper: get the clickable element for a given visible label. In v1 this
-// is the `<li role="button">`; in v2 it will be `<li role="treeitem">`. Both
-// accept click events, so we find by text and walk to the enclosing `<li>`.
+// Helper: return the visual ROW <div> for a given label. That's where the
+// state modifier classes (--active, --focused) live and where click events
+// are bound. The enclosing <li role="treeitem"> is a layout container only
+// since the nested-DOM restructure — its className no longer carries the
+// visual state. Tests that need the <li> (for aria-* attributes or
+// tabIndex) use `.closest('li')` explicitly.
 const itemOf = (label: string): HTMLElement => {
-  const node = screen.getByText(label).closest('li');
-  if (!node) throw new Error(`No <li> ancestor for "${label}"`);
+  const node = screen.getByText(label).closest('.rstm-tree-item-row');
+  if (!node) throw new Error(`No row ancestor for "${label}"`);
   return node as HTMLElement;
 };
 

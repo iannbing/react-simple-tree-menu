@@ -64,7 +64,39 @@
   text-align: left;
 }
 
+/* Nested subgroup inside an expanded .rstm-tree-item. Indentation still
+   comes from the inline paddingLeft on each .rstm-tree-item so that hover
+   / active backgrounds extend to the container's left edge (standard
+   list-row UX). The subgroup itself is a layout container only. */
+.rstm-tree-item-subgroup {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* The <li> is a layout container only — no background, no padding, no
+   radius — so the visual row's styling can't bleed over nested subgroups
+   inside the same <li>. */
 .rstm-tree-item {
+  /* Structural only. Consumers' own `.rstm-tree-item { ... }` overrides
+     will still match the <li>, but the visible row is now .rstm-tree-item-row.
+     See SPEC.md §11 for the migration note. */
+}
+
+/* Suppress the browser's default focus outline on the <li>. tabIndex
+   lives on the <li> (required for the roving-tabindex keyboard model),
+   so the browser otherwise paints a ring around the li's full box —
+   which includes the nested subgroup <ul>. Our own focus indicator is
+   the inset box-shadow on `.rstm-tree-item--focused` (row-level), which
+   meets WCAG 2.1 focus-visible requirements. */
+.rstm-tree-item:focus,
+.rstm-tree-item:focus-visible {
+  outline: none;
+}
+
+/* The visual row — one per tree item. Hover, active, focus, and the
+   inline paddingLeft (for depth) all live here. */
+.rstm-tree-item-row {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -78,10 +110,13 @@
     box-shadow var(--rstm-transition);
 }
 
-.rstm-tree-item:hover {
+.rstm-tree-item-row:hover {
   background-color: var(--rstm-hover-bg);
 }
 
+/* State modifiers live on the row (not the <li>). Naming stays the same
+   as v1 so consumer CSS rules like `.rstm-tree-item--active { ... }`
+   still match visually — the class is on the row now. */
 .rstm-tree-item--active,
 .rstm-tree-item--active:hover {
   color: var(--rstm-active-fg);

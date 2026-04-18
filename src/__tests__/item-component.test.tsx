@@ -98,14 +98,18 @@ describe('ItemComponent (new, direct) — SPEC §12', () => {
 
   it('preserves legacy rstm-* class names', () => {
     renderIn({ level: 2, active: true, focused: true });
-    const cls = screen.getByRole('treeitem').className;
-    expect(cls).toContain('rstm-tree-item');
-    expect(cls).toContain('rstm-tree-item-level2');
-    expect(cls).toContain('rstm-tree-item--active');
-    expect(cls).toContain('rstm-tree-item--focused');
+    const treeitem = screen.getByRole('treeitem');
+    // Structural classes live on the <li>.
+    expect(treeitem.className).toContain('rstm-tree-item');
+    expect(treeitem.className).toContain('rstm-tree-item-level2');
+    // Visual state classes live on the inner row so that background /
+    // ring styling doesn't bleed over nested children.
+    const row = treeitem.querySelector('.rstm-tree-item-row')!;
+    expect(row.className).toContain('rstm-tree-item--active');
+    expect(row.className).toContain('rstm-tree-item--focused');
   });
 
-  it('fires onClick when the item is clicked', async () => {
+  it('fires onClick when the item row is clicked', async () => {
     const onClick = vi.fn();
     const user = userEvent.setup();
     render(
@@ -113,7 +117,10 @@ describe('ItemComponent (new, direct) — SPEC §12', () => {
         <ItemComponent {...(baseItem as unknown as TreeMenuItem)} onClick={onClick} />
       </ul>
     );
-    await user.click(screen.getByRole('treeitem'));
+    // Click the label text (inside the row). Clicking the bare <li> no
+    // longer fires — the handler is on the row <div>, and the <li> is
+    // now just a layout container.
+    await user.click(screen.getByText('Fruits'));
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 

@@ -85,8 +85,10 @@ export interface TreeMenuLabels {
 // round-trip through destructure/spread under exactOptionalPropertyTypes.
 // Public-facing, this is equivalent to `{ [slot]?: string }`.
 export interface TreeMenuClassNames {
-  /** `<ul>` tree container */
+  /** Outer `<ul role="tree">` container */
   group?: string | undefined;
+  /** Nested `<ul role="group">` — one per expanded branch */
+  subgroup?: string | undefined;
   /** `<li>` item in any state */
   item?: string | undefined;
   /** Appended to `item` when the item is active */

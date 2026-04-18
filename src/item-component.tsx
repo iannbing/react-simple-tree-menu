@@ -28,6 +28,12 @@ export interface ItemComponentProps extends TreeMenuItem {
   style?: CSSProperties;
   /** Appended to the `rstm-*` anchor classes. */
   classNames?: ItemClassNames | undefined;
+  /**
+   * Nested content rendered inside the `<li>` after the label — typically
+   * the `<ul role="group">` holding child items. Empty / absent for leaf
+   * items and for closed branches.
+   */
+  children?: ReactNode;
 }
 
 function cx(...tokens: Array<string | false | null | undefined>): string {
@@ -54,10 +60,20 @@ function ItemComponentImpl({
   posInSet,
   setSize,
   classNames,
+  children,
 }: ItemComponentProps) {
-  const className = cx(
+  // Structural classes on the <li> — consumers still get selector hooks
+  // via rstm-tree-item + rstm-tree-item-level{N}.
+  const liClassName = cx(
     'rstm-tree-item',
-    `rstm-tree-item-level${level}`,
+    `rstm-tree-item-level${level}`
+  );
+
+  // Visual classes on the inner row <div>. State modifiers (--active,
+  // --focused) and consumer-supplied classNames live here because they
+  // style the *row*, which must not extend over nested children.
+  const rowClassName = cx(
+    'rstm-tree-item-row',
     active && 'rstm-tree-item--active',
     focused && 'rstm-tree-item--focused',
     classNames?.item,
@@ -72,11 +88,15 @@ function ItemComponentImpl({
     }
   };
 
+  // The click handler lives on the row <div>, not the <li>. Events from
+  // a child item bubble up through child <li> → subgroup <ul> → parent
+  // <li>, but the parent's row <div> is a sibling of that chain (not an
+  // ancestor), so nothing extra fires. No stopPropagation needed.
+  const handleRowClick = (e: MouseEvent<HTMLDivElement>) => {
+    onClick(e as unknown as MouseEvent<HTMLLIElement>);
+  };
+
   return (
-    // Keyboard navigation for the tree is handled by the KeyDown wrapper
-    // one level up; adding per-item keyboard handlers here would duplicate
-    // and interfere with the roving-tabindex model.
-    // eslint-disable-next-line jsx-a11y/click-events-have-key-events
     <li
       role="treeitem"
       tabIndex={focused ? 0 : -1}
@@ -86,37 +106,46 @@ function ItemComponentImpl({
       aria-posinset={posInSet}
       // aria-expanded is only meaningful on nodes with children.
       {...(hasNodes ? { 'aria-expanded': isOpen } : {})}
-      className={className}
-      style={{
-        paddingLeft: `${
-          DEFAULT_PADDING + (hasNodes ? 0 : LEAF_OFFSET) + level * LEVEL_SPACE
-        }rem`,
-        ...style,
-      }}
-      onClick={onClick}
+      className={liClassName}
     >
-      {hasNodes && (
-        // Ornamental toggle — Arrow-Left/Right on the containing treeitem
-        // already drive expand/collapse via KeyDown. The div is a mouse-only
-        // convenience; screen reader users navigate via aria-expanded.
-        // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-        <div
-          className={cx('rstm-toggle-icon', classNames?.toggleIcon)}
-          onClick={handleToggleClick}
-        >
+      {/* Visual row. Padding, hover, active, focused all live here so
+          styling doesn't bleed over the nested <ul> below. Keyboard
+          navigation is handled by the KeyDown wrapper one level up,
+          hence no per-row onKeyDown. */}
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
+      <div
+        className={rowClassName}
+        style={{
+          paddingLeft: `${
+            DEFAULT_PADDING + (hasNodes ? 0 : LEAF_OFFSET) + level * LEVEL_SPACE
+          }rem`,
+          ...style,
+        }}
+        onClick={handleRowClick}
+      >
+        {hasNodes && (
+          // Ornamental toggle — Arrow-Left/Right on the treeitem already
+          // drives expand/collapse via KeyDown. Mouse-only convenience.
+          // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
           <div
-            className={cx(
-              'rstm-toggle-icon-symbol',
-              classNames?.toggleIconSymbol
-            )}
-            role="img"
-            aria-label="Toggle"
+            className={cx('rstm-toggle-icon', classNames?.toggleIcon)}
+            onClick={handleToggleClick}
           >
-            {isOpen ? openedIcon : closedIcon}
+            <div
+              className={cx(
+                'rstm-toggle-icon-symbol',
+                classNames?.toggleIconSymbol
+              )}
+              role="img"
+              aria-label="Toggle"
+            >
+              {isOpen ? openedIcon : closedIcon}
+            </div>
           </div>
-        </div>
-      )}
-      {label}
+        )}
+        {label}
+      </div>
+      {children}
     </li>
   );
 }

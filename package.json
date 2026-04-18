@@ -106,7 +106,7 @@
   "size-limit": [
     {
       "path": "dist/main.esm.js",
-      "limit": "3 KB"
+      "limit": "3.5 KB"
     }
   ],
   "publishConfig": {

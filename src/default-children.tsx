@@ -6,9 +6,13 @@
 // when the default CSS isn't imported, which lets Tailwind (or similar)
 // users skip the CSS import and style purely through the prop.
 
-import { useEffect, useState, type ChangeEvent } from 'react';
+import { useEffect, useState, type ChangeEvent, type ReactElement } from 'react';
 import { ItemComponent, type ItemClassNames } from './item-component';
-import type { TreeMenuChildren, TreeMenuClassNames } from './types';
+import type {
+  TreeMenuChildren,
+  TreeMenuClassNames,
+  TreeMenuItem,
+} from './types';
 
 const DEFAULT_SEARCH_PLACEHOLDER = 'Search';
 const DEFAULT_SEARCH_ARIA_LABEL = 'Search';
@@ -23,7 +27,7 @@ function cx(...tokens: Array<string | false | null | undefined>): string {
 }
 
 // Shallow-copy the subset ItemComponent cares about. Avoids accidentally
-// passing `search` / `group` classes down.
+// passing `search` / `group` / `subgroup` classes down.
 const toItemClassNames = (
   cn: TreeMenuClassNames | undefined
 ): ItemClassNames | undefined =>
@@ -35,6 +39,53 @@ const toItemClassNames = (
     toggleIcon,
     toggleIconSymbol,
   }))(cn);
+
+// Reconstruct the tree from the flat items[] via slash-delimited key
+// paths. The flat shape is load-bearing for virtualization / custom
+// render-props; this is a pure local operation used only when rendering
+// the default UI as a nested <ul>/<li>/<ul> structure.
+interface UnflattenResult {
+  roots: TreeMenuItem[];
+  childrenByParent: Map<string, TreeMenuItem[]>;
+}
+
+function unflatten(items: TreeMenuItem[]): UnflattenResult {
+  const roots: TreeMenuItem[] = [];
+  const childrenByParent = new Map<string, TreeMenuItem[]>();
+  for (const item of items) {
+    const slash = item.key.lastIndexOf('/');
+    if (slash === -1) {
+      roots.push(item);
+    } else {
+      const parent = item.key.slice(0, slash);
+      const siblings = childrenByParent.get(parent);
+      if (siblings) siblings.push(item);
+      else childrenByParent.set(parent, [item]);
+    }
+  }
+  return { roots, childrenByParent };
+}
+
+function renderNode(
+  item: TreeMenuItem,
+  byParent: Map<string, TreeMenuItem[]>,
+  itemClasses: ItemClassNames | undefined,
+  subgroupClass: string
+): ReactElement {
+  const { key, ...rest } = item;
+  const children = byParent.get(key);
+  return (
+    <ItemComponent key={key} {...rest} classNames={itemClasses}>
+      {children && (
+        <ul className={subgroupClass} role="group">
+          {children.map((child) =>
+            renderNode(child, byParent, itemClasses, subgroupClass)
+          )}
+        </ul>
+      )}
+    </ItemComponent>
+  );
+}
 
 interface SearchBarProps {
   search: (term: string) => void;
@@ -89,6 +140,8 @@ export const defaultChildren: TreeMenuChildren = ({
   labels,
 }) => {
   const itemClassNames = toItemClassNames(classNames);
+  const { roots, childrenByParent } = unflatten(items);
+  const subgroupClass = cx('rstm-tree-item-subgroup', classNames?.subgroup);
   return (
     <>
       {search && (
@@ -104,9 +157,9 @@ export const defaultChildren: TreeMenuChildren = ({
         className={cx('rstm-tree-item-group', classNames?.group)}
         role="tree"
       >
-        {items.map(({ key, ...props }) => (
-          <ItemComponent key={key} {...props} classNames={itemClassNames} />
-        ))}
+        {roots.map((root) =>
+          renderNode(root, childrenByParent, itemClassNames, subgroupClass)
+        )}
       </ul>
     </>
   );
