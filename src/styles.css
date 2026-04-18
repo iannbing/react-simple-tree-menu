@@ -1,0 +1,61 @@
+/* react-simple-tree-menu default styles. Hand-written plain CSS — no
+   preprocessor, no runtime dep. Exposed via the package subpath
+   `react-simple-tree-menu/styles`.
+
+   Theming: override any of the CSS custom properties on .rstm-tree-item-group
+   or a parent selector. */
+
+.rstm-tree-item-group {
+  --rstm-icon-size: 2rem;
+  --rstm-default-padding: 0.75rem;
+  --rstm-border-color: #ccc;
+  --rstm-text-color: #333;
+  --rstm-active-bg: #179ed3;
+  --rstm-active-fg: #fff;
+  --rstm-focus-shadow: 0 0 5px 0 #222;
+
+  list-style-type: none;
+  padding-left: 0;
+  border-top: 1px solid var(--rstm-border-color);
+  text-align: left;
+  width: 100%;
+}
+
+.rstm-toggle-icon {
+  display: inline-block;
+}
+
+.rstm-toggle-icon-symbol {
+  width: var(--rstm-icon-size, 2rem);
+  height: var(--rstm-icon-size, 2rem);
+  text-align: center;
+  line-height: var(--rstm-icon-size, 2rem);
+}
+
+.rstm-tree-item {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  color: var(--rstm-text-color, #333);
+  background: none;
+  border-bottom: 1px solid var(--rstm-border-color, #ccc);
+  box-shadow: none;
+  z-index: unset;
+  position: relative;
+}
+
+.rstm-tree-item--active {
+  color: var(--rstm-active-fg, #fff);
+  background: var(--rstm-active-bg, #179ed3);
+  border-bottom: none;
+}
+
+.rstm-tree-item--focused {
+  box-shadow: var(--rstm-focus-shadow, 0 0 5px 0 #222);
+  z-index: 999;
+}
+
+.rstm-search {
+  padding: 1rem 1.5rem;
+  border: none;
+  width: 100%;
+}

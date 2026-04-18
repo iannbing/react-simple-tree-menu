@@ -1,18 +1,19 @@
-import TreeMenu from './legacy/TreeMenu';
+// Public entry point — v2 implementation.
 
-// export components
-export default TreeMenu;
-export { defaultChildren, ItemComponent } from './legacy/TreeMenu/renderProps';
-export { default as KeyDown } from './legacy/KeyDown';
+export { TreeMenu as default } from './TreeMenu';
+export { ItemComponent } from './ItemComponent';
+export { defaultChildren } from './defaultChildren';
+export { KeyDown } from './KeyDown';
 
-// export type definitions
-export type { TreeMenuProps } from './legacy/TreeMenu';
-export type { TreeMenuItem, TreeMenuChildren } from './legacy/TreeMenu/renderProps';
+// Types
+export type { TreeMenuProps, TreeMenuHandle } from './TreeMenu';
 export type {
-  TreeNodeObject,
+  TreeMenuItem,
+  TreeMenuChildren,
   TreeNode,
+  TreeNodeObject,
   TreeNodeInArray,
   LocaleFunction,
   MatchSearchFunction,
   Item,
-} from './legacy/TreeMenu/walk';
+} from './types';

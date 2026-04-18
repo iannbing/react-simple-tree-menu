@@ -65,7 +65,7 @@ describe('smoke: minimal render against legacy', () => {
       a: { label: 'Ant', index: 0 },
     };
     render(<TreeMenu data={data} />);
-    const items = screen.getAllByRole('button');
+    const items = screen.getAllByText(/Ant|Zebra/);
     expect(items[0]).toHaveTextContent('Ant');
     expect(items[1]).toHaveTextContent('Zebra');
   });

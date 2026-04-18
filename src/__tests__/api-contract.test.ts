@@ -19,10 +19,7 @@ import { resolve } from 'node:path';
 describe('API contract diff', () => {
   const dist = resolve('dist/index.d.ts');
 
-  it.skipIf(!existsSync(dist)).fails('dist/index.d.ts matches v1 fixture modulo allowlist', () => {
-    // Will throw on non-zero exit; `.fails` inverts so the assertion
-    // *passing* here means the script *failed* — which is the expected
-    // state during the strangulation window.
+  it.skipIf(!existsSync(dist))('dist/index.d.ts matches v1 fixture modulo allowlist', () => {
     expect(() => {
       execSync('node scripts/check-api-contract.mjs', { stdio: 'pipe' });
     }).not.toThrow();

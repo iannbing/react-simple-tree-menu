@@ -28,27 +28,27 @@ const data: TreeNodeInArray[] = [
 // WAI-ARIA tree pattern
 // ---------------------------------------------------------------------------
 
-describe('ARIA tree pattern (red until M4.1/M4.2)', () => {
-  it.fails('container has role="tree"', () => {
+describe('ARIA tree pattern (green post-cutover)', () => {
+  it('container has role="tree"', () => {
     render(<TreeMenu data={data} />);
     // Legacy renders a bare <ul class="rstm-tree-item-group"> with no role.
     expect(screen.getByRole('tree')).toBeInTheDocument();
   });
 
-  it.fails('items have role="treeitem"', () => {
+  it('items have role="treeitem"', () => {
     render(<TreeMenu data={data} />);
     // Legacy renders <li role="button">.
     const treeitems = screen.getAllByRole('treeitem');
     expect(treeitems.length).toBeGreaterThan(0);
   });
 
-  it.fails('nodes with children have aria-expanded matching open state', () => {
+  it('nodes with children have aria-expanded matching open state', () => {
     render(<TreeMenu data={data} />);
     const fruits = screen.getByText('Fruits').closest('li')!;
     expect(fruits.getAttribute('aria-expanded')).toBe('false');
   });
 
-  it.fails('items have aria-level reflecting 1-based depth', () => {
+  it('items have aria-level reflecting 1-based depth', () => {
     render(<TreeMenu data={data} initialOpenNodes={['fruits']} />);
     const fruits = screen.getByText('Fruits').closest('li')!;
     const apple = screen.getByText('Apple').closest('li')!;
@@ -56,14 +56,14 @@ describe('ARIA tree pattern (red until M4.1/M4.2)', () => {
     expect(apple.getAttribute('aria-level')).toBe('2');
   });
 
-  it.fails('items have aria-setsize and aria-posinset', () => {
+  it('items have aria-setsize and aria-posinset', () => {
     render(<TreeMenu data={data} />);
     const fruits = screen.getByText('Fruits').closest('li')!;
     expect(fruits.getAttribute('aria-setsize')).toBe('2');
     expect(fruits.getAttribute('aria-posinset')).toBe('1');
   });
 
-  it.fails('active items have aria-selected="true"', () => {
+  it('active items have aria-selected="true"', () => {
     render(<TreeMenu data={data} initialActiveKey="fruits" />);
     const fruits = screen.getByText('Fruits').closest('li')!;
     expect(fruits.getAttribute('aria-selected')).toBe('true');
@@ -74,8 +74,8 @@ describe('ARIA tree pattern (red until M4.1/M4.2)', () => {
 // Roving tabindex (new)
 // ---------------------------------------------------------------------------
 
-describe('roving tabindex (red until M4.1)', () => {
-  it.fails('focused item has tabIndex=0, others have tabIndex=-1', () => {
+describe('roving tabindex (green post-cutover)', () => {
+  it('focused item has tabIndex=0, others have tabIndex=-1', () => {
     render(<TreeMenu data={data} initialFocusKey="vegetables" />);
     const fruits = screen.getByText('Fruits').closest('li')!;
     const vegetables = screen.getByText('Vegetables').closest('li')!;

@@ -9,7 +9,7 @@ import type {
   LocaleFunction,
   MatchSearchFunction,
   Item,
-} from '../legacy/TreeMenu/walk';
+} from '../types';
 
 type Data = TreeNodeObject | TreeNodeInArray[] | null | undefined;
 
@@ -61,11 +61,15 @@ export function walk(props: WalkProps): Item[] {
 
   // Recurse. parentKey is the accumulated slash-joined path; passing it in
   // avoids re-joining at each level (SPEC §5 perf acceptance).
+  // posInSet / setSize are ARIA sibling coordinates (1-indexed) — cheap to
+  // compute here and saves downstream readers from re-grouping by parent.
   const visit = (
     node: TreeNode | TreeNodeInArray,
     nodeKey: string,
     parentKey: string,
-    level: number
+    level: number,
+    posInSet: number,
+    setSize: number
   ): void => {
     const { nodes, label: rawLabel = DEFAULT_LABEL, ...custom } = node;
     const key = parentKey
@@ -83,7 +87,6 @@ export function walk(props: WalkProps): Item[] {
     // Insert self first; children are appended in-place below so the output
     // array stays in depth-first order without ever concatenating.
     const selfIndex = out.length;
-    const visibleSlot = visible ? selfIndex : -1;
     if (visible) {
       out.push({
         ...(custom as Record<string, unknown>),
@@ -92,6 +95,8 @@ export function walk(props: WalkProps): Item[] {
         level,
         key,
         label,
+        posInSet,
+        setSize,
       } as Item);
     }
 
@@ -99,14 +104,16 @@ export function walk(props: WalkProps): Item[] {
 
     const childLevel = level + 1;
     if (Array.isArray(nodes)) {
-      for (let i = 0; i < nodes.length; i++) {
-        visit(nodes[i]!, (nodes[i] as TreeNodeInArray).key, key, childLevel);
+      const n = nodes.length;
+      for (let i = 0; i < n; i++) {
+        visit(nodes[i]!, (nodes[i] as TreeNodeInArray).key, key, childLevel, i + 1, n);
       }
     } else if (nodes) {
       const entries = Object.entries(nodes as TreeNodeObject);
       entries.sort((a, b) => a[1].index - b[1].index);
-      for (let i = 0; i < entries.length; i++) {
-        visit(entries[i]![1], entries[i]![0], key, childLevel);
+      const n = entries.length;
+      for (let i = 0; i < n; i++) {
+        visit(entries[i]![1], entries[i]![0], key, childLevel, i + 1, n);
       }
     }
 
@@ -122,22 +129,23 @@ export function walk(props: WalkProps): Item[] {
         level,
         key,
         label,
+        posInSet,
+        setSize,
       } as Item);
     }
-
-    // Silence "visibleSlot unused" when the path above doesn't read it.
-    void visibleSlot;
   };
 
   if (Array.isArray(data)) {
-    for (let i = 0; i < data.length; i++) {
-      visit(data[i]!, data[i]!.key, '', 0);
+    const n = data.length;
+    for (let i = 0; i < n; i++) {
+      visit(data[i]!, data[i]!.key, '', 0, i + 1, n);
     }
   } else {
     const entries = Object.entries(data);
     entries.sort((a, b) => a[1].index - b[1].index);
-    for (let i = 0; i < entries.length; i++) {
-      visit(entries[i]![1], entries[i]![0], '', 0);
+    const n = entries.length;
+    for (let i = 0; i < n; i++) {
+      visit(entries[i]![1], entries[i]![0], '', 0, i + 1, n);
     }
   }
 

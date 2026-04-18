@@ -8,7 +8,7 @@ import type {
   TreeNodeObject,
   LocaleFunction,
   MatchSearchFunction,
-} from '../legacy/TreeMenu/walk';
+} from '../types';
 
 const arr: TreeNodeInArray[] = [
   {
@@ -90,6 +90,18 @@ describe('walk() — SPEC §5', () => {
     it('Item.label is the locale-transformed label (default: identity)', () => {
       const items = walk({ data: arr, openNodes: [], searchTerm: '' });
       expect(items.find((i) => i.key === 'fruits')!.label).toBe('Fruits');
+    });
+
+    it('Item.posInSet / Item.setSize are 1-indexed sibling coordinates', () => {
+      const items = walk({ data: arr, openNodes: ['fruits'], searchTerm: '' });
+      const fruits = items.find((i) => i.key === 'fruits')!;
+      const vegetables = items.find((i) => i.key === 'vegetables')!;
+      const apple = items.find((i) => i.key === 'fruits/apple')!;
+      const banana = items.find((i) => i.key === 'fruits/banana')!;
+      expect(fruits).toMatchObject({ posInSet: 1, setSize: 2 });
+      expect(vegetables).toMatchObject({ posInSet: 2, setSize: 2 });
+      expect(apple).toMatchObject({ posInSet: 1, setSize: 2 });
+      expect(banana).toMatchObject({ posInSet: 2, setSize: 2 });
     });
   });
 

@@ -6,7 +6,7 @@
 // A hard budget is introduced at M6.3.
 
 import { bench, describe } from 'vitest';
-import type { TreeNodeInArray } from '../legacy/TreeMenu/walk';
+import type { TreeNodeInArray } from '../types';
 import { walk } from './walk';
 
 // Build a balanced tree with `size` total nodes, branching factor `fan`.
