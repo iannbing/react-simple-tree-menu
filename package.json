@@ -70,6 +70,7 @@
   "dependencies": {},
   "devDependencies": {
     "@eslint/js": "^9.14.0",
+    "@types/node": "^22.9.0",
     "@storybook/addon-essentials": "^8.4.0",
     "@storybook/react-vite": "^8.4.0",
     "@testing-library/jest-dom": "^6.5.0",

@@ -1,40 +1,172 @@
-// Unit tests for the (future) useTreeMenuState hook at
-// src/tree/useTreeMenuState.ts. Stubbed with `it.todo` until M3.3.
-//
-// Hook owns the four-slot state (openNodes, searchTerm, activeKey,
-// focusKey) via useReducer with controlled/uncontrolled duality at the
-// boundary. SPEC §4.
+// Unit tests for useTreeMenuState — the reducer hook that owns
+// openNodes / searchTerm / activeKey / focusKey with controlled/
+// uncontrolled duality at the boundary. SPEC §4.
 
-import { describe, it } from 'vitest';
+import { describe, it, expect } from 'vitest';
+import { act, renderHook } from '@testing-library/react';
+import { useTreeMenuState } from './useTreeMenuState';
 
 describe('useTreeMenuState — SPEC §4', () => {
   describe('initialization', () => {
-    it.todo('seeds openNodes from initialOpenNodes (default [])');
-    it.todo('seeds activeKey from initialActiveKey (default "")');
-    it.todo('seeds focusKey from initialFocusKey (default "")');
-    it.todo('seeds searchTerm as ""');
+    it('seeds openNodes from initialOpenNodes (default [])', () => {
+      const { result } = renderHook(() => useTreeMenuState({}));
+      expect(result.current.state.openNodes).toEqual([]);
+
+      const { result: withInitial } = renderHook(() =>
+        useTreeMenuState({ initialOpenNodes: ['a', 'b'] })
+      );
+      expect(withInitial.current.state.openNodes).toEqual(['a', 'b']);
+    });
+
+    it('seeds activeKey from initialActiveKey (default "")', () => {
+      const { result } = renderHook(() => useTreeMenuState({}));
+      expect(result.current.state.activeKey).toBe('');
+      const { result: r2 } = renderHook(() =>
+        useTreeMenuState({ initialActiveKey: 'x' })
+      );
+      expect(r2.current.state.activeKey).toBe('x');
+    });
+
+    it('seeds focusKey from initialFocusKey (default "")', () => {
+      const { result } = renderHook(() => useTreeMenuState({}));
+      expect(result.current.state.focusKey).toBe('');
+      const { result: r2 } = renderHook(() =>
+        useTreeMenuState({ initialFocusKey: 'y' })
+      );
+      expect(r2.current.state.focusKey).toBe('y');
+    });
+
+    it('seeds searchTerm as ""', () => {
+      const { result } = renderHook(() => useTreeMenuState({}));
+      expect(result.current.state.searchTerm).toBe('');
+    });
   });
 
   describe('actions (uncontrolled)', () => {
-    it.todo('TOGGLE adds a key not in openNodes');
-    it.todo('TOGGLE removes a key already in openNodes');
-    it.todo('SEARCH updates searchTerm');
-    it.todo('ACTIVATE sets both activeKey and focusKey');
-    it.todo('FOCUS sets focusKey only');
-    it.todo('RESET restores to initial state with no arguments');
-    it.todo('RESET accepts openNodes / activeKey / focusKey overrides');
-    it.todo('RESET clears searchTerm regardless of arguments');
+    it('TOGGLE adds a key not in openNodes', () => {
+      const { result } = renderHook(() => useTreeMenuState({}));
+      act(() => result.current.dispatch({ type: 'TOGGLE', key: 'a' }));
+      expect(result.current.state.openNodes).toEqual(['a']);
+    });
+
+    it('TOGGLE removes a key already in openNodes', () => {
+      const { result } = renderHook(() =>
+        useTreeMenuState({ initialOpenNodes: ['a', 'b'] })
+      );
+      act(() => result.current.dispatch({ type: 'TOGGLE', key: 'a' }));
+      expect(result.current.state.openNodes).toEqual(['b']);
+    });
+
+    it('SEARCH updates searchTerm', () => {
+      const { result } = renderHook(() => useTreeMenuState({}));
+      act(() => result.current.dispatch({ type: 'SEARCH', term: 'hello' }));
+      expect(result.current.state.searchTerm).toBe('hello');
+    });
+
+    it('ACTIVATE sets both activeKey and focusKey', () => {
+      const { result } = renderHook(() => useTreeMenuState({}));
+      act(() => result.current.dispatch({ type: 'ACTIVATE', key: 'a/b' }));
+      expect(result.current.state.activeKey).toBe('a/b');
+      expect(result.current.state.focusKey).toBe('a/b');
+    });
+
+    it('FOCUS sets focusKey only', () => {
+      const { result } = renderHook(() =>
+        useTreeMenuState({ initialActiveKey: 'a' })
+      );
+      act(() => result.current.dispatch({ type: 'FOCUS', key: 'b' }));
+      expect(result.current.state.focusKey).toBe('b');
+      expect(result.current.state.activeKey).toBe('a'); // unchanged
+    });
+
+    it('RESET restores to initial state with no overrides', () => {
+      const { result } = renderHook(() =>
+        useTreeMenuState({ initialOpenNodes: ['root'] })
+      );
+      act(() => result.current.dispatch({ type: 'TOGGLE', key: 'x' }));
+      act(() => result.current.dispatch({ type: 'SEARCH', term: 'q' }));
+      act(() => result.current.dispatch({ type: 'ACTIVATE', key: 'a' }));
+      act(() => result.current.dispatch({ type: 'RESET' }));
+      expect(result.current.state.openNodes).toEqual(['root']);
+      expect(result.current.state.searchTerm).toBe('');
+      expect(result.current.state.activeKey).toBe('');
+      expect(result.current.state.focusKey).toBe('');
+    });
+
+    it('RESET accepts openNodes / activeKey / focusKey overrides', () => {
+      const { result } = renderHook(() => useTreeMenuState({}));
+      act(() =>
+        result.current.dispatch({
+          type: 'RESET',
+          openNodes: ['x'],
+          activeKey: 'y',
+          focusKey: 'z',
+        })
+      );
+      expect(result.current.state.openNodes).toEqual(['x']);
+      expect(result.current.state.activeKey).toBe('y');
+      expect(result.current.state.focusKey).toBe('z');
+    });
+
+    it('RESET clears searchTerm regardless of arguments', () => {
+      const { result } = renderHook(() => useTreeMenuState({}));
+      act(() => result.current.dispatch({ type: 'SEARCH', term: 'q' }));
+      act(() =>
+        result.current.dispatch({ type: 'RESET', openNodes: ['a'] })
+      );
+      expect(result.current.state.searchTerm).toBe('');
+    });
   });
 
   describe('controlled prop overrides', () => {
-    it.todo('controlled openNodes bypasses internal state');
-    it.todo('controlled activeKey bypasses internal state');
-    it.todo('controlled focusKey bypasses internal state');
-    it.todo('TOGGLE is a no-op when openNodes is controlled');
-    it.todo('controlled → uncontrolled transition preserves last state');
+    it('controlled openNodes bypasses internal state', () => {
+      const { result } = renderHook(() =>
+        useTreeMenuState({ openNodes: ['controlled'] })
+      );
+      expect(result.current.state.openNodes).toEqual(['controlled']);
+    });
+
+    it('controlled activeKey bypasses internal state', () => {
+      const { result } = renderHook(() =>
+        useTreeMenuState({ activeKey: 'controlled-active' })
+      );
+      expect(result.current.state.activeKey).toBe('controlled-active');
+    });
+
+    it('controlled focusKey bypasses internal state', () => {
+      const { result } = renderHook(() =>
+        useTreeMenuState({ focusKey: 'controlled-focus' })
+      );
+      expect(result.current.state.focusKey).toBe('controlled-focus');
+    });
+
+    it('TOGGLE is a no-op when openNodes is controlled', () => {
+      const { result } = renderHook(() =>
+        useTreeMenuState({ openNodes: ['x'] })
+      );
+      act(() => result.current.dispatch({ type: 'TOGGLE', key: 'y' }));
+      // Still just the controlled value.
+      expect(result.current.state.openNodes).toEqual(['x']);
+    });
+
+    it('controlled prop value flows through when it changes', () => {
+      const { result, rerender } = renderHook(
+        ({ openNodes }: { openNodes: string[] }) =>
+          useTreeMenuState({ openNodes }),
+        { initialProps: { openNodes: ['a'] } }
+      );
+      expect(result.current.state.openNodes).toEqual(['a']);
+      rerender({ openNodes: ['a', 'b'] });
+      expect(result.current.state.openNodes).toEqual(['a', 'b']);
+    });
   });
 
   describe('dispatch identity', () => {
-    it.todo('returned dispatch is referentially stable across rerenders');
+    it('returned dispatch is referentially stable across rerenders', () => {
+      const { result, rerender } = renderHook(() => useTreeMenuState({}));
+      const first = result.current.dispatch;
+      rerender();
+      expect(result.current.dispatch).toBe(first);
+    });
   });
 });

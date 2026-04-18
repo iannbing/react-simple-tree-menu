@@ -5,8 +5,8 @@
 // Derived from SPEC.md. Cover a behavior per `it` with the smallest setup
 // that exercises it.
 
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { act, render, screen, within } from '@testing-library/react';
+import { describe, it, expect, vi, afterEach } from 'vitest';
+import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import TreeMenu, {
   type TreeMenuChildren,
@@ -368,9 +368,13 @@ describe('render-props', () => {
 // ---------------------------------------------------------------------------
 
 describe('resetOpenNodes (render-prop callback)', () => {
-  it('resets to initialOpenNodes, clears search, clears active/focus', async () => {
-    const user = userEvent.setup();
-    const Captured: { reset?: Function } = {};
+  it('resets to initialOpenNodes, clears search, clears active/focus', () => {
+    type ResetFn = (
+      openNodes?: string[],
+      activeKey?: string,
+      focusKey?: string
+    ) => void;
+    const Captured: { reset?: ResetFn } = {};
     const customChildren: TreeMenuChildren = ({ items, resetOpenNodes, search }) => {
       Captured.reset = resetOpenNodes;
       return (
@@ -404,11 +408,7 @@ describe('resetOpenNodes (render-prop callback)', () => {
     expect(screen.getByText('Apple')).toBeInTheDocument();
     // Trigger reset with a new openNodes and an activeKey.
     act(() => {
-      (Captured.reset as (
-        openNodes?: string[],
-        activeKey?: string,
-        focusKey?: string
-      ) => void)(['vegetables'], 'vegetables');
+      Captured.reset!(['vegetables'], 'vegetables');
     });
     expect(screen.queryByText('Apple')).not.toBeInTheDocument();
     expect(screen.getByText('Carrot')).toBeInTheDocument();

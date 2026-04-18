@@ -1,26 +1,126 @@
-// Unit tests for the (future) useDebouncedCallback hook at
-// src/tree/useDebouncedCallback.ts. Stubbed with `it.todo` until M3.2.
-//
-// Small hook (~20 lines) replacing the `tiny-debounce` runtime dep.
-// SPEC §6 (search debounce behavior).
+// Unit tests for useDebouncedCallback. SPEC §6 (search debounce).
+// Replaces the tiny-debounce runtime dep.
 
-import { describe, it } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { act, renderHook } from '@testing-library/react';
+import { useDebouncedCallback } from './useDebouncedCallback';
 
 describe('useDebouncedCallback — SPEC §6', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   describe('debounce behavior', () => {
-    it.todo('calls through after `delay` ms when invoked once');
-    it.todo('collapses rapid successive calls into a single delayed invocation');
-    it.todo('uses the latest arguments when collapsing calls');
-    it.todo('delay=0 still defers to the next task (not synchronous)');
+    it('calls through after `delay` ms when invoked once', () => {
+      const fn = vi.fn();
+      const { result } = renderHook(() => useDebouncedCallback(fn, 100));
+      act(() => result.current('x'));
+      expect(fn).not.toHaveBeenCalled();
+      act(() => {
+        vi.advanceTimersByTime(99);
+      });
+      expect(fn).not.toHaveBeenCalled();
+      act(() => {
+        vi.advanceTimersByTime(1);
+      });
+      expect(fn).toHaveBeenCalledWith('x');
+    });
+
+    it('collapses rapid successive calls into a single delayed invocation', () => {
+      const fn = vi.fn();
+      const { result } = renderHook(() => useDebouncedCallback(fn, 100));
+      act(() => {
+        result.current('a');
+        vi.advanceTimersByTime(50);
+        result.current('b');
+        vi.advanceTimersByTime(50);
+        result.current('c');
+      });
+      act(() => {
+        vi.advanceTimersByTime(100);
+      });
+      expect(fn).toHaveBeenCalledTimes(1);
+      expect(fn).toHaveBeenCalledWith('c');
+    });
+
+    it('uses the latest arguments when collapsing calls', () => {
+      const fn = vi.fn();
+      const { result } = renderHook(() => useDebouncedCallback(fn, 50));
+      act(() => {
+        result.current('first', 1);
+        result.current('last', 2);
+      });
+      act(() => {
+        vi.advanceTimersByTime(50);
+      });
+      expect(fn).toHaveBeenCalledWith('last', 2);
+    });
+
+    it('delay=0 defers to the next task (not synchronous)', () => {
+      const fn = vi.fn();
+      const { result } = renderHook(() => useDebouncedCallback(fn, 0));
+      act(() => result.current('x'));
+      expect(fn).not.toHaveBeenCalled();
+      act(() => {
+        vi.advanceTimersByTime(0);
+      });
+      expect(fn).toHaveBeenCalledWith('x');
+    });
   });
 
   describe('cleanup', () => {
-    it.todo('pending call does not fire after the component unmounts');
-    it.todo('cancel() on the returned function clears any pending call');
+    it('pending call does not fire after the component unmounts', () => {
+      const fn = vi.fn();
+      const { result, unmount } = renderHook(() => useDebouncedCallback(fn, 100));
+      act(() => result.current('x'));
+      unmount();
+      act(() => {
+        vi.advanceTimersByTime(200);
+      });
+      expect(fn).not.toHaveBeenCalled();
+    });
+
+    it('cancel() on the returned function clears any pending call', () => {
+      const fn = vi.fn();
+      const { result } = renderHook(() => useDebouncedCallback(fn, 100));
+      act(() => result.current('x'));
+      act(() => result.current.cancel());
+      act(() => {
+        vi.advanceTimersByTime(200);
+      });
+      expect(fn).not.toHaveBeenCalled();
+    });
   });
 
   describe('identity + latest-callback semantics', () => {
-    it.todo('returned function reference is stable across rerenders');
-    it.todo('fires the latest callback if the wrapped fn changes between calls');
+    it('returned function reference is stable across rerenders', () => {
+      const fn = vi.fn();
+      const { result, rerender } = renderHook(
+        ({ cb, delay }) => useDebouncedCallback(cb, delay),
+        { initialProps: { cb: fn, delay: 100 } }
+      );
+      const first = result.current;
+      rerender({ cb: vi.fn(), delay: 100 });
+      expect(result.current).toBe(first);
+    });
+
+    it('fires the latest callback if the wrapped fn changes between calls', () => {
+      const a = vi.fn();
+      const b = vi.fn();
+      const { result, rerender } = renderHook(
+        ({ cb }) => useDebouncedCallback(cb, 100),
+        { initialProps: { cb: a } }
+      );
+      act(() => result.current('x'));
+      rerender({ cb: b });
+      act(() => {
+        vi.advanceTimersByTime(100);
+      });
+      expect(a).not.toHaveBeenCalled();
+      expect(b).toHaveBeenCalledWith('x');
+    });
   });
 });
