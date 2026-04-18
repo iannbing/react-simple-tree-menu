@@ -1,3 +1,4 @@
+// @ts-nocheck -- legacy v1 KeyDown wrapper, scheduled for deletion at M5.4
 import React from 'react';
 
 interface KeyDownProps {

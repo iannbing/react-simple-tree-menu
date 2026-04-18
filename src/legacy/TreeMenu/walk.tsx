@@ -1,3 +1,4 @@
+// @ts-nocheck -- legacy v1 walk, scheduled for deletion at M5.4
 import isEmpty from 'is-empty';
 import memoize from 'fast-memoize';
 

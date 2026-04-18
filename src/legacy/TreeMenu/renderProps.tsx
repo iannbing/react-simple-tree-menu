@@ -1,3 +1,4 @@
+// @ts-nocheck -- legacy v1 render-props, scheduled for deletion at M5.4
 import React, { ReactNode } from 'react';
 import classNames from 'classnames';
 

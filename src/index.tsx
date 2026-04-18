@@ -1,18 +1,18 @@
-import TreeMenu from './TreeMenu';
+import TreeMenu from './legacy/TreeMenu';
 
 // export components
 export default TreeMenu;
-export { defaultChildren, ItemComponent } from './TreeMenu/renderProps';
+export { defaultChildren, ItemComponent } from './legacy/TreeMenu/renderProps';
+export { default as KeyDown } from './legacy/KeyDown';
 
-// export definitions
-export { TreeMenuProps } from './TreeMenu';
-export { TreeMenuItem, TreeMenuChildren } from './TreeMenu/renderProps';
-export {
+// export type definitions
+export type { TreeMenuProps } from './legacy/TreeMenu';
+export type { TreeMenuItem, TreeMenuChildren } from './legacy/TreeMenu/renderProps';
+export type {
   TreeNodeObject,
   TreeNode,
   TreeNodeInArray,
   LocaleFunction,
   MatchSearchFunction,
   Item,
-} from './TreeMenu/walk';
-export { default as KeyDown } from './KeyDown';
+} from './legacy/TreeMenu/walk';

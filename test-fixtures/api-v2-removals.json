@@ -1,0 +1,16 @@
+{
+  "$comment": "Allowlist of intentional API changes from v1 → v2. The API-contract diff test at build time treats differences listed here as expected and fails on any other divergence. Adding to this list requires an approved design decision in CHANGELOG.md.",
+  "removedProps": {
+    "TreeMenuProps": [
+      {
+        "name": "cacheSearch",
+        "reason": "Leaky abstraction tied to fast-memoize arg-identity caching. Replaced internally by useMemo keyed on real dependencies — correct by default, no user-facing knob.",
+        "decidedIn": "PLAN.md M2/M3 discussion"
+      }
+    ]
+  },
+  "removedExports": [],
+  "renamedExports": [],
+  "addedExports": [],
+  "addedProps": {}
+}
