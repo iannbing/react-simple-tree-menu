@@ -258,7 +258,11 @@ describe('search', () => {
     const user = setupWithFakeTimers();
     render(<TreeMenu data={arrayData} debounceTime={0} />);
     await user.type(screen.getByPlaceholderText('Search'), 'apple');
-    act(() => {
+    // Advance the debounce AND flush React 18's deferred-value transition
+    // that wraps `searchTerm` internally (see useDeferredValueSafe in
+    // src/tree-menu.tsx). `await act(async ...)` runs microtasks / the
+    // scheduler so the transition commits before we assert.
+    await act(async () => {
       vi.advanceTimersByTime(50);
     });
     // "Apple" is a child of closed "Fruits"; search should make it visible
@@ -303,18 +307,18 @@ describe('locale + matchSearch', () => {
     render(
       <TreeMenu data={localData} matchSearch={matchSearch} debounceTime={0} />
     );
-    await user.type(
-      screen.getByPlaceholderText('Search'),
-      'Fruits'
-    );
-    act(() => {
+    await user.type(screen.getByPlaceholderText('Search'), 'Fruits');
+    // `await act(async ...)` flushes React 18's deferred-value transition
+    // that wraps searchTerm internally — see useDeferredValueSafe in
+    // src/tree-menu.tsx.
+    await act(async () => {
       vi.advanceTimersByTime(50);
     });
     expect(screen.getByText('Fruits')).toBeInTheDocument();
     // "Fru" should NOT match under the exact-match custom rule.
     await user.clear(screen.getByPlaceholderText('Search'));
     await user.type(screen.getByPlaceholderText('Search'), 'Fru');
-    act(() => {
+    await act(async () => {
       vi.advanceTimersByTime(50);
     });
     expect(screen.queryByText('Fruits')).not.toBeInTheDocument();

@@ -4,6 +4,7 @@
 // Public API byte-identical to v1.1.18 modulo `cacheSearch` removal
 // (per test-fixtures/api-v2-removals.json). SPEC §§4, 6, 7, 8, 9, 10.
 
+import * as React from 'react';
 import {
   forwardRef,
   useCallback,
@@ -80,12 +81,16 @@ export interface TreeMenuHandle {
   ) => void;
 }
 
-// Note: M6.3 will re-introduce useDeferredValue as an opt-in perf
-// enhancement for React 18+ users. It was removed at M5.1 because the
-// scheduler timing under vitest fake timers made the characterization
-// suite flaky — and behavioral parity with legacy is the non-negotiable
-// gate for cutover. The optimization is strictly additive and lands
-// with dedicated real-timer tests once the flip is done.
+// Feature-detect React 18+'s useDeferredValue. On 16.14/17 this doesn't
+// exist and we fall through to identity — the library behaves exactly as
+// before. On 18/19, wrapping `state.searchTerm` with it lets React keep
+// the input responsive while the (potentially expensive) tree re-walk
+// happens at lower priority. Additive, opt-out-able via a consumer who
+// pins an older React peer, never changes behavioral correctness.
+type UseDeferredValue = <T>(value: T) => T;
+const useDeferredValueSafe: UseDeferredValue =
+  (React as unknown as { useDeferredValue?: UseDeferredValue })
+    .useDeferredValue ?? (<T,>(v: T): T => v);
 
 function defaultOnClickItem(_item: Item): void {
   // no-op; dev warning once per component instance is attached in the
@@ -123,19 +128,23 @@ export const TreeMenu = forwardRef<TreeMenuHandle, TreeMenuProps>(
       focusKey: controlledFocus,
     });
 
+    // Feature-detected deferred value: on React 18+ this smooths typing
+    // into the search box against large trees (input commits at normal
+    // priority, walk re-runs at "transition" priority). On 16.14/17 it's
+    // the identity function — same-frame updates as before.
+    const deferredSearchTerm = useDeferredValueSafe(state.searchTerm);
+
     // Flatten the tree. The only source of truth for visible items.
-    // (M6.3 will wrap state.searchTerm in a feature-detected useDeferredValue
-    // for large-tree input smoothing on React 18+.)
     const rawItems = useMemo(
       () =>
         walk({
           data,
           openNodes: state.openNodes,
-          searchTerm: state.searchTerm,
+          searchTerm: deferredSearchTerm,
           locale,
           matchSearch,
         }),
-      [data, state.openNodes, state.searchTerm, locale, matchSearch]
+      [data, state.openNodes, deferredSearchTerm, locale, matchSearch]
     );
 
     // resetOpenNodes — render-prop callback + imperative ref handle.
