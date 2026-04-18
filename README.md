@@ -18,7 +18,7 @@ npm install react-simple-tree-menu
 
 ```tsx
 import TreeMenu from 'react-simple-tree-menu';
-import 'react-simple-tree-menu/styles';   // optional, see "Styling" below
+import 'react-simple-tree-menu/styles'; // optional, see "Styling" below
 ```
 
 ## Quickstart
@@ -77,12 +77,12 @@ Arbitrary custom fields (e.g. `url`, `icon`) flow through each node and show up 
 
 Focus the tree (Tab), then:
 
-| Key | Action |
-|---|---|
-| ↑ / ↓ | Move focus to previous / next visible item |
-| ← | Close the focused branch (or move focus to its parent) |
-| → | Open the focused branch |
-| Enter | Activate focused item and fire `onClickItem` |
+| Key   | Action                                                 |
+| ----- | ------------------------------------------------------ |
+| ↑ / ↓ | Move focus to previous / next visible item             |
+| ←     | Close the focused branch (or move focus to its parent) |
+| →     | Open the focused branch                                |
+| Enter | Activate focused item and fire `onClickItem`           |
 
 ## Styling
 
@@ -98,9 +98,9 @@ Ships a compact CSS file (~2.5 KB) with sans-serif fonts, subtle hover, inset fo
 
 ```css
 .rstm-tree-item-group {
-  --rstm-active-bg: #f97316;           /* orange */
-  --rstm-radius: 0;                    /* square corners */
-  --rstm-transition: 120ms ease-out;   /* opt into motion */
+  --rstm-active-bg: #f97316; /* orange */
+  --rstm-radius: 0; /* square corners */
+  --rstm-transition: 120ms ease-out; /* opt into motion */
 }
 ```
 
@@ -111,7 +111,7 @@ The complete list of `--rstm-*` tokens and their default values lives in [`src/s
 Tailwind v4 auto-exposes theme colors as CSS variables (`--color-primary`, `--color-gray-300`, …). The library's default stylesheet reads them via `var()` chains, so:
 
 ```tsx
-import 'react-simple-tree-menu/styles';   // that's it
+import 'react-simple-tree-menu/styles'; // that's it
 ```
 
 Active state tracks your `--color-primary`, borders track your `--color-gray-300`, body font tracks your `--font-sans`. Fallback palette kicks in where your theme is silent.
@@ -124,10 +124,10 @@ Pass utility classes via the `classNames` prop:
 <TreeMenu
   data={data}
   classNames={{
-    item:    'py-3 px-4 cursor-pointer',
-    active:  'bg-indigo-600 text-white',
+    item: 'py-3 px-4 cursor-pointer',
+    active: 'bg-indigo-600 text-white',
     focused: 'ring-2 ring-offset-2 ring-indigo-500',
-    search:  'py-2 px-3 w-full border rounded',
+    search: 'py-2 px-3 w-full border rounded',
   }}
 />
 ```
@@ -138,31 +138,31 @@ The library's `rstm-*` anchor classes stay in the DOM (inert strings when the CS
 
 ### `<TreeMenu>` props
 
-| Prop | Type | Default | Description |
-|---|---|---|---|
-| `data` | `TreeNode[]` \| `{ [key]: TreeNode }` | — | The tree, in either format above. |
-| `activeKey` | `string` | — | Controlled selected-item key (full path). |
-| `focusKey` | `string` | — | Controlled keyboard-focused key. |
-| `openNodes` | `string[]` | — | Controlled set of expanded branch keys. |
-| `initialActiveKey` | `string` | `''` | Uncontrolled initial selection. |
-| `initialFocusKey` | `string` | `''` | Uncontrolled initial focus. |
-| `initialOpenNodes` | `string[]` | `[]` | Uncontrolled initial open branches. |
-| `resetOpenNodesOnDataUpdate` | `boolean` | `false` | Reset `openNodes` to initial when `data` ref changes. |
-| `hasSearch` | `boolean` | `true` | Render the default search input. |
-| `onClickItem` | `(item) => void` | no-op | Called on click and on Enter. Receives the full `Item`. |
-| `debounceTime` | `number` | `125` | Search-input debounce in ms. |
-| `locale` | `(props) => string` | identity | Transform labels. **Pass a stable ref.** |
-| `matchSearch` | `(props) => boolean` | case-insensitive substring | Custom matcher. **Pass a stable ref.** |
-| `disableKeyboard` | `boolean` | `false` | Skip the keyboard wrapper. |
-| `children` | render-prop | default UI | Custom renderer — see below. |
-| `classNames` | `TreeMenuClassNames` | — | Per-slot class names appended to `rstm-*` anchors. |
-| `labels` | `TreeMenuLabels` | English defaults | i18n overrides for default-UI copy. |
+| Prop                         | Type                                  | Default                    | Description                                             |
+| ---------------------------- | ------------------------------------- | -------------------------- | ------------------------------------------------------- |
+| `data`                       | `TreeNode[]` \| `{ [key]: TreeNode }` | —                          | The tree, in either format above.                       |
+| `activeKey`                  | `string`                              | —                          | Controlled selected-item key (full path).               |
+| `focusKey`                   | `string`                              | —                          | Controlled keyboard-focused key.                        |
+| `openNodes`                  | `string[]`                            | —                          | Controlled set of expanded branch keys.                 |
+| `initialActiveKey`           | `string`                              | `''`                       | Uncontrolled initial selection.                         |
+| `initialFocusKey`            | `string`                              | `''`                       | Uncontrolled initial focus.                             |
+| `initialOpenNodes`           | `string[]`                            | `[]`                       | Uncontrolled initial open branches.                     |
+| `resetOpenNodesOnDataUpdate` | `boolean`                             | `false`                    | Reset `openNodes` to initial when `data` ref changes.   |
+| `hasSearch`                  | `boolean`                             | `true`                     | Render the default search input.                        |
+| `onClickItem`                | `(item) => void`                      | no-op                      | Called on click and on Enter. Receives the full `Item`. |
+| `debounceTime`               | `number`                              | `125`                      | Search-input debounce in ms.                            |
+| `locale`                     | `(props) => string`                   | identity                   | Transform labels. **Pass a stable ref.**                |
+| `matchSearch`                | `(props) => boolean`                  | case-insensitive substring | Custom matcher. **Pass a stable ref.**                  |
+| `disableKeyboard`            | `boolean`                             | `false`                    | Skip the keyboard wrapper.                              |
+| `children`                   | render-prop                           | default UI                 | Custom renderer — see below.                            |
+| `classNames`                 | `TreeMenuClassNames`                  | —                          | Per-slot class names appended to `rstm-*` anchors.      |
+| `labels`                     | `TreeMenuLabels`                      | English defaults           | i18n overrides for default-UI copy.                     |
 
 ### Imperative ref
 
 ```tsx
 const treeRef = useRef<TreeMenuHandle>(null);
-<TreeMenu ref={treeRef} data={data} />
+<TreeMenu ref={treeRef} data={data} />;
 treeRef.current?.resetOpenNodes(['fruits'], 'fruits/apple');
 ```
 
@@ -172,10 +172,14 @@ treeRef.current?.resetOpenNodes(['fruits'], 'fruits/apple');
 <TreeMenu data={data}>
   {({ search, items, resetOpenNodes }) => (
     <div>
-      <input onChange={e => search?.(e.target.value)} />
+      <input onChange={(e) => search?.(e.target.value)} />
       <ul>
         {items.map(({ key, label, active, onClick }) => (
-          <li key={key} className={active ? 'bg-indigo-500 text-white' : ''} onClick={onClick}>
+          <li
+            key={key}
+            className={active ? 'bg-indigo-500 text-white' : ''}
+            onClick={onClick}
+          >
             {label}
           </li>
         ))}
@@ -201,10 +205,18 @@ Class-component v1 ref patterns keep working via the new `TreeMenuHandle` — `r
 All types are published alongside the JS. Exported:
 
 ```ts
-TreeMenuProps, TreeMenuHandle, TreeMenuItem, TreeMenuChildren,
-TreeMenuClassNames, TreeMenuLabels,
-TreeNode, TreeNodeObject, TreeNodeInArray,
-LocaleFunction, MatchSearchFunction, Item
+(TreeMenuProps,
+  TreeMenuHandle,
+  TreeMenuItem,
+  TreeMenuChildren,
+  TreeMenuClassNames,
+  TreeMenuLabels,
+  TreeNode,
+  TreeNodeObject,
+  TreeNodeInArray,
+  LocaleFunction,
+  MatchSearchFunction,
+  Item);
 ```
 
 ## License

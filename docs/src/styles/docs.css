@@ -1,0 +1,27 @@
+/* Docs-site brand tweaks. Starlight exposes CSS custom properties for its
+   theme; overriding the accent color here cascades to sidebar highlights,
+   inline link underlines, and the TOC active row. */
+
+:root {
+  --sl-color-accent-low: #1e3a8a;
+  --sl-color-accent: #3b82f6;
+  --sl-color-accent-high: #bfdbfe;
+}
+
+:root[data-theme='light'] {
+  --sl-color-accent-low: #dbeafe;
+  --sl-color-accent: #2563eb;
+  --sl-color-accent-high: #1e3a8a;
+}
+
+/* Live demo wrapper used by the LiveTreeMenu island. Keeps the embedded
+   TreeMenu inside a card that reads well against both light and dark
+   Starlight themes. */
+.rstm-live-demo {
+  margin: 1rem 0 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.5rem;
+  background: var(--sl-color-bg-sidebar);
+  max-width: 28rem;
+}

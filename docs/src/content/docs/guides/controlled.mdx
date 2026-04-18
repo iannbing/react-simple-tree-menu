@@ -1,0 +1,82 @@
+---
+title: Controlled vs. uncontrolled
+description: Let TreeMenu own its state, or drive it from your own props.
+---
+
+`TreeMenu` is **uncontrolled by default** — it owns four pieces of state
+internally: `openNodes`, `activeKey`, `focusKey`, and `searchTerm`.
+
+For each piece of state there is:
+
+- an `initial*` prop (read once on mount, then ignored)
+- a controlled `*` prop (read on every render; you own updates)
+
+## Uncontrolled
+
+```tsx
+<TreeMenu
+  data={data}
+  initialActiveKey="fruit/apple"
+  initialOpenNodes={['fruit']}
+  initialFocusKey="fruit/apple"
+/>
+```
+
+State lives inside the component. The `onClickItem` callback fires on each
+click so you can react (e.g., route to a page), but you don't need to wire
+state back in.
+
+## Controlled
+
+```tsx
+import { useState } from 'react';
+import TreeMenu from 'react-simple-tree-menu';
+
+function MyTree() {
+  const [openNodes, setOpenNodes] = useState<string[]>([]);
+  const [activeKey, setActiveKey] = useState<string>('');
+
+  return (
+    <TreeMenu
+      data={data}
+      openNodes={openNodes}
+      activeKey={activeKey}
+      onClickItem={({ key, isOpen }) => {
+        setActiveKey(key);
+        setOpenNodes((prev) =>
+          isOpen ? prev.filter((k) => k !== key) : [...prev, key]
+        );
+      }}
+    />
+  );
+}
+```
+
+You now own the source of truth. Useful when:
+
+- Tree state is persisted to a URL or localStorage.
+- Two trees need to share state.
+- You want to pre-open a set of nodes in response to a query result.
+
+## resetOpenNodes
+
+The render-props function receives a `resetOpenNodes` helper. Call it to
+reset **all four state slots** — `openNodes`, `activeKey`, `focusKey`, and
+`searchTerm` — back to their `initial*` values.
+
+```tsx
+<TreeMenu data={data}>
+  {({ items, search, resetOpenNodes }) => (
+    <>
+      <button onClick={() => resetOpenNodes()}>Reset</button>
+      {/* render items + search... */}
+    </>
+  )}
+</TreeMenu>
+```
+
+`resetOpenNodes` also accepts explicit overrides:
+
+```tsx
+resetOpenNodes(['fruit'], 'fruit/apple', 'fruit/apple');
+```

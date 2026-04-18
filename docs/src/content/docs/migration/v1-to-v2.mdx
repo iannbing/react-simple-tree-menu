@@ -1,0 +1,126 @@
+---
+title: Migration v1 → v2
+description: What changed in 2.0, and how to move your code over.
+---
+
+v2 is a ground-up modernization with a few deliberate breaking changes.
+For the vast majority of users, the migration is **≤ 5 lines of code**.
+
+## TL;DR
+
+1. **Raise your React peer to `>=16.14`.**
+2. **Remove the `cacheSearch` prop** from any `<TreeMenu>` usage.
+3. **Update your CSS import** to the new subpath.
+
+## 1. React peer range
+
+v1 claimed `>=16.6.3`. v2 requires **`>=16.14`**.
+
+The floor is raised so the library can use React's automatic JSX runtime
+internally. Almost no one is still on React 16.6–16.13 (that window closed
+Oct 2020), but if you are, upgrade first.
+
+CI runs matrix tests against 16.14, 17, 18, and 19.
+
+## 2. `cacheSearch` is gone
+
+v1 exposed `cacheSearch` to opt into `fast-memoize`'s arg-identity caching
+for the tree walk. It was leaky — inline `locale` / `matchSearch` functions
+fooled the cache — and confusing.
+
+v2 uses plain `useMemo` keyed on real dependencies. Correct by default.
+No user-facing knob.
+
+```diff
+-<TreeMenu data={data} cacheSearch />
++<TreeMenu data={data} />
+```
+
+If you explicitly set `cacheSearch={false}` to *disable* caching, you can
+also just drop the prop — there's nothing to disable anymore.
+
+## 3. CSS subpath
+
+v1: `import 'react-simple-tree-menu/dist/main.css';`
+v2 (recommended): `import 'react-simple-tree-menu/styles';`
+
+```diff
+-import 'react-simple-tree-menu/dist/main.css';
++import 'react-simple-tree-menu/styles';
+```
+
+The old path (`dist/main.css`) still works — we ship it as an alias for one
+minor release — but it's documented-deprecated.
+
+### Semantics: built-in CSS is hand-written, not Sass
+
+v1 compiled from `src/sass/`. v2 is a single hand-written
+`src/styles.css`. If you **overrode Sass variables** or imported
+intermediate partials, those paths no longer exist. Migrate to
+[CSS custom properties](/guides/theming/#2-css-custom-properties).
+
+## 4. DOM structure (mostly additive)
+
+### Nested `<ul>` structure
+
+v1 flattened every rendered row into one `<ul>` with inline `paddingLeft`.
+v2 emits a proper nested tree (`<ul role="tree">` → `<li role="treeitem">`
+→ `<ul role="group">` → `<li>` …), matching the WAI-ARIA tree pattern.
+
+If you targeted children with `:nth-child` selectors that assumed a flat
+list, you'll need to update them. Most users won't notice.
+
+### Row wrapper
+
+Every item is now:
+
+```html
+<li class="rstm-tree-item rstm-tree-item-levelN" role="treeitem" ...>
+  <div class="rstm-tree-item-row rstm-tree-item--active">
+    ...
+  </div>
+</li>
+```
+
+State classes (`rstm-tree-item--active`, `rstm-tree-item--focused`) live on
+the inner row `<div>`, **not the `<li>`**, so a hover/active background
+doesn't bleed over nested children.
+
+Selectors like `.rstm-tree-item--active { background: red }` still match —
+the class is still there, just on a different element. Compound selectors
+like `li.rstm-tree-item--active` will **not** match anymore. Use
+`.rstm-tree-item--active` alone.
+
+## 5. ARIA additions (no opt-out)
+
+v2 adds `role="tree"`, `role="treeitem"`, `role="group"`, `aria-level`,
+`aria-expanded`, `aria-selected`, `aria-setsize`, `aria-posinset`, and a
+roving `tabIndex`. There's no way to turn these off, and there's no reason
+you'd want to — they're the correct behavior for a tree.
+
+## 6. Runtime dependencies: none
+
+v1 had four: `classnames`, `fast-memoize`, `is-empty`, `tiny-debounce`.
+v2 has zero. Your `npm ls react-simple-tree-menu` tree is smaller now.
+
+## 7. New: `classNames` and `labels` props
+
+These are additive — existing code keeps working.
+
+- **`classNames`** — append your own classes to the `rstm-*` anchors. Use
+  this to go headless with Tailwind or CSS Modules. See
+  [Theming](/guides/theming/#4-headless-skip-our-css).
+- **`labels`** — customize the default UI's i18n strings (search input
+  placeholder + aria-label). See
+  [Keyboard & accessibility](/guides/keyboard/#screen-reader-labels).
+
+## 8. New: `useDeferredValue` on React 18+
+
+v2 feature-detects `useDeferredValue` and uses it to keep the search
+input responsive on very large trees. React 16/17 users get the same
+behavior as before (no transition). No API change either way.
+
+## Still stuck?
+
+[Open an issue](https://github.com/iannbing/react-simple-tree-menu/issues) —
+happy to help.

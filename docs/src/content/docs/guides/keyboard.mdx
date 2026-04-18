@@ -1,0 +1,51 @@
+---
+title: Keyboard & accessibility
+description: WAI-ARIA tree pattern with full keyboard navigation.
+---
+
+The default UI implements the
+[WAI-ARIA tree view pattern](https://www.w3.org/WAI/ARIA/apg/patterns/treeview/),
+including the required keyboard model and ARIA attributes.
+
+## Keyboard
+
+| Key          | Action                                                    |
+| ------------ | --------------------------------------------------------- |
+| `↓`          | Focus next visible item                                   |
+| `↑`          | Focus previous visible item                               |
+| `→`          | Open a closed branch, or focus first child if already open |
+| `←`          | Close an open branch, or focus parent if already closed   |
+| `Enter`      | Activate the focused item (fires `onClickItem`)           |
+
+## ARIA attributes
+
+- Container: `role="tree"`
+- Every item: `role="treeitem"` + `aria-level` (1-based depth)
+- Items with children: `aria-expanded="true|false"`
+- Active item: `aria-selected="true"`
+- Sibling info: `aria-setsize` + `aria-posinset`
+- Roving tabindex: the focused item has `tabIndex=0`, all others `tabIndex=-1`
+
+## Opt out of keyboard
+
+Pass `disableKeyboard` to skip the `<div tabIndex={0}>` wrapper entirely.
+Use this when embedding a TreeMenu inside another widget that owns keyboard
+focus.
+
+```tsx
+<TreeMenu data={data} disableKeyboard />
+```
+
+## Screen-reader labels
+
+Customize the search input's accessible name via the `labels` prop:
+
+```tsx
+<TreeMenu
+  data={data}
+  labels={{
+    searchPlaceholder: 'Chercher…',
+    searchAriaLabel: 'Rechercher l\u2019arbre',
+  }}
+/>
+```

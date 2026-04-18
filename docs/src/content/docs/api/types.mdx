@@ -1,0 +1,88 @@
+---
+title: Types
+description: TypeScript type definitions exported by the library.
+---
+
+All types are exported from `react-simple-tree-menu`.
+
+```ts
+import type {
+  TreeMenuProps,
+  TreeMenuHandle,
+  TreeMenuItem,
+  TreeMenuChildren,
+  TreeMenuClassNames,
+  TreeMenuLabels,
+  TreeNode,
+  TreeNodeObject,
+  TreeNodeInArray,
+  LocaleFunction,
+  MatchSearchFunction,
+  Item,
+} from 'react-simple-tree-menu';
+```
+
+## `TreeNode`
+
+Shared shape for a node in either data format. Label is optional — nodes
+without a label render as `"unknown"`.
+
+```ts
+interface TreeNode {
+  label?: string;
+  nodes?: TreeNodeObject | TreeNodeInArray[];
+  // ...any custom user properties
+}
+```
+
+## `TreeNodeObject`
+
+Object data format. Keys become node `key`s.
+
+```ts
+interface TreeNodeObject {
+  [key: string]: TreeNode;
+}
+```
+
+## `TreeNodeInArray`
+
+Array data format. Every node must supply a unique `key`.
+
+```ts
+interface TreeNodeInArray extends TreeNode {
+  key: string;
+}
+```
+
+## `Item`
+
+See [`Item` under TreeMenu](/api/tree-menu/#item).
+
+## `TreeMenuClassNames`
+
+See [the `classNames` slot table](/guides/theming/#full-classnames-shape).
+
+## `TreeMenuLabels`
+
+```ts
+interface TreeMenuLabels {
+  searchPlaceholder?: string;
+  searchAriaLabel?: string;
+}
+```
+
+## `LocaleFunction`
+
+```ts
+type LocaleFunction = (label: string) => string;
+```
+
+## `MatchSearchFunction`
+
+```ts
+type MatchSearchFunction = (config: {
+  label: string;
+  searchTerm: string;
+}) => boolean;
+```

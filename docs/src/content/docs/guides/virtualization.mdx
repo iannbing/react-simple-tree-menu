@@ -1,0 +1,85 @@
+---
+title: Virtualization
+description: Render 50,000-node trees smoothly with react-window.
+---
+
+`TreeMenu` renders every **visible** item — that is, every item that's not
+inside a closed branch. For typical file-tree-sized data (hundreds of open
+items) that's fine. If you regularly show thousands of open items at once,
+compose `TreeMenu` with
+[`react-window`](https://github.com/bvaughn/react-window) (or any list
+virtualizer) via the render-props API.
+
+`react-window` is **not a dependency** of this library. You install and
+import it yourself.
+
+## Recipe
+
+```tsx
+import TreeMenu from 'react-simple-tree-menu';
+import { FixedSizeList } from 'react-window';
+import 'react-simple-tree-menu/styles';
+
+const ROW_HEIGHT = 32;
+
+export function VirtualTree({ data }: { data: Record<string, unknown> }) {
+  return (
+    <TreeMenu data={data}>
+      {({ items, search }) => (
+        <>
+          <input
+            onChange={(e) => search?.(e.target.value)}
+            placeholder="Search..."
+            className="rstm-search"
+          />
+          <FixedSizeList
+            height={400}
+            itemCount={items.length}
+            itemSize={ROW_HEIGHT}
+            width="100%"
+            itemData={items}
+          >
+            {({ index, style, data: rows }) => {
+              const item = rows[index];
+              return (
+                <div
+                  style={{ ...style, paddingLeft: 12 + item.level * 16 }}
+                  onClick={item.onClick}
+                  className={`rstm-tree-item-row ${
+                    item.active ? 'rstm-tree-item--active' : ''
+                  }`}
+                >
+                  {item.hasNodes && (
+                    <span
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        item.toggleNode?.();
+                      }}
+                    >
+                      {item.isOpen ? '▾' : '▸'}
+                    </span>
+                  )}
+                  <span>{item.label}</span>
+                </div>
+              );
+            }}
+          </FixedSizeList>
+        </>
+      )}
+    </TreeMenu>
+  );
+}
+```
+
+## Tradeoffs
+
+- **Nesting is flattened.** `react-window` renders a flat list, so the
+  outer nested `<ul>` structure from the default UI goes away. Accessibility
+  is on you — add `role="treeitem"`, `aria-level={item.level + 1}`, etc.
+- **Keyboard model.** The default `KeyDown` wrapper uses the rendered DOM
+  to find focus targets. With virtualization, only visible rows are in the
+  DOM. If you need full keyboard nav across the whole tree, you'll need to
+  build your own handler that scrolls the focused index into view.
+- **Bench first.** The library is fast without virtualization up to several
+  thousand visible items. Only reach for this recipe if you've measured
+  real jank.
