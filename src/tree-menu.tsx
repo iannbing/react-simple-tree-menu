@@ -13,10 +13,10 @@ import {
   useRef,
 } from 'react';
 import { walk } from './tree/walk';
-import { useTreeMenuState } from './tree/useTreeMenuState';
-import { useDebouncedCallback } from './tree/useDebouncedCallback';
-import { KeyDown } from './KeyDown';
-import { defaultChildren } from './defaultChildren';
+import { useTreeMenuState } from './tree/use-tree-menu-state';
+import { useDebouncedCallback } from './tree/use-debounced-callback';
+import { KeyDown } from './key-down';
+import { defaultChildren } from './default-children';
 import type {
   TreeNode,
   TreeNodeInArray,
@@ -40,7 +40,16 @@ export interface TreeMenuProps {
   onClickItem?: (props: Item) => void;
   debounceTime?: number;
   children?: TreeMenuChildren;
+  /**
+   * Custom label transformer. **Pass a stable reference** (defined outside
+   * the render or wrapped in `useCallback`) — the internal walk memo keys
+   * on identity, so inlining this re-walks the tree on every render.
+   */
   locale?: LocaleFunction;
+  /**
+   * Custom search matcher. **Pass a stable reference** — same memoization
+   * note as `locale`.
+   */
   matchSearch?: MatchSearchFunction;
   disableKeyboard?: boolean;
 }
@@ -165,71 +174,75 @@ export const TreeMenu = forwardRef<TreeMenuHandle, TreeMenuProps>(
     );
 
     // Decorate raw Item[] with active/focused and handlers.
+    // Conditional spread for `toggleNode` so we never assign `undefined`
+    // to an optional-absent property (exactOptionalPropertyTypes).
     const items: TreeMenuItem[] = useMemo(
       () =>
-        rawItems.map((item) => {
+        rawItems.map((item): TreeMenuItem => {
           const focused = item.key === state.focusKey;
           const active = item.key === state.activeKey;
-          const treeItem: TreeMenuItem = {
+          return {
             ...item,
             focused,
             active,
             onClick: () => handleClick(item),
-            toggleNode: item.hasNodes ? () => handleToggle(item.key) : undefined,
-          } as TreeMenuItem;
-          return treeItem;
+            ...(item.hasNodes
+              ? { toggleNode: () => handleToggle(item.key) }
+              : {}),
+          };
         }),
       [rawItems, state.focusKey, state.activeKey, handleClick, handleToggle]
     );
 
     // Keyboard handlers. Match the legacy model in SPEC §7.
-    const keyDownProps = useMemo(
-      () => {
-        const focusIndex = items.findIndex(
-          (i) => i.key === (state.focusKey || state.activeKey)
-        );
-        const parentKey = (key: string): string => {
-          const parts = key.split('/');
-          return parts.length > 1 ? parts.slice(0, -1).join('/') : key;
-        };
-        return {
-          up: () => {
-            if (focusIndex > 0)
-              dispatch({ type: 'FOCUS', key: items[focusIndex - 1]!.key });
-          },
-          down: () => {
-            if (focusIndex !== -1 && focusIndex < items.length - 1)
-              dispatch({ type: 'FOCUS', key: items[focusIndex + 1]!.key });
-            else if (focusIndex === -1 && items.length > 0)
-              dispatch({ type: 'FOCUS', key: items[0]!.key });
-          },
-          left: () => {
-            const item = items[focusIndex];
-            if (!item) return;
-            if (item.isOpen) {
-              dispatch({ type: 'TOGGLE', key: item.key });
-              dispatch({ type: 'FOCUS', key: item.key });
-            } else {
-              dispatch({ type: 'FOCUS', key: parentKey(item.key) });
-            }
-          },
-          right: () => {
-            const item = items[focusIndex];
-            if (item && item.hasNodes && !item.isOpen) {
-              dispatch({ type: 'TOGGLE', key: item.key });
-            }
-          },
-          enter: () => {
-            const item = items[focusIndex];
-            if (item) {
-              dispatch({ type: 'ACTIVATE', key: state.focusKey || item.key });
-              onClickItem(item);
-            }
-          },
-        };
-      },
-      [items, state.focusKey, state.activeKey, dispatch, onClickItem]
+    //
+    // No useMemo here — `items` is a new array on every relevant state change
+    // (new Item wrappers via the decoration useMemo above), so memoizing this
+    // object was never effective. An honest plain literal. M5.3/M6.3 will
+    // revisit identity stability if profiling justifies it.
+    const focusIndex = items.findIndex(
+      (i) => i.key === (state.focusKey || state.activeKey)
     );
+    const parentKeyOf = (key: string): string => {
+      const slash = key.lastIndexOf('/');
+      return slash === -1 ? key : key.slice(0, slash);
+    };
+    const keyDownProps = {
+      up: () => {
+        if (focusIndex > 0) {
+          dispatch({ type: 'FOCUS', key: items[focusIndex - 1]!.key });
+        }
+      },
+      down: () => {
+        if (focusIndex !== -1 && focusIndex < items.length - 1) {
+          dispatch({ type: 'FOCUS', key: items[focusIndex + 1]!.key });
+        } else if (focusIndex === -1 && items.length > 0) {
+          dispatch({ type: 'FOCUS', key: items[0]!.key });
+        }
+      },
+      left: () => {
+        const item = items[focusIndex];
+        if (!item) return;
+        if (item.isOpen) {
+          dispatch({ type: 'TOGGLE', key: item.key });
+          dispatch({ type: 'FOCUS', key: item.key });
+        } else {
+          dispatch({ type: 'FOCUS', key: parentKeyOf(item.key) });
+        }
+      },
+      right: () => {
+        const item = items[focusIndex];
+        if (item && item.hasNodes && !item.isOpen) {
+          dispatch({ type: 'TOGGLE', key: item.key });
+        }
+      },
+      enter: () => {
+        const item = items[focusIndex];
+        if (!item) return;
+        dispatch({ type: 'ACTIVATE', key: item.key });
+        onClickItem(item);
+      },
+    };
 
     const renderProps = hasSearch
       ? { search, searchTerm: state.searchTerm, items, resetOpenNodes }

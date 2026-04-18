@@ -374,7 +374,7 @@ describe('resetOpenNodes (render-prop callback)', () => {
       activeKey?: string,
       focusKey?: string
     ) => void;
-    const Captured: { reset?: ResetFn } = {};
+    const Captured: { reset?: ResetFn | undefined } = {};
     const customChildren: TreeMenuChildren = ({ items, resetOpenNodes, search }) => {
       Captured.reset = resetOpenNodes;
       return (

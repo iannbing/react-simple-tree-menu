@@ -11,12 +11,12 @@ const DEFAULT_PADDING = 0.75;
 const ICON_SIZE = 2;
 const LEVEL_SPACE = 1.75;
 
+// ItemComponentProps = TreeMenuItem + three renderer-only props. posInSet
+// and setSize already live on Item via walk(), so no need to re-declare.
 export interface ItemComponentProps extends TreeMenuItem {
   openedIcon?: ReactNode;
   closedIcon?: ReactNode;
   style?: CSSProperties;
-  posInSet?: number;
-  setSize?: number;
 }
 
 function cx(...tokens: Array<string | false | null | undefined>): string {
@@ -28,24 +28,21 @@ function cx(...tokens: Array<string | false | null | undefined>): string {
   return out;
 }
 
-function ItemComponentImpl(props: ItemComponentProps) {
-  const {
-    hasNodes = false,
-    isOpen = false,
-    level = 0,
-    onClick,
-    toggleNode,
-    active,
-    focused,
-    openedIcon = '-',
-    closedIcon = '+',
-    label = 'unknown',
-    style,
-    posInSet,
-    setSize,
-    ...rest
-  } = props;
-
+function ItemComponentImpl({
+  hasNodes = false,
+  isOpen = false,
+  level = 0,
+  onClick,
+  toggleNode,
+  active,
+  focused,
+  openedIcon = '-',
+  closedIcon = '+',
+  label = 'unknown',
+  style,
+  posInSet,
+  setSize,
+}: ItemComponentProps) {
   const className = cx(
     'rstm-tree-item',
     `rstm-tree-item-level${level}`,
@@ -60,23 +57,20 @@ function ItemComponentImpl(props: ItemComponentProps) {
     }
   };
 
-  // ARIA: aria-expanded only applies to items that have children.
-  const ariaExpanded = hasNodes ? { 'aria-expanded': isOpen } : undefined;
-
   return (
     // Keyboard navigation for the tree is handled by the KeyDown wrapper
     // one level up; adding per-item keyboard handlers here would duplicate
     // and interfere with the roving-tabindex model.
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events
     <li
-      {...(rest as object)}
       role="treeitem"
       tabIndex={focused ? 0 : -1}
       aria-level={level + 1}
       aria-selected={!!active}
       aria-setsize={setSize}
       aria-posinset={posInSet}
-      {...ariaExpanded}
+      // aria-expanded is only meaningful on nodes with children.
+      {...(hasNodes ? { 'aria-expanded': isOpen } : {})}
       className={className}
       style={{
         paddingLeft: `${

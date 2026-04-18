@@ -5,7 +5,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { defaultChildren } from '../defaultChildren';
+import { defaultChildren } from '../default-children';
 import type { TreeMenuItem } from '../types';
 
 const items: TreeMenuItem[] = [
@@ -57,5 +57,20 @@ describe('defaultChildren', () => {
     expect(treeitems).toHaveLength(items.length);
     expect(treeitems[0]).toHaveTextContent('Alpha');
     expect(treeitems[1]).toHaveTextContent('Bravo');
+  });
+
+  it('search input clears when searchTerm resets externally', () => {
+    // Simulate the lifecycle: committed searchTerm goes 'carrot' → ''
+    // via a resetOpenNodes call on the parent. Input should track.
+    const { rerender } = render(
+      defaultChildren({ items, search: () => {}, searchTerm: 'carrot' })
+    );
+    const input = screen.getByPlaceholderText(
+      'Type and search'
+    ) as HTMLInputElement;
+    expect(input.value).toBe('carrot');
+
+    rerender(defaultChildren({ items, search: () => {}, searchTerm: '' }));
+    expect(input.value).toBe('');
   });
 });

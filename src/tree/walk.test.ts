@@ -156,6 +156,29 @@ describe('walk() — SPEC §5', () => {
     });
   });
 
+  describe('internal fields do not leak onto Items', () => {
+    it('omits the object-format `index` sort key from emitted Items', () => {
+      const items = walk({
+        data: { foo: { label: 'Foo', index: 3 } },
+        openNodes: [],
+        searchTerm: '',
+      });
+      expect(items[0]).not.toHaveProperty('index');
+    });
+
+    it('omits raw node `key`/`nodes` from emitted Items (recomputed/recursed)', () => {
+      const items = walk({
+        data: [{ key: 'a', label: 'Alpha', nodes: [{ key: 'b', label: 'Beta' }] }],
+        openNodes: ['a'],
+        searchTerm: '',
+      });
+      // Each Item has the computed key, but no stray `nodes` array.
+      for (const it of items) {
+        expect(it).not.toHaveProperty('nodes');
+      }
+    });
+  });
+
   describe('edge cases', () => {
     it('empty object data returns []', () => {
       expect(walk({ data: {}, openNodes: [], searchTerm: '' })).toEqual([]);

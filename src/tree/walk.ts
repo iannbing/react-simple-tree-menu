@@ -17,8 +17,11 @@ export interface WalkProps {
   data: Data;
   openNodes: string[];
   searchTerm: string;
-  locale?: LocaleFunction;
-  matchSearch?: MatchSearchFunction;
+  // Explicit `| undefined` on optional props so callers can pass
+  // destructured values through without tripping
+  // exactOptionalPropertyTypes.
+  locale?: LocaleFunction | undefined;
+  matchSearch?: MatchSearchFunction | undefined;
 }
 
 const KEY_DELIMITER = '/';
@@ -71,7 +74,20 @@ export function walk(props: WalkProps): Item[] {
     posInSet: number,
     setSize: number
   ): void => {
-    const { nodes, label: rawLabel = DEFAULT_LABEL, ...custom } = node;
+    // Strip fields that are walk-internal / structural from `custom` so
+    // they don't leak as data properties onto the emitted Item:
+    //   - `nodes`    — the nested children collection (recursed into separately)
+    //   - `label`    — transformed by `locale()` below; rebound from rawLabel
+    //   - `index`    — object-format sort key, meaningful only pre-walk
+    //   - `key`      — array-format's own node key; we emit the computed path
+    // Anything else a consumer attached (url, icon, whatever) flows through.
+    const {
+      nodes,
+      label: rawLabel = DEFAULT_LABEL,
+      index: _discardIndex,
+      key: _discardKey,
+      ...custom
+    } = node as TreeNode & TreeNodeInArray;
     const key = parentKey
       ? parentKey + KEY_DELIMITER + nodeKey
       : nodeKey;

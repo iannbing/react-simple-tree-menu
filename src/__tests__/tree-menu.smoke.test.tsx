@@ -10,7 +10,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { createRef } from 'react';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { TreeMenu, type TreeMenuHandle } from '../TreeMenu';
+import { TreeMenu, type TreeMenuHandle } from '../tree-menu';
 import type { TreeNodeInArray } from '../types';
 
 const data: TreeNodeInArray[] = [

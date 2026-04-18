@@ -6,7 +6,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ItemComponent } from '../ItemComponent';
+import { ItemComponent } from '../item-component';
 import type { TreeMenuItem } from '../types';
 
 // Key omitted on purpose — spreading `key` into JSX triggers a React

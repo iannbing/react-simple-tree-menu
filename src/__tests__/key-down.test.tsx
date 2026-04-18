@@ -4,7 +4,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { KeyDown } from '../KeyDown';
+import { KeyDown } from '../key-down';
 
 const makeHandlers = () => ({
   up: vi.fn(),

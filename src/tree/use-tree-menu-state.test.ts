@@ -4,7 +4,7 @@
 
 import { describe, it, expect } from 'vitest';
 import { act, renderHook } from '@testing-library/react';
-import { useTreeMenuState } from './useTreeMenuState';
+import { useTreeMenuState } from './use-tree-menu-state';
 
 describe('useTreeMenuState — SPEC §4', () => {
   describe('initialization', () => {

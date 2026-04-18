@@ -1,12 +1,12 @@
 // Public entry point — v2 implementation.
 
-export { TreeMenu as default } from './TreeMenu';
-export { ItemComponent } from './ItemComponent';
-export { defaultChildren } from './defaultChildren';
-export { KeyDown } from './KeyDown';
+export { TreeMenu as default } from './tree-menu';
+export { ItemComponent } from './item-component';
+export { defaultChildren } from './default-children';
+export { KeyDown } from './key-down';
 
 // Types
-export type { TreeMenuProps, TreeMenuHandle } from './TreeMenu';
+export type { TreeMenuProps, TreeMenuHandle } from './tree-menu';
 export type {
   TreeMenuItem,
   TreeMenuChildren,

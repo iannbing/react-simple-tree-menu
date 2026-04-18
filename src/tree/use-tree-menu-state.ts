@@ -18,20 +18,22 @@ export type TreeMenuAction =
   | { type: 'FOCUS'; key: string }
   | {
       type: 'RESET';
-      openNodes?: string[];
-      activeKey?: string;
-      focusKey?: string;
+      openNodes?: string[] | undefined;
+      activeKey?: string | undefined;
+      focusKey?: string | undefined;
     };
 
 export interface UseTreeMenuStateProps {
-  initialOpenNodes?: string[];
-  initialActiveKey?: string;
-  initialFocusKey?: string;
+  // `| undefined` on every optional — callers spread destructured props,
+  // which produces explicit undefined under exactOptionalPropertyTypes.
+  initialOpenNodes?: string[] | undefined;
+  initialActiveKey?: string | undefined;
+  initialFocusKey?: string | undefined;
   // Controlled overrides. When provided, internal state for that slot is
   // bypassed on read, and TOGGLE becomes a no-op.
-  openNodes?: string[];
-  activeKey?: string;
-  focusKey?: string;
+  openNodes?: string[] | undefined;
+  activeKey?: string | undefined;
+  focusKey?: string | undefined;
 }
 
 interface InternalState extends TreeMenuStateShape {

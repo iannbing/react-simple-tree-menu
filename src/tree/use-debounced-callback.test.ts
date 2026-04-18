@@ -3,7 +3,7 @@
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { act, renderHook } from '@testing-library/react';
-import { useDebouncedCallback } from './useDebouncedCallback';
+import { useDebouncedCallback } from './use-debounced-callback';
 
 describe('useDebouncedCallback — SPEC §6', () => {
   beforeEach(() => {
