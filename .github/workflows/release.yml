@@ -1,0 +1,141 @@
+name: Release
+
+# Two-path release pipeline:
+#
+# 1. push to `release/v2`  → release-rc job
+#      Runs full gates, bumps version via `npm-version-suffix rc`
+#      (package.json N.N.N → N.N.N-rc.0 → -rc.1 → ...), publishes with
+#      the `next` dist-tag, pushes the version-bump commit + tag.
+#
+# 2. workflow_dispatch     → release-stable job
+#      Manually triggered from the Actions UI. Takes a `version` input
+#      (e.g. 2.0.0), runs full gates, bumps package.json, publishes
+#      *without* a dist-tag (so it becomes `latest`), pushes.
+#
+# Prerequisites (one-time, repo-owner does this in GitHub settings):
+#   - Secrets → Actions → new secret `NPM_TOKEN`, value is an npm
+#     automation token with publish rights for the package.
+#   - Settings → Actions → General → Workflow permissions → "Read and
+#     write permissions" (so the workflow can push back the version
+#     bump commit + tag).
+
+on:
+  push:
+    branches: ['release/v2']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Stable version to publish (e.g. 2.0.0). Will run `npm version <input>`.'
+        required: true
+        type: string
+
+jobs:
+  # --------------------------------------------------------------------
+  # RC publish — every push to release/v2 produces a new -rc.N on npm
+  # --------------------------------------------------------------------
+  release-rc:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # push version bump
+      id-token: write   # npm provenance (OIDC)
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          registry-url: 'https://registry.npmjs.org'
+
+      - run: npm ci
+
+      - name: Gate — lint + typecheck
+        run: |
+          npm run lint
+          npm run typecheck
+
+      - name: Gate — test (one React peer here; the matrix runs on CI)
+        run: npm test
+
+      - name: Gate — build
+        run: npm run build
+
+      - name: Gate — API contract
+        run: npm run check:api
+
+      - name: Gate — bundle size
+        run: npm run check:size
+
+      - name: Configure git
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Bump RC version (reads `npm view` for latest -rc.N and +1)
+        # The package has no CLI binary — invoke the script directly.
+        # Starts at -rc.1 if no previous RC exists for this base version.
+        # The base version comes from package.json's current "version"
+        # field — the maintainer sets that manually when starting a new
+        # stable track (e.g. `npm version 2.0.0 --no-git-tag-version`
+        # before the first push to release/v2).
+        run: node ./node_modules/npm-version-suffix/run-add-suffix.js
+
+      - name: Publish to npm (next dist-tag)
+        run: npm publish --tag next --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Push version bump + tag
+        run: git push --follow-tags
+
+  # --------------------------------------------------------------------
+  # Stable publish — manual trigger only
+  # --------------------------------------------------------------------
+  release-stable:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          registry-url: 'https://registry.npmjs.org'
+
+      - run: npm ci
+
+      - name: Gates
+        run: |
+          npm run lint
+          npm run typecheck
+          npm test
+          npm run build
+          npm run check:api
+          npm run check:size
+
+      - name: Configure git
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Bump to requested stable version
+        run: npm version ${{ inputs.version }}
+
+      - name: Publish to npm (latest)
+        run: npm publish --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Push version bump + tag
+        run: git push --follow-tags
