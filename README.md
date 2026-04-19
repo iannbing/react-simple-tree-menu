@@ -94,13 +94,25 @@ Three paths — pick the one that matches your stack:
 import 'react-simple-tree-menu/styles';
 ```
 
-Ships a compact CSS file (~2.5 KB) with sans-serif fonts, subtle hover, inset focus ring, and indigo active state. Every color, radius, and spacing value is a CSS custom property — override any single token:
+Ships a compact CSS file (~2.5 KB) with sans-serif fonts, subtle hover, inset focus ring, and indigo active state. Every color, radius, and spacing value is a CSS custom property — defaults are on `:root` with zero specificity, so you override globally, per-theme, or per-panel and the change inherits into every tree inside:
 
 ```css
-.rstm-tree-item-group {
-  --rstm-active-bg: #f97316; /* orange */
-  --rstm-radius: 0; /* square corners */
-  --rstm-transition: 120ms ease-out; /* opt into motion */
+/* global */
+:root {
+  --rstm-active-bg: #f97316;          /* orange */
+  --rstm-radius: 0;                   /* square corners */
+  --rstm-transition: 120ms ease-out;  /* opt into motion */
+}
+
+/* per-theme (light / dark attribute) */
+:root[data-theme='dark'] {
+  --rstm-text-color: #f3f4f6;
+  --rstm-hover-bg: #1f2937;
+}
+
+/* per-panel (one tree themed differently from the rest) */
+.my-dark-panel {
+  --rstm-active-bg: #60a5fa;
 }
 ```
 

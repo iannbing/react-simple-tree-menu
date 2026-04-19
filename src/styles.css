@@ -3,22 +3,25 @@
 
    Theming model (SPEC §15):
    - Every color / typography / spacing value is a CSS custom property
-     on `.rstm-tree-item-group`.
+     declared on `:root` with zero specificity (`:where(:root)`).
    - Each default resolves via a `var()` chain that reads Tailwind v4's
      auto-exposed theme variables when present, then falls back to the
      library's own palette.
    - Tailwind v4 users therefore get brand-aligned colors with zero
      config beyond `import 'react-simple-tree-menu/styles'`.
    - Everyone else gets sensible, modern defaults; override any token
-     in their own CSS. */
+     in their own CSS — either globally (`:root { --rstm-*: ... }`) or
+     scoped to any ancestor (`.my-panel { --rstm-*: ... }`), and the
+     token inherits down to the tree naturally.
 
-/* Shared token scope. `:where()` has zero specificity so consumers can
-   still override any `--rstm-*` via a direct selector (e.g. their own
-   `.rstm-tree-item-group { --rstm-active-bg: ... }`). Tokens are
-   declared on both anchor classes so `.rstm-search`, a sibling of
-   `.rstm-tree-item-group` in the defaultChildren fragment, can still
-   read them. */
-:where(.rstm-tree-item-group, .rstm-search) {
+   Why `:where(:root)` and not `:where(.rstm-tree-item-group, .rstm-search)`?
+   Custom-property inheritance loses to an element's own declaration
+   regardless of specificity. If tokens were declared on the inner
+   elements, an ancestor wrapper's override would be silently ignored
+   because the tree's own declaration would mask it. Putting defaults on
+   `:root` keeps them as inherited fallbacks, so any closer ancestor's
+   override takes over via normal inheritance. */
+:where(:root) {
   /* Scale & spacing */
   --rstm-icon-size: 1rem;
   --rstm-radius: 0.25rem;

@@ -26,16 +26,49 @@ That's it. The library ships a hand-written, zero-preprocessor CSS file
 ## 2. CSS custom properties
 
 Every color, spacing, and typography value is a `--rstm-*` custom property.
-Override any of them in your own CSS:
+Defaults are declared on `:root` with zero specificity, so they inherit
+naturally into the tree — you can override them on **any ancestor**
+(global, per-theme, per-panel) and the change cascades down.
+
+### Global override
 
 ```css
-.rstm-tree-item-group {
+:root {
   --rstm-active-bg: #e11d48;
   --rstm-radius: 0.5rem;
   --rstm-transition: 120ms ease-out;
   --rstm-font-family: 'Inter', system-ui, sans-serif;
 }
 ```
+
+### Per-theme override (light / dark via a data attribute)
+
+```css
+:root[data-theme='dark'] {
+  --rstm-text-color: #f3f4f6;
+  --rstm-hover-bg: #1f2937;
+  --rstm-active-bg: #60a5fa;
+}
+```
+
+### Per-panel override (two trees, two palettes)
+
+```html
+<div class="light-panel"><TreeMenu ... /></div>
+<div class="dark-panel"><TreeMenu ... /></div>
+```
+
+```css
+.dark-panel {
+  --rstm-text-color: #f3f4f6;
+  --rstm-hover-bg: #1f2937;
+  --rstm-active-bg: #60a5fa;
+}
+```
+
+The inner `.rstm-tree-item-group` has no declaration of its own, so it
+inherits from the closest ancestor — `.dark-panel` for that subtree,
+`:root` everywhere else.
 
 ### Full token list
 
