@@ -24,6 +24,32 @@ export default defineConfig({
       title: 'react-simple-tree-menu',
       description:
         'Simple, data-driven, zero-dependency tree menu component for React.',
+      head: [
+        // Preconnect + load the Inter display family (weights 400/500/600/700)
+        // and JetBrains Mono for code. Subsetting to latin keeps the weight
+        // low. Starlight will pick these up as the body/heading/mono stacks
+        // via the `--sl-font` and `--sl-font-system-mono` overrides in
+        // docs.css below.
+        {
+          tag: 'link',
+          attrs: { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+        },
+        {
+          tag: 'link',
+          attrs: {
+            rel: 'preconnect',
+            href: 'https://fonts.gstatic.com',
+            crossorigin: true,
+          },
+        },
+        {
+          tag: 'link',
+          attrs: {
+            rel: 'stylesheet',
+            href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap',
+          },
+        },
+      ],
       social: [
         {
           icon: 'github',

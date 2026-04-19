@@ -3,7 +3,7 @@ title: react-simple-tree-menu
 description: Simple, data-driven, zero-dependency tree menu for React.
 template: splash
 hero:
-  tagline: Simple, data-driven, zero-dependency tree menu for React.
+  tagline: A small, accessible, zero-dependency tree menu for React — 3 KB, headless-ready, works back to React 16.14.
   actions:
     - text: Get started
       link: /getting-started/
@@ -12,34 +12,42 @@ hero:
     - text: View on GitHub
       link: https://github.com/iannbing/react-simple-tree-menu
       icon: external
+      variant: minimal
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
 import LiveTreeMenu from '../../components/LiveTreeMenu.tsx';
 
-## See it in action
+## Try it
 
 <LiveTreeMenu client:only="react" />
 
-## Highlights
+```tsx
+import TreeMenu from 'react-simple-tree-menu';
+import 'react-simple-tree-menu/styles';
+
+<TreeMenu data={tree} onClickItem={({ key }) => console.log(key)} />;
+```
+
+## Why this library
 
 <CardGrid stagger>
-  <Card title="Zero runtime deps" icon="rocket">
-    Ships a ~3KB bundle. React is the only peer.
+  <Card title="3 KB, zero runtime deps" icon="rocket">
+    Minified + brotli bundle under 3.5 KB. React is the only peer dependency.
   </Card>
-  <Card title="Accessible" icon="approve-check">
-    WAI-ARIA tree pattern, roving tabindex, full keyboard navigation out of the box.
+  <Card title="Accessibility, done" icon="approve-check">
+    WAI-ARIA tree pattern, roving tabindex, programmatic focus movement, full keyboard nav out of the box.
   </Card>
-  <Card title="Render-props" icon="setting">
-    Use the default UI, or pass a function child and render whatever you want.
+  <Card title="Render-props escape hatch" icon="setting">
+    Use the default UI, or pass a function child and render whatever you want — flat, nested, or virtualized.
   </Card>
-  <Card title="Headless-ready" icon="puzzle">
-    Tailwind v4 theme variables detected automatically. Or pass `classNames` and skip our CSS.
+  <Card title="Theme with one variable" icon="sun">
+    Every color, spacing, and font value is a `--rstm-*` CSS custom property. Override globally, per-theme, or per-panel.
   </Card>
-  <Card title="Search with debounce" icon="magnifier">
-    Built-in search filters the tree and auto-expands matching ancestors.
+  <Card title="Tailwind-friendly" icon="puzzle">
+    Tailwind v4 theme variables auto-detected. Or go headless: pass `classNames` and skip the CSS import entirely.
   </Card>
-  <Card title="Controlled or uncontrolled" icon="forward-slash">
-    Let the component own state, or drive `openNodes` / `activeKey` / `focusKey` yourself.
+  <Card title="Works with any React" icon="seti:react">
+    Tested against React 16.14, 17, 18, and 19 on every commit. `useDeferredValue` is picked up automatically on 18+.
   </Card>
 </CardGrid>
