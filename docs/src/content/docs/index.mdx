@@ -28,7 +28,12 @@ import LiveTreeMenu from '../../components/LiveTreeMenu.tsx';
 import TreeMenu from 'react-simple-tree-menu';
 import 'react-simple-tree-menu/styles';
 
-<TreeMenu data={tree} onClickItem={({ key }) => console.log(key)} />;
+<TreeMenu
+  data={tree}
+  onClickItem={({ key }) => {
+    console.log(key);
+  }}
+/>;
 ```
 
 </div>
