@@ -1,11 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="react-simple-tree-menu">
-  <!-- Open disclosure triangle — accent color. -->
-  <path d="M3 4 L3 10 L7.5 7 Z" fill="#4f46e5"/>
-  <!-- Three progressively-indented rounded bars. The staircase indent
-       reads as a tree/outline at any size; keeping everything on a 32
-       grid with 3-unit-tall bars and 1.5-unit corners gives crisp
-       silhouettes at 16 × 16. -->
-  <rect x="11" y="5.5" width="17" height="3" rx="1.5" fill="#1c1a2e"/>
-  <rect x="15" y="14.5" width="13" height="3" rx="1.5" fill="#1c1a2e"/>
-  <rect x="19" y="23.5" width="9" height="3" rx="1.5" fill="#1c1a2e"/>
+  <!-- Sideways binary tree: parent node on the left, two children
+       branching to the right. Mirrors the indentation direction of an
+       actual tree menu. Three circles + two accent strokes. -->
+  <path d="M8 16 L24 8 M8 16 L24 24" stroke="#4f46e5" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <circle cx="8" cy="16" r="4" fill="#4f46e5"/>
+  <circle cx="24" cy="8" r="3.5" fill="#1c1a2e"/>
+  <circle cx="24" cy="24" r="3.5" fill="#1c1a2e"/>
 </svg>

@@ -23,7 +23,7 @@
    override takes over via normal inheritance. */
 :where(:root) {
   /* Scale & spacing */
-  --rstm-icon-size: 1rem;
+  --rstm-icon-size: 1.375rem;
   --rstm-radius: 0.25rem;
   /* Instant state flips by default. Consumers can opt into animation by
      overriding this token (e.g. `80ms ease-out` for a subtle fade). */
@@ -131,6 +131,10 @@
   outline: none;
 }
 
+/* Toggle icon — the disclosure control. Sized bigger than the label
+   height so it reads as a distinct affordance (not just a decorative
+   glyph). Hover darkens the color and adds a subtle background pill so
+   keyboard/mouse users get a clear "clickable" cue on the control. */
 .rstm-toggle-icon {
   display: inline-flex;
   align-items: center;
@@ -139,17 +143,40 @@
   width: var(--rstm-icon-size);
   height: var(--rstm-icon-size);
   color: var(--rstm-muted-color);
-  transition: transform var(--rstm-transition);
+  border-radius: var(--rstm-radius);
+  cursor: pointer;
+  transition:
+    background-color var(--rstm-transition),
+    color var(--rstm-transition),
+    transform var(--rstm-transition);
+}
+
+.rstm-toggle-icon:hover {
+  background-color: color-mix(
+    in srgb,
+    currentColor 15%,
+    transparent
+  );
+  color: var(--rstm-text-color);
 }
 
 .rstm-tree-item--active .rstm-toggle-icon {
   color: currentColor;
 }
 
+.rstm-tree-item--active .rstm-toggle-icon:hover {
+  background-color: color-mix(
+    in srgb,
+    var(--rstm-active-fg) 22%,
+    transparent
+  );
+}
+
 .rstm-toggle-icon-symbol {
   display: block;
-  font-size: 1.2em;
+  font-size: 1.1em;
   line-height: 1;
+  font-weight: 600;
 }
 
 .rstm-search {
