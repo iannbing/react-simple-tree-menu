@@ -157,10 +157,16 @@ body {
   margin-top: 0.75rem;
 }
 
-/* Starlight's splash template has a hero-only <section>; follow it with
-   tight spacing so the sample sits close under the CTAs. */
+/* Starlight's splash template puts the hero copy + CTAs in one block
+   and the mdx content immediately below. Add breathing room before the
+   first content row (demo + code) lands so the CTAs don't sit flush
+   against the sample card. */
 .hero + .sl-markdown-content {
-  margin-top: 1rem;
+  margin-top: 2.5rem;
+}
+
+.hero + .sl-markdown-content > .rstm-hero-sample:first-child {
+  margin-top: 0;
 }
 
 /* Starlight action buttons */
