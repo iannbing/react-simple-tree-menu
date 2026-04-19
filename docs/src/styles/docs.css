@@ -158,18 +158,9 @@ body {
 }
 
 /* Starlight's splash template has a hero-only <section>; follow it with
-   tight spacing so the first content block ("Try it") sits close. */
+   tight spacing so the sample sits close under the CTAs. */
 .hero + .sl-markdown-content {
   margin-top: 1rem;
-}
-
-.hero + .sl-markdown-content > h2:first-child {
-  margin-top: 1.25rem;
-  font-size: 1.05rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--sl-color-gray-3);
-  font-weight: 600;
 }
 
 /* Starlight action buttons */
@@ -327,18 +318,41 @@ body {
   margin: 1rem 0 1.5rem;
 }
 
-.rstm-hero-sample > .rstm-live-demo {
-  /* Cancel the baseline margin the demo-card rule applies when it stands
-     alone — here it's inside a grid that manages spacing. */
+/* Descendant selector (not `>`) because Astro wraps the React island in
+   an `<astro-island>` element with `display: contents`, so the real grid
+   child is one level deeper than the markup suggests. */
+.rstm-hero-sample .rstm-live-demo {
+  /* Cancel the baseline demo-card margin + width cap; inside the grid
+     we want to fill the column. */
   margin: 0;
   max-width: none;
   align-self: start;
 }
 
+/* Give the code block the same card treatment as the demo so both
+   columns feel like peers. Expressive-code renders its own `pre` inside
+   a `.expressive-code` wrapper. */
 .rstm-hero-sample > .expressive-code,
-.rstm-hero-sample > pre {
+.rstm-hero-sample > pre,
+.rstm-hero-sample > astro-island {
   margin: 0;
   align-self: start;
+}
+
+.rstm-hero-sample > .expressive-code {
+  border: 1px solid var(--sl-color-hairline);
+  border-radius: 0.875rem;
+  overflow: hidden;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.08),
+    0 10px 30px -15px rgba(0, 0, 0, 0.12);
+}
+
+.rstm-hero-sample > .expressive-code pre,
+.rstm-hero-sample > .expressive-code figure {
+  border: none;
+  border-radius: 0;
+  margin: 0;
 }
 
 @media (min-width: 56rem) {
