@@ -16,13 +16,7 @@
 
 /* Live demo wrapper used by the LiveTreeMenu island. Keeps the embedded
    TreeMenu inside a card that reads well against both light and dark
-   Starlight themes.
-
-   Route the library's `--rstm-*` tokens through Starlight's theme-
-   adaptive variables so the demo is readable on either theme. The
-   library's CSS declares these tokens on `:where(.rstm-tree-item-group,
-   .rstm-search)` (zero specificity), so declaring them on this wrapper
-   (specificity 0,1,0) cleanly takes precedence and cascades down. */
+   Starlight themes. */
 .rstm-live-demo {
   margin: 1rem 0 1.5rem;
   padding: 1rem;
@@ -30,12 +24,24 @@
   border-radius: 0.5rem;
   background: var(--sl-color-bg-sidebar);
   max-width: 28rem;
+}
 
+/* Route the library's `--rstm-*` tokens through Starlight's theme-
+   adaptive `--sl-color-*` scale so the demo is readable on both light
+   and dark themes.
+
+   The library declares these tokens directly ON `.rstm-tree-item-group`
+   and `.rstm-search` (via a zero-specificity `:where()`). An ancestor
+   declaration on `.rstm-live-demo` would only inherit — and the
+   element's own declaration always beats inheritance, regardless of
+   specificity. So target the same elements the library targets, with
+   specificity 0,2,0 to win over the library's 0,0,0. */
+.rstm-live-demo .rstm-tree-item-group,
+.rstm-live-demo .rstm-search {
   --rstm-text-color: var(--sl-color-text);
   --rstm-muted-color: var(--sl-color-gray-3);
   --rstm-border-color: var(--sl-color-gray-5);
   --rstm-hover-bg: var(--sl-color-gray-6);
-  /* Active stays brand-accent — adaptive via Starlight's accent scale. */
   --rstm-active-bg: var(--sl-color-accent);
   --rstm-active-fg: var(--sl-color-white);
   --rstm-focus-ring-color: var(--sl-color-accent);
