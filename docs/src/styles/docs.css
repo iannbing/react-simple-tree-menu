@@ -313,6 +313,39 @@ body {
 }
 
 /* ---------------------------------------------------------------------------
+   Hero sample — live demo + code block side-by-side at wider viewports.
+   Stacks on narrow screens so neither column gets cramped.
+   --------------------------------------------------------------------------- */
+
+.rstm-hero-sample {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: minmax(0, 1fr);
+  margin: 1rem 0 1.5rem;
+}
+
+.rstm-hero-sample > .rstm-live-demo {
+  /* Cancel the baseline margin the demo-card rule applies when it stands
+     alone — here it's inside a grid that manages spacing. */
+  margin: 0;
+  max-width: none;
+}
+
+.rstm-hero-sample > .expressive-code,
+.rstm-hero-sample > pre {
+  margin: 0;
+  align-self: start;
+}
+
+@media (min-width: 56rem) {
+  .rstm-hero-sample {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    align-items: start;
+    gap: 1.5rem;
+  }
+}
+
+/* ---------------------------------------------------------------------------
    Live TreeMenu demo card
    --------------------------------------------------------------------------- */
 
