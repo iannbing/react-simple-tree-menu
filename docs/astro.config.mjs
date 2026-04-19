@@ -24,6 +24,12 @@ export default defineConfig({
       title: 'react-simple-tree-menu',
       description:
         'Simple, data-driven, zero-dependency tree menu component for React.',
+      logo: {
+        light: './src/assets/logo-light.svg',
+        dark: './src/assets/logo-dark.svg',
+        replacesTitle: false,
+      },
+      favicon: '/favicon.svg',
       head: [
         // Preconnect + load the Inter display family (weights 400/500/600/700)
         // and JetBrains Mono for code. Subsetting to latin keeps the weight

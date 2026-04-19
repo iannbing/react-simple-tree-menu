@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Favicon: accent triangle + neutral bars. Works on both light and
+       dark browser chrome because the bars use currentColor via a
+       media-query rule. -->
+  <style>
+    .bar { fill: #1c1a2e; }
+    @media (prefers-color-scheme: dark) {
+      .bar { fill: #e6e4f4; }
+    }
+  </style>
+  <path d="M3 4 L3 10 L7.5 7 Z" fill="#6366f1"/>
+  <rect class="bar" x="11" y="5.5" width="17" height="3" rx="1.5"/>
+  <rect class="bar" x="15" y="14.5" width="13" height="3" rx="1.5"/>
+  <rect class="bar" x="19" y="23.5" width="9" height="3" rx="1.5"/>
+</svg>

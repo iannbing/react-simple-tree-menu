@@ -120,14 +120,19 @@ body {
 }
 
 /* ---------------------------------------------------------------------------
-   Splash hero — big tagline, pill actions, subtle glow
+   Splash hero — compact. Don't burn a full viewport on a title + CTA.
    --------------------------------------------------------------------------- */
 
+.hero {
+  padding-block: 1.5rem 0.25rem;
+  align-items: center;
+}
+
 .hero > h1 {
-  font-size: clamp(2.4rem, 5vw, 3.6rem);
+  font-size: clamp(1.9rem, 3.2vw, 2.5rem);
   font-weight: 800;
   letter-spacing: -0.03em;
-  line-height: 1.05;
+  line-height: 1.08;
   background: linear-gradient(
     135deg,
     var(--sl-color-text) 0%,
@@ -137,13 +142,34 @@ body {
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
+  margin-block-end: 0.5rem;
 }
 
 .hero .tagline {
-  font-size: 1.25rem;
+  font-size: 1.05rem;
   line-height: 1.55;
   color: var(--sl-color-gray-2);
-  max-width: 42ch;
+  max-width: 46ch;
+  margin-block: 0.25rem 0.75rem;
+}
+
+.hero .actions {
+  margin-top: 0.75rem;
+}
+
+/* Starlight's splash template has a hero-only <section>; follow it with
+   tight spacing so the first content block ("Try it") sits close. */
+.hero + .sl-markdown-content {
+  margin-top: 1rem;
+}
+
+.hero + .sl-markdown-content > h2:first-child {
+  margin-top: 1.25rem;
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--sl-color-gray-3);
+  font-weight: 600;
 }
 
 /* Starlight action buttons */
@@ -201,15 +227,16 @@ body {
   );
   border-radius: 0.875rem;
   padding: 1.25rem;
+  /* Don't animate `transform` — Starlight's `stagger` CardGrid applies
+     its own transform to the even-indexed cards, and our hover would
+     overwrite it, making the card snap back to the top of the row. */
   transition:
     border-color 140ms ease,
-    transform 140ms ease,
     box-shadow 140ms ease;
 }
 
 .sl-markdown-content .card:hover {
   border-color: color-mix(in srgb, var(--sl-color-accent) 35%, transparent);
-  transform: translateY(-2px);
   box-shadow:
     0 14px 30px -20px color-mix(in srgb, var(--sl-color-accent) 40%, transparent);
 }

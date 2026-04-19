@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="react-simple-tree-menu">
+  <!-- Open disclosure triangle — accent color, lighter variant for dark bg. -->
+  <path d="M3 4 L3 10 L7.5 7 Z" fill="#818cf8"/>
+  <!-- Bars use the docs site's dark-theme text color so the logo reads
+       without extra fill tweaks in the nav. -->
+  <rect x="11" y="5.5" width="17" height="3" rx="1.5" fill="#e6e4f4"/>
+  <rect x="15" y="14.5" width="13" height="3" rx="1.5" fill="#e6e4f4"/>
+  <rect x="19" y="23.5" width="9" height="3" rx="1.5" fill="#e6e4f4"/>
+</svg>
