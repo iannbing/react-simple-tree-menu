@@ -51,6 +51,10 @@ symbols or props that remained.
   container, `role="treeitem"` on each item, plus `aria-expanded`,
   `aria-level`, `aria-selected`, `aria-setsize`, `aria-posinset`.
   Roving tabindex (focused item `tabIndex=0`, others `-1`).
+- **Arrow-key navigation matches WAI-ARIA tree pattern.** `→` on an
+  open branch now moves focus to the first child (previously a no-op).
+  Closed branch / leaf behavior unchanged. Matches VS Code, Finder,
+  GitHub file tree muscle memory.
 - **`classNames` prop** (`TreeMenuClassNames` type). Per-slot
   strings appended to the `rstm-*` anchor classes — Tailwind /
   utility-class users can skip the default CSS import and style

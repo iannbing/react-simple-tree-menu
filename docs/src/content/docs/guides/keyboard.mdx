@@ -9,18 +9,18 @@ including the required keyboard model and ARIA attributes.
 
 ## Keyboard
 
-| Key          | Action                                                    |
-| ------------ | --------------------------------------------------------- |
-| `↓`          | Focus next visible item                                   |
-| `↑`          | Focus previous visible item                               |
-| `→`          | Open a closed branch (no-op on leaves and already-open branches) |
-| `←`          | Close an open branch; on a closed item, focus parent      |
-| `Enter`      | Activate the focused item (fires `onClickItem`)           |
+| Key          | Action                                                                             |
+| ------------ | ---------------------------------------------------------------------------------- |
+| `↓`          | Focus next visible item                                                            |
+| `↑`          | Focus previous visible item                                                        |
+| `→`          | On a closed branch: open it · on an open branch: focus first child · leaf: no-op   |
+| `←`          | Close an open branch · on a closed item or leaf: focus parent                      |
+| `Enter`      | Activate the focused item (fires `onClickItem`)                                    |
 
-The `→`-on-open-branch-focuses-first-child and similar "deep" WAI-ARIA
-tree behaviors are intentional omissions for v2 — the current model
-matches v1's keyboard semantics for zero-migration compatibility.
-[Issue tracking the richer model.](https://github.com/iannbing/react-simple-tree-menu/issues)
+The `→` / `←` behaviors match the canonical
+[WAI-ARIA tree pattern](https://www.w3.org/WAI/ARIA/apg/patterns/treeview/),
+so muscle memory from VS Code, Finder, and the GitHub file tree all
+carry over.
 
 ## ARIA attributes
 

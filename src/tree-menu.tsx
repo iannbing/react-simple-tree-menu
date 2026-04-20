@@ -259,9 +259,21 @@ export const TreeMenu = forwardRef<TreeMenuHandle, TreeMenuProps>(
         }
       },
       right: () => {
+        // WAI-ARIA tree pattern for Right Arrow:
+        //   - Closed branch: open it; focus stays.
+        //   - Open branch:   move focus to the first child.
+        //   - Leaf:          no-op.
+        // walk() emits depth-first, so the first child of an open parent
+        // at items[focusIndex] is always items[focusIndex + 1].
         const item = items[focusIndex];
-        if (item && item.hasNodes && !item.isOpen) {
+        if (!item || !item.hasNodes) return;
+        if (!item.isOpen) {
           dispatch({ type: 'TOGGLE', key: item.key });
+          return;
+        }
+        const child = items[focusIndex + 1];
+        if (child && child.level === item.level + 1) {
+          dispatch({ type: 'FOCUS', key: child.key });
         }
       },
       enter: () => {

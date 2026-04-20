@@ -81,7 +81,7 @@ Focus the tree (Tab), then:
 | ----- | ------------------------------------------------------ |
 | ↑ / ↓ | Move focus to previous / next visible item             |
 | ←     | Close the focused branch (or move focus to its parent) |
-| →     | Open the focused branch                                |
+| →     | Open a closed branch · on an open branch, focus its first child |
 | Enter | Activate focused item and fire `onClickItem`           |
 
 ## Styling

@@ -500,6 +500,31 @@ describe('keyboard navigation', () => {
     expect(screen.getByText('Apple')).toBeInTheDocument();
   });
 
+  it('ArrowRight on an open branch moves focus to the first child', async () => {
+    const user = userEvent.setup();
+    const { container } = render(
+      <TreeMenu data={arrayData} initialOpenNodes={['fruits']} />
+    );
+    (container.firstElementChild as HTMLElement).focus();
+    // ↓ focuses Fruits (already open), → should move focus to Apple.
+    await user.keyboard('{ArrowDown}{ArrowRight}');
+    expect(itemOf('Apple').className).toMatch(/rstm-tree-item--focused/);
+    // Fruits is no longer the focused row.
+    expect(itemOf('Fruits').className).not.toMatch(/rstm-tree-item--focused/);
+  });
+
+  it('ArrowRight on a leaf is a no-op', async () => {
+    const user = userEvent.setup();
+    const { container } = render(
+      <TreeMenu data={arrayData} initialOpenNodes={['fruits']} initialFocusKey="fruits/apple" />
+    );
+    (container.firstElementChild as HTMLElement).focus();
+    // Apple is a leaf; → should not toggle, open, or move focus.
+    await user.keyboard('{ArrowRight}');
+    expect(itemOf('Apple').className).toMatch(/rstm-tree-item--focused/);
+    expect(itemOf('Apple').getAttribute('aria-expanded')).toBeNull();
+  });
+
   it('ArrowLeft closes an open branch, keeping focus on it', async () => {
     const user = userEvent.setup();
     const { container } = render(
