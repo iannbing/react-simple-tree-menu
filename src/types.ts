@@ -127,4 +127,10 @@ export type TreeMenuChildren = (props: {
   classNames?: TreeMenuClassNames | undefined;
   /** Passed through from TreeMenu's `labels` prop. */
   labels?: TreeMenuLabels | undefined;
+  /**
+   * Separator that joins node keys into paths (e.g. `"fruit/berry"`).
+   * Passed through from TreeMenu's `keySeparator` prop so custom
+   * render-props can feed it into `unflatten(items, keySeparator)`.
+   */
+  keySeparator?: string | undefined;
 }) => ReactElement;

@@ -36,7 +36,8 @@
   "addedProps": {
     "TreeMenuProps": {
       "classNames": "Optional per-slot class names appended to the default `rstm-*` anchors (M4.5c).",
-      "labels": "Optional i18n-friendly copy overrides for default UI strings (M4.5d)."
+      "labels": "Optional i18n-friendly copy overrides for default UI strings (M4.5d).",
+      "keySeparator": "Optional delimiter that joins node keys into paths (default `/`). Lets consumers whose own keys contain `/` (URLs, filesystem paths) pick a different delimiter without loss of functionality."
     }
   }
 }

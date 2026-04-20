@@ -59,6 +59,30 @@ describe('walk() — SPEC §5', () => {
       expect(items.map((i) => i.key)).toContain('fruits/apple');
       expect(items.map((i) => i.key)).toContain('fruits/banana');
     });
+
+    it('honors a custom keySeparator in composed keys and openNodes lookups', () => {
+      const items = walk({
+        data: arr,
+        openNodes: ['fruits'],
+        searchTerm: '',
+        keySeparator: '.',
+      });
+      expect(items.map((i) => i.key)).toEqual([
+        'fruits',
+        'fruits.apple',
+        'fruits.banana',
+        'vegetables',
+      ]);
+      // openNodes still match: top-level `fruits` has no separator so the
+      // lookup is unaffected. Expanding a nested branch uses the new sep:
+      const deep = walk({
+        data: arr,
+        openNodes: ['fruits', 'fruits.apple'],
+        searchTerm: '',
+        keySeparator: '.',
+      });
+      expect(deep.find((i) => i.key === 'fruits.apple')!.isOpen).toBe(false); // apple has no children
+    });
   });
 
   describe('shape of each emitted Item', () => {

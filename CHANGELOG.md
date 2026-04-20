@@ -70,6 +70,13 @@ symbols or props that remained.
 - **`TreeMenuHandle` ref shape.** `useImperativeHandle` exposes
   `resetOpenNodes` for consumers who prefer refs to render-props
   (mirrors v1's class-component ref pattern).
+- **`keySeparator` prop.** Customize the character that joins node
+  keys into paths (default `"/"`). Useful when node keys themselves
+  contain `/` (URLs, filesystem paths) — pass e.g. `"."` and the
+  library uses that everywhere: emitted `Item.key` paths,
+  `openNodes` lookups, LEFT-arrow parent-focus navigation, and
+  `unflatten(items, keySeparator)` for custom render-props.
+  `unflatten()` gains a matching optional second argument.
 - **`unflatten` helper + `UnflattenResult<T>` type.** Public export of
   the grouping function `defaultChildren` uses internally — reconstructs
   a nested tree from the flat `items[]` via slash-joined key paths.

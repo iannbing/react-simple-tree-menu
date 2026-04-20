@@ -113,9 +113,10 @@ export const defaultChildren: TreeMenuChildren = ({
   items,
   classNames,
   labels,
+  keySeparator,
 }) => {
   const itemClassNames = toItemClassNames(classNames);
-  const { roots, childrenByParent } = unflatten(items);
+  const { roots, childrenByParent } = unflatten(items, keySeparator);
   const subgroupClass = cx('rstm-tree-item-subgroup', classNames?.subgroup);
   return (
     <>

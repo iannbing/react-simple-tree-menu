@@ -84,4 +84,34 @@ describe('unflatten', () => {
     const { roots } = unflatten<I>([a]);
     expect(roots[0]).toBe(a);
   });
+
+  it('respects a custom keySeparator', () => {
+    const items: I[] = [
+      item('fruit'),
+      item('fruit.apple'),
+      item('fruit.berry'),
+      item('fruit.berry.strawberry'),
+    ];
+    const { roots, childrenByParent } = unflatten(items, '.');
+    expect(roots.map((r) => r.key)).toEqual(['fruit']);
+    expect(childrenByParent.get('fruit')?.map((c) => c.key)).toEqual([
+      'fruit.apple',
+      'fruit.berry',
+    ]);
+    expect(childrenByParent.get('fruit.berry')?.map((c) => c.key)).toEqual([
+      'fruit.berry.strawberry',
+    ]);
+  });
+
+  it('does not treat the default separator as structural when a custom one is set', () => {
+    // Keys contain `/` but aren't path-joins — the custom `.` separator
+    // means `/` should be treated as a literal character in the key.
+    const items: I[] = [
+      item('a/b'),
+      item('a/b.child'),
+    ];
+    const { roots, childrenByParent } = unflatten(items, '.');
+    expect(roots.map((r) => r.key)).toEqual(['a/b']);
+    expect(childrenByParent.get('a/b')?.map((c) => c.key)).toEqual(['a/b.child']);
+  });
 });

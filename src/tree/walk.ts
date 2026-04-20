@@ -22,9 +22,10 @@ export interface WalkProps {
   // exactOptionalPropertyTypes.
   locale?: LocaleFunction | undefined;
   matchSearch?: MatchSearchFunction | undefined;
+  keySeparator?: string | undefined;
 }
 
-const KEY_DELIMITER = '/';
+const DEFAULT_KEY_SEPARATOR = '/';
 const DEFAULT_LABEL = 'unknown';
 
 const defaultLocale: LocaleFunction = ({ label }) => label;
@@ -52,7 +53,7 @@ const hasData = (v: Data): v is TreeNodeObject | TreeNodeInArray[] =>
  * unless a search is active.
  */
 export function walk(props: WalkProps): Item[] {
-  const { data, openNodes, searchTerm, locale, matchSearch } = props;
+  const { data, openNodes, searchTerm, locale, matchSearch, keySeparator } = props;
   if (!hasData(data)) return [];
 
   const effectiveLocale = locale ?? defaultLocale;
@@ -60,6 +61,7 @@ export function walk(props: WalkProps): Item[] {
     matchSearch ??
     (searchTerm ? makeDefaultMatcher(searchTerm) : (() => true));
   const hasSearch = searchTerm.length > 0;
+  const sep = keySeparator || DEFAULT_KEY_SEPARATOR;
   const out: Item[] = [];
 
   // Recurse. parentKey is the accumulated slash-joined path; passing it in
@@ -98,7 +100,7 @@ export function walk(props: WalkProps): Item[] {
       key?: string;
     };
     const key = parentKey
-      ? parentKey + KEY_DELIMITER + nodeKey
+      ? parentKey + sep + nodeKey
       : nodeKey;
 
     const label = effectiveLocale({ label: rawLabel, ...custom });

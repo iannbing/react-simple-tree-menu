@@ -27,6 +27,7 @@ import TreeMenu from 'react-simple-tree-menu';
 | `resetOpenNodesOnDataUpdate`   | `boolean`                                                 | `false`      | Reset open nodes when `data` identity changes.                                               |
 | `classNames`                   | `TreeMenuClassNames`                                      | `{}`         | Class names appended to `rstm-*` anchors. See [Theming](/guides/theming/#full-classnames-shape). |
 | `labels`                       | `TreeMenuLabels`                                          | `{}`         | Customize the default UI's i18n strings.                                                     |
+| `keySeparator`                 | `string`                                                  | `'/'`        | Delimiter joining node keys into paths. Change if your keys contain `/` (URLs, paths) — the library uses it everywhere: emitted `Item.key`, `openNodes` lookups, LEFT-arrow parent focus, `unflatten()`.  |
 | `children`                     | `(props: TreeMenuChildren) => ReactNode`                  | `defaultChildren` | Render-props function.                                                                    |
 
 ## Imperative handle

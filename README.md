@@ -169,6 +169,7 @@ The library's `rstm-*` anchor classes stay in the DOM (inert strings when the CS
 | `children`                   | render-prop                           | default UI                 | Custom renderer — see below.                            |
 | `classNames`                 | `TreeMenuClassNames`                  | —                          | Per-slot class names appended to `rstm-*` anchors.      |
 | `labels`                     | `TreeMenuLabels`                      | English defaults           | i18n overrides for default-UI copy.                     |
+| `keySeparator`               | `string`                              | `'/'`                      | Delimiter joining node keys into paths. Change if your keys contain `/` (URLs, paths). |
 
 ### Imperative ref
 

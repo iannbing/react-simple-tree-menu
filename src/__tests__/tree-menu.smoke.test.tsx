@@ -92,4 +92,21 @@ describe('TreeMenu v2 (new) — smoke', () => {
     // Still open — controlled openNodes is not mutated.
     expect(screen.getByText('Apple')).toBeInTheDocument();
   });
+
+  it('keySeparator prop composes Item keys with the given delimiter', async () => {
+    const onClickItem = vi.fn();
+    const user = userEvent.setup();
+    render(
+      <TreeMenu
+        data={data}
+        initialOpenNodes={['fruits']}
+        keySeparator="."
+        onClickItem={onClickItem}
+      />
+    );
+    await user.click(screen.getByText('Apple'));
+    expect(onClickItem).toHaveBeenCalledWith(
+      expect.objectContaining({ key: 'fruits.apple' })
+    );
+  });
 });

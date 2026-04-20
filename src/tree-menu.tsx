@@ -68,6 +68,15 @@ export interface TreeMenuProps {
    * without writing a custom `children` render-prop.
    */
   labels?: TreeMenuLabels;
+  /**
+   * String that joins node keys into paths for identifying items.
+   * Default `"/"`. Change this if your own node keys contain `/` (e.g.
+   * URL paths or filesystem paths), since the library uses the separator
+   * to reconstruct parent/child relationships in `unflatten` and in
+   * keyboard parent-focus navigation. Pick a delimiter that never
+   * appears in a node's own `key`.
+   */
+  keySeparator?: string;
 }
 
 // Imperative API for consumers who prefer refs over render-props for the
@@ -117,6 +126,7 @@ export const TreeMenu = forwardRef<TreeMenuHandle, TreeMenuProps>(
       locale,
       matchSearch,
       disableKeyboard = false,
+      keySeparator = '/',
     } = props;
 
     const { state, dispatch } = useTreeMenuState({
@@ -143,8 +153,9 @@ export const TreeMenu = forwardRef<TreeMenuHandle, TreeMenuProps>(
           searchTerm: deferredSearchTerm,
           locale,
           matchSearch,
+          keySeparator,
         }),
-      [data, state.openNodes, deferredSearchTerm, locale, matchSearch]
+      [data, state.openNodes, deferredSearchTerm, locale, matchSearch, keySeparator]
     );
 
     // resetOpenNodes — render-prop callback + imperative ref handle.
@@ -230,8 +241,8 @@ export const TreeMenu = forwardRef<TreeMenuHandle, TreeMenuProps>(
       (i) => i.key === (state.focusKey || state.activeKey)
     );
     const parentKeyOf = (key: string): string => {
-      const slash = key.lastIndexOf('/');
-      return slash === -1 ? key : key.slice(0, slash);
+      const sepAt = key.lastIndexOf(keySeparator);
+      return sepAt === -1 ? key : key.slice(0, sepAt);
     };
     const keyDownProps = {
       up: () => {
@@ -292,8 +303,9 @@ export const TreeMenu = forwardRef<TreeMenuHandle, TreeMenuProps>(
           resetOpenNodes,
           classNames,
           labels,
+          keySeparator,
         }
-      : { items, resetOpenNodes, classNames, labels };
+      : { items, resetOpenNodes, classNames, labels, keySeparator };
 
     const rendered = children(renderProps);
 
