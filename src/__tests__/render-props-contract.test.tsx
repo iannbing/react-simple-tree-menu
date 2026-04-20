@@ -10,7 +10,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */
 
 import { describe, it, expect, vi } from 'vitest';
-import { act, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type { ReactElement } from 'react';
 import TreeMenu, { type TreeMenuItem, type TreeNodeInArray } from '../index';
@@ -149,13 +149,6 @@ describe('render-props contract', () => {
 
   it('search() passed to custom renderer still debounces + filters items', async () => {
     vi.useFakeTimers();
-    // `delay: null` avoids a React-19 + fake-timer + RTL-v16 deadlock
-    // in the per-keystroke timer queue — see the matching note in
-    // characterization.test.tsx's `setupWithFakeTimers` helper.
-    const user = userEvent.setup({
-      advanceTimers: vi.advanceTimersByTime,
-      delay: null,
-    });
     render(
       <TreeMenu data={data} debounceTime={0}>
         {({ items, search }) => (
@@ -173,7 +166,12 @@ describe('render-props contract', () => {
         )}
       </TreeMenu>
     );
-    await user.type(screen.getByTestId('custom-search'), 'a1');
+    // `fireEvent.change` in one shot — user.type()'s per-keystroke
+    // simulation deadlocks under React 19 + fake timers (see the
+    // matching note in characterization.test.tsx's `setSearch`).
+    fireEvent.change(screen.getByTestId('custom-search'), {
+      target: { value: 'a1' },
+    });
     await act(async () => {
       vi.advanceTimersByTime(50);
     });

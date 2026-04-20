@@ -6,7 +6,7 @@
 // that exercises it.
 
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { act, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import TreeMenu, {
   type TreeMenuChildren,
@@ -63,20 +63,17 @@ const itemOf = (label: string): HTMLElement => {
   return node as HTMLElement;
 };
 
-// Helper: timer-safe user-event setup for debounce tests.
-//
-// `delay: null` skips user-event's per-keystroke setTimeout. With fake
-// timers, user-event's keystroke-delay queue + React 19's scheduler +
-// RTL v16's async wrapper can deadlock, and the `user.type()` promise
-// never resolves. Disabling the per-keystroke delay sidesteps that;
-// the tests still drive the debounce window via
-// `vi.advanceTimersByTime`.
-const setupWithFakeTimers = () => {
-  vi.useFakeTimers();
-  return userEvent.setup({
-    advanceTimers: vi.advanceTimersByTime,
-    delay: null,
-  });
+// Helper: set the value of a search input in one shot via
+// `fireEvent.change`. We use this instead of `userEvent.type()` for
+// fake-timer tests because user-event's keystroke-by-keystroke
+// simulation deadlocks under the React 19 + RTL v16 + fake-timers
+// combo — the per-keystroke promise chain never resolves. The
+// library's `onChange` handler dispatches SEARCH with the full new
+// value, so a single change event is behaviorally equivalent for
+// these tests; it only skips the intermediate per-character SEARCH
+// dispatches that would be debounced away anyway.
+const setSearch = (input: HTMLElement, value: string): void => {
+  fireEvent.change(input, { target: { value } });
 };
 
 // ---------------------------------------------------------------------------
@@ -257,9 +254,9 @@ describe('search', () => {
   });
 
   it('typing in the search box filters items after the debounce window', async () => {
-    const user = setupWithFakeTimers();
+    vi.useFakeTimers();
     render(<TreeMenu data={arrayData} debounceTime={125} />);
-    await user.type(screen.getByPlaceholderText('Search'), 'carrot');
+    setSearch(screen.getByPlaceholderText('Search'), 'carrot');
     await act(async () => {
       vi.advanceTimersByTime(200);
     });
@@ -268,9 +265,9 @@ describe('search', () => {
   });
 
   it('auto-opens ancestors of matching items during search', async () => {
-    const user = setupWithFakeTimers();
+    vi.useFakeTimers();
     render(<TreeMenu data={arrayData} debounceTime={0} />);
-    await user.type(screen.getByPlaceholderText('Search'), 'apple');
+    setSearch(screen.getByPlaceholderText('Search'), 'apple');
     // Advance the debounce AND flush React 18+'s deferred-value transition
     // that wraps `searchTerm` internally (see useDeferredValueSafe in
     // src/tree-menu.tsx). `await act(async ...)` runs microtasks / the
@@ -304,7 +301,7 @@ describe('locale + matchSearch', () => {
   });
 
   it('matchSearch replaces the default substring matcher', async () => {
-    const user = setupWithFakeTimers();
+    vi.useFakeTimers();
     const localData: TreeNodeInArray[] = [
       { key: 'fruits', label: 'Fruits' },
       { key: 'vegetables', label: 'Vegetables' },
@@ -315,17 +312,13 @@ describe('locale + matchSearch', () => {
     render(
       <TreeMenu data={localData} matchSearch={matchSearch} debounceTime={0} />
     );
-    await user.type(screen.getByPlaceholderText('Search'), 'Fruits');
-    // `await act(async ...)` flushes React 18's deferred-value transition
-    // that wraps searchTerm internally — see useDeferredValueSafe in
-    // src/tree-menu.tsx.
+    setSearch(screen.getByPlaceholderText('Search'), 'Fruits');
     await act(async () => {
       vi.advanceTimersByTime(50);
     });
     expect(screen.getByText('Fruits')).toBeInTheDocument();
     // "Fru" should NOT match under the exact-match custom rule.
-    await user.clear(screen.getByPlaceholderText('Search'));
-    await user.type(screen.getByPlaceholderText('Search'), 'Fru');
+    setSearch(screen.getByPlaceholderText('Search'), 'Fru');
     await act(async () => {
       vi.advanceTimersByTime(50);
     });
