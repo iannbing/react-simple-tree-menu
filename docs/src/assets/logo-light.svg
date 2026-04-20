@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="react-simple-tree-menu">
-  <!-- Sideways binary tree: parent node on the left, two children
-       branching to the right. Mirrors the indentation direction of an
-       actual tree menu. Three circles + two accent strokes. -->
-  <path d="M8 16 L24 8 M8 16 L24 24" stroke="#4f46e5" stroke-width="2" stroke-linecap="round" fill="none"/>
-  <circle cx="8" cy="16" r="4" fill="#4f46e5"/>
-  <circle cx="24" cy="8" r="3.5" fill="#1c1a2e"/>
-  <circle cx="24" cy="24" r="3.5" fill="#1c1a2e"/>
-</svg>
