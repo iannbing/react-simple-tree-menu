@@ -5,6 +5,7 @@ export { ItemComponent } from './item-component';
 export { defaultChildren } from './default-children';
 export { KeyDown } from './key-down';
 export { unflatten } from './tree/unflatten';
+export { collectBranchKeys } from './tree/collect-branch-keys';
 
 // Types
 export type { TreeMenuProps, TreeMenuHandle } from './tree-menu';

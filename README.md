@@ -176,8 +176,24 @@ The library's `rstm-*` anchor classes stay in the DOM (inert strings when the CS
 ```tsx
 const treeRef = useRef<TreeMenuHandle>(null);
 <TreeMenu ref={treeRef} data={data} />;
+
 treeRef.current?.resetOpenNodes(['fruits'], 'fruits/apple');
+treeRef.current?.expandAll();   // every branch opens
+treeRef.current?.collapseAll(); // back to roots only
 ```
+
+`expandAll` / `collapseAll` preserve the user's current active / focus / search state. Both are no-ops when `openNodes` is controlled — the parent owns that slot. For controlled consumers, use the exported helper instead:
+
+```tsx
+import TreeMenu, { collectBranchKeys } from 'react-simple-tree-menu';
+
+const [open, setOpen] = useState<string[]>([]);
+<button onClick={() => setOpen(collectBranchKeys(data))}>Expand all</button>
+<button onClick={() => setOpen([])}>Collapse all</button>
+<TreeMenu data={data} openNodes={open} />
+```
+
+**Perf note:** `collectBranchKeys` is O(N) — microseconds even on 100k-node trees. The cost after expand-all comes from rendering every branch's children. For trees that grow beyond ~2k visible rows, pair with the [virtualization recipe](https://iannbing.github.io/react-simple-tree-menu/guides/virtualization/).
 
 ### Custom render-props
 

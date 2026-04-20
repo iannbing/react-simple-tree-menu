@@ -16,6 +16,10 @@ export type TreeMenuAction =
   | { type: 'SEARCH'; term: string }
   | { type: 'ACTIVATE'; key: string }
   | { type: 'FOCUS'; key: string }
+  // SET_OPEN_NODES replaces openNodes wholesale without touching
+  // activeKey / focusKey / searchTerm — used by expandAll / collapseAll
+  // where the user wouldn't expect their current selection to be lost.
+  | { type: 'SET_OPEN_NODES'; openNodes: string[] }
   | {
       type: 'RESET';
       openNodes?: string[] | undefined;
@@ -57,6 +61,8 @@ function reducer(state: InternalState, action: TreeMenuAction): InternalState {
       return { ...state, activeKey: action.key, focusKey: action.key };
     case 'FOCUS':
       return { ...state, focusKey: action.key };
+    case 'SET_OPEN_NODES':
+      return { ...state, openNodes: action.openNodes };
     case 'RESET':
       return {
         ...state,
@@ -127,7 +133,12 @@ export function useTreeMenuState(
 
   const dispatch = useCallback(
     (action: TreeMenuAction) => {
-      if (action.type === 'TOGGLE' && controlledOpenRef.current !== undefined) {
+      // Controlled `openNodes` owns the slot — any internal write to it
+      // (TOGGLE by user click, SET_OPEN_NODES by expandAll/collapseAll)
+      // is a no-op so controlled state stays the single source of truth.
+      const writesOpen =
+        action.type === 'TOGGLE' || action.type === 'SET_OPEN_NODES';
+      if (writesOpen && controlledOpenRef.current !== undefined) {
         return;
       }
       rawDispatch(action);

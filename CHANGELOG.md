@@ -68,8 +68,18 @@ symbols or props that remained.
 - **`labels` prop** (`TreeMenuLabels` type). i18n-friendly overrides
   for default UI copy: `searchPlaceholder`, `searchAriaLabel`.
 - **`TreeMenuHandle` ref shape.** `useImperativeHandle` exposes
-  `resetOpenNodes` for consumers who prefer refs to render-props
-  (mirrors v1's class-component ref pattern).
+  `resetOpenNodes`, plus `expandAll()` and `collapseAll()` for
+  one-call expansion state changes. `expandAll()` does one O(N) walk
+  of the data tree (microseconds even on 100k nodes) to collect every
+  branch key, then dispatches a single state update; `collapseAll()`
+  is a no-arg reset to zero open branches. Both preserve the user's
+  current active/focus/search state (unlike `resetOpenNodes`). Under
+  controlled `openNodes` they're no-ops — the parent owns the slot.
+- **`collectBranchKeys(data, keySeparator?)` helper.** Public export
+  of the traversal that `expandAll()` uses internally. Controlled-
+  `openNodes` consumers can build their own expand-all:
+  `setOpen(collectBranchKeys(data))` without re-implementing the
+  path-join walk.
 - **`keySeparator` prop.** Customize the character that joins node
   keys into paths (default `"/"`). Useful when node keys themselves
   contain `/` (URLs, filesystem paths) — pass e.g. `"."` and the

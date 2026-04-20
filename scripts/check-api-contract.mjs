@@ -81,6 +81,7 @@ const expectedExports = [
   // v2 additions — mirrored in api-v2-removals.json `addedExports`.
   'unflatten',
   'UnflattenResult',
+  'collectBranchKeys',
 ];
 
 for (const name of expectedExports) {

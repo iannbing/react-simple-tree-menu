@@ -109,4 +109,53 @@ describe('TreeMenu v2 (new) — smoke', () => {
       expect.objectContaining({ key: 'fruits.apple' })
     );
   });
+
+  it('ref handle exposes expandAll — every branch opens, selection preserved', () => {
+    const ref = createRef<TreeMenuHandle>();
+    render(
+      <TreeMenu ref={ref} data={data} initialActiveKey="vegetables" />
+    );
+    // Pre-expandAll: closed branches are not rendered.
+    expect(screen.queryByText('Apple')).not.toBeInTheDocument();
+    act(() => {
+      ref.current!.expandAll();
+    });
+    expect(screen.getByText('Apple')).toBeInTheDocument();
+    // Active selection survives — expandAll doesn't clear it the way
+    // resetOpenNodes does.
+    const vegetables = screen.getByText('Vegetables').closest('[role="treeitem"]');
+    expect(vegetables?.getAttribute('aria-selected')).toBe('true');
+  });
+
+  it('ref handle exposes collapseAll — every branch closes, selection preserved', () => {
+    const ref = createRef<TreeMenuHandle>();
+    render(
+      <TreeMenu
+        ref={ref}
+        data={data}
+        initialOpenNodes={['fruits']}
+        initialActiveKey="fruits/apple"
+      />
+    );
+    expect(screen.getByText('Apple')).toBeInTheDocument();
+    act(() => {
+      ref.current!.collapseAll();
+    });
+    expect(screen.queryByText('Apple')).not.toBeInTheDocument();
+    // Selection is NOT wiped (unlike resetOpenNodes).
+    const fruits = screen.getByText('Fruits').closest('[role="treeitem"]');
+    expect(fruits).toBeInTheDocument();
+  });
+
+  it('expandAll/collapseAll are no-ops under controlled openNodes', () => {
+    const ref = createRef<TreeMenuHandle>();
+    // Controlled to an empty set; expandAll should NOT alter rendering.
+    render(<TreeMenu ref={ref} data={data} openNodes={[]} />);
+    expect(screen.queryByText('Apple')).not.toBeInTheDocument();
+    act(() => {
+      ref.current!.expandAll();
+    });
+    // Still closed — controlled parent owns openNodes.
+    expect(screen.queryByText('Apple')).not.toBeInTheDocument();
+  });
 });

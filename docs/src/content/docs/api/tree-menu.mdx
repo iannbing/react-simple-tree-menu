@@ -44,13 +44,31 @@ function MyTree() {
   return (
     <>
       <button onClick={() => ref.current?.resetOpenNodes()}>Reset</button>
+      <button onClick={() => ref.current?.expandAll()}>Expand all</button>
+      <button onClick={() => ref.current?.collapseAll()}>Collapse all</button>
       <TreeMenu ref={ref} data={data} />
     </>
   );
 }
 ```
 
-`resetOpenNodes` accepts optional overrides: `(openNodes?, activeKey?, focusKey?)`.
+| Method           | Signature                                                 | Notes                                                                       |
+| ---------------- | --------------------------------------------------------- | --------------------------------------------------------------------------- |
+| `resetOpenNodes` | `(openNodes?, activeKey?, focusKey?) => void`             | Reset expansion state. Also clears activeKey/focusKey/searchTerm.           |
+| `expandAll`      | `() => void`                                              | Open every branch. Preserves active/focus/search. No-op under controlled `openNodes`. |
+| `collapseAll`    | `() => void`                                              | Close every branch. Preserves active/focus/search. No-op under controlled `openNodes`. |
+
+**Controlled `openNodes` users**: the imperative methods are no-ops (the parent owns the slot). Use the exported helper instead:
+
+```tsx
+import TreeMenu, { collectBranchKeys } from 'react-simple-tree-menu';
+
+const [open, setOpen] = useState<string[]>([]);
+<button onClick={() => setOpen(collectBranchKeys(data))}>Expand all</button>
+<TreeMenu data={data} openNodes={open} />
+```
+
+`collectBranchKeys(data, keySeparator?)` is O(N) and microseconds even on 100k-node trees. The real cost after expand-all is rendering every branch's children — for trees that grow beyond ~2k visible rows, pair with the [virtualization guide](/react-simple-tree-menu/guides/virtualization/).
 
 ## Render-props shape
 

@@ -31,6 +31,10 @@
     {
       "name": "UnflattenResult",
       "reason": "Return type of `unflatten`: `{ roots: T[]; childrenByParent: Map<string, T[]> }`."
+    },
+    {
+      "name": "collectBranchKeys",
+      "reason": "Public helper to enumerate every branch key in a tree. Backs the imperative `expandAll()` handle, and lets consumers using controlled `openNodes` implement their own expand-all without reimplementing the path-join algorithm."
     }
   ],
   "addedProps": {

@@ -14,6 +14,7 @@ import {
   useRef,
 } from 'react';
 import { walk } from './tree/walk';
+import { collectBranchKeys } from './tree/collect-branch-keys';
 import { useTreeMenuState } from './tree/use-tree-menu-state';
 import { useDebouncedCallback } from './tree/use-debounced-callback';
 import { KeyDown } from './key-down';
@@ -88,6 +89,20 @@ export interface TreeMenuHandle {
     activeKey?: string,
     focusKey?: string
   ) => void;
+  /**
+   * Expand every branch in the tree. One-time O(N) traversal to collect
+   * branch keys, then a single state dispatch. Cheap even on 100k-node
+   * trees, but downstream render cost scales with visible items —
+   * consider pairing with the virtualization recipe when the fully-
+   * expanded tree exceeds ~2k visible rows. No-op if `openNodes` is
+   * controlled externally.
+   */
+  expandAll: () => void;
+  /**
+   * Collapse every branch to the root level. No-op if `openNodes` is
+   * controlled externally.
+   */
+  collapseAll: () => void;
 }
 
 // Feature-detect React 18+'s useDeferredValue. On 16.14/17 this doesn't
@@ -170,10 +185,19 @@ export const TreeMenu = forwardRef<TreeMenuHandle, TreeMenuProps>(
       },
       [dispatch, initialOpenNodes]
     );
+    const expandAll = useCallback(() => {
+      dispatch({
+        type: 'SET_OPEN_NODES',
+        openNodes: collectBranchKeys(data, keySeparator),
+      });
+    }, [dispatch, data, keySeparator]);
+    const collapseAll = useCallback(() => {
+      dispatch({ type: 'SET_OPEN_NODES', openNodes: [] });
+    }, [dispatch]);
     useImperativeHandle(
       ref,
-      () => ({ resetOpenNodes }),
-      [resetOpenNodes]
+      () => ({ resetOpenNodes, expandAll, collapseAll }),
+      [resetOpenNodes, expandAll, collapseAll]
     );
 
     // resetOpenNodesOnDataUpdate — mirror legacy behavior when data
