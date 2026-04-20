@@ -173,10 +173,14 @@
 }
 
 .rstm-toggle-icon-symbol {
-  display: block;
-  font-size: 1.1em;
+  /* A tight flex row so the SVG / consumer glyph centers on both axes
+     inside the toggle's hover pill. `line-height: 1` keeps a string
+     default (e.g. legacy consumers passing "+" / "-") from adding a
+     phantom descender. */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   line-height: 1;
-  font-weight: 600;
 }
 
 .rstm-search {

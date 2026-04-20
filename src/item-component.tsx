@@ -14,6 +14,41 @@ import {
 } from 'react';
 import type { TreeMenuClassNames, TreeMenuItem } from './types';
 
+// SVG triangles — centered on their viewBox, so the glyph is pixel-
+// centered inside the toggle's flex container. Unicode ▸/▾ have
+// asymmetric side-bearing in most system fonts; centering their bbox
+// via flexbox still leaves the visible shape off-center, which is
+// visibly wrong once the toggle has a hover background. currentColor
+// makes them follow the icon's own color (muted by default, active-fg
+// when the row is selected). aria-hidden because the meaning lives on
+// aria-expanded at the treeitem level.
+// Both paths chosen so the triangle centroid lands exactly at (5, 5)
+// — the viewBox center — which keeps the glyph visually centered
+// inside the flex container that draws the hover pill.
+const DEFAULT_CLOSED_ICON: ReactNode = (
+  <svg
+    viewBox="0 0 10 10"
+    width="0.625em"
+    height="0.625em"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M3 2 L3 8 L9 5 Z" fill="currentColor" />
+  </svg>
+);
+
+const DEFAULT_OPENED_ICON: ReactNode = (
+  <svg
+    viewBox="0 0 10 10"
+    width="0.625em"
+    height="0.625em"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M2 3 L8 3 L5 9 Z" fill="currentColor" />
+  </svg>
+);
+
 // Left-padding math. CSS handles vertical padding, cursor, hover, etc.;
 // only horizontal indentation varies per-level so we inject it inline.
 // Tighter than v1's 0.75 + 2/1.75 — looks less cramped at deep levels.
@@ -60,8 +95,8 @@ function ItemComponentImpl({
   toggleNode,
   active,
   focused,
-  openedIcon = '\u25BE', // ▾  down-pointing small triangle
-  closedIcon = '\u25B8', // ▸  right-pointing small triangle
+  openedIcon = DEFAULT_OPENED_ICON,
+  closedIcon = DEFAULT_CLOSED_ICON,
   label = 'unknown',
   style,
   posInSet,
