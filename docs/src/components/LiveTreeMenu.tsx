@@ -1,21 +1,26 @@
 // Live TreeMenu demo embedded throughout the docs as an Astro React island.
 // Hydrated with `client:only="react"` so the static Astro build doesn't try
-// to SSR the library (the internal `useDeferredValue` feature-detect runs
-// at module scope and is safe, but we still want to avoid the SSR pass
-// flicker on the static site).
+// to SSR the library.
 //
-// Interaction model for the demo (not the library default):
-//   - Clicking a branch row toggles it (file-explorer UX). First-time
-//     visitors expect click-to-expand and would otherwise think the
-//     component doesn't respond to the label.
-//   - Clicking a leaf fires `onClickItem` and updates a little
-//     "Last clicked" readout below the tree so the interaction is
-//     visibly confirmed.
-//   - The disclosure triangle still toggles the way the library ships
-//     by default.
+// Interaction model for the demo:
+//   - `openNodes` stays UNCONTROLLED — the library owns its own state,
+//     so the disclosure triangle toggles natively (clicking ▸/▾ works
+//     regardless of any onClickItem logic).
+//   - A render-props wrapper decorates each item's onClick so clicking
+//     a branch label ALSO toggles the branch (file-explorer UX). The
+//     library ships with "label = activate" semantics by default; this
+//     demo layers "label also expands" on top without changing the
+//     library itself.
+//   - A small hint strip + aria-live "Last clicked" readout make the
+//     click contract visible to first-time visitors.
 
 import { useState } from 'react';
-import TreeMenu, { type Item } from 'react-simple-tree-menu';
+import TreeMenu, {
+  defaultChildren,
+  type Item,
+  type TreeMenuChildren,
+  type TreeMenuItem,
+} from 'react-simple-tree-menu';
 import 'react-simple-tree-menu/styles';
 
 type Variant = 'default' | 'headless';
@@ -55,8 +60,6 @@ const sampleTree = {
   },
 };
 
-// Minimal utility classes for the headless variant — wired via scoped
-// plain CSS below so we don't need Tailwind installed in docs/.
 const headlessClasses = {
   group: 'demo-group',
   subgroup: 'demo-subgroup',
@@ -68,45 +71,55 @@ const headlessClasses = {
 };
 
 export default function LiveTreeMenu({ variant = 'default' }: Props) {
-  const [openNodes, setOpenNodes] = useState<string[]>(['fruit']);
   const [lastClicked, setLastClicked] = useState<string | null>(null);
 
-  const handleClickItem = (item: Item) => {
-    setLastClicked(item.key);
-    if (item.hasNodes) {
-      setOpenNodes((prev) =>
-        prev.includes(item.key)
-          ? prev.filter((k) => k !== item.key)
-          : [...prev, item.key]
-      );
-    }
+  // Render-props wrapper that:
+  //   1. Tracks label clicks for the "Last clicked" readout below.
+  //   2. Also calls `toggleNode()` on branches so a label click
+  //      expands / collapses (file-explorer UX). The native disclosure
+  //      icon still toggles via the library's default click handler —
+  //      the two paths do not conflict because `toggleNode` is
+  //      idempotent with respect to the item's current open state.
+  const renderWithClickToExpand: TreeMenuChildren = (props) => {
+    const decorated: TreeMenuItem[] = props.items.map((item) => {
+      const originalClick = item.onClick;
+      const toggle = item.toggleNode;
+      return {
+        ...item,
+        onClick: (e) => {
+          setLastClicked(item.key);
+          originalClick(e);
+          if (item.hasNodes && toggle) toggle();
+        },
+      };
+    });
+    return defaultChildren({ ...props, items: decorated });
   };
 
-  const tree =
-    variant === 'headless' ? (
-      <>
-        <style>{headlessCss}</style>
-        <TreeMenu
-          data={sampleTree}
-          classNames={headlessClasses}
-          openNodes={openNodes}
-          onClickItem={handleClickItem}
-        />
-      </>
-    ) : (
-      <TreeMenu
-        data={sampleTree}
-        openNodes={openNodes}
-        onClickItem={handleClickItem}
-      />
-    );
+  const commonProps = {
+    data: sampleTree,
+    initialOpenNodes: ['fruit'],
+    onClickItem: (item: Item) => setLastClicked(item.key),
+  };
 
   return (
-    <div className="rstm-live-demo">
-      {tree}
+    // `not-content` opts the subtree out of Starlight's markdown-prose
+    // rules — which otherwise add a vertical `margin-top` between every
+    // adjacent block-level sibling, spreading the tree rows apart.
+    <div className="rstm-live-demo not-content">
+      {variant === 'headless' ? (
+        <>
+          <style>{headlessCss}</style>
+          <TreeMenu {...commonProps} classNames={headlessClasses}>
+            {renderWithClickToExpand}
+          </TreeMenu>
+        </>
+      ) : (
+        <TreeMenu {...commonProps}>{renderWithClickToExpand}</TreeMenu>
+      )}
       <div className="rstm-live-demo-hint">
         <span>
-          <strong>Tip:</strong> click a branch to expand · click a leaf to select
+          <strong>Tip:</strong> click a branch to expand · click ▸ to toggle · click a leaf to select
         </span>
         <span className="rstm-live-demo-last" aria-live="polite">
           {lastClicked ? (
