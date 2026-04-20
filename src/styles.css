@@ -55,7 +55,6 @@
     --color-primary,
     var(--color-indigo-400, #818cf8)
   );
-  --rstm-focus-shadow: inset 0 0 0 2px var(--rstm-focus-ring-color);
 }
 
 .rstm-tree-item-group {
@@ -127,7 +126,14 @@
 }
 
 .rstm-tree-item--focused {
-  box-shadow: var(--rstm-focus-shadow);
+  /* Inline the `var(--rstm-focus-ring-color)` rather than composing it
+     through an intermediate `--rstm-focus-shadow` token. If we stored
+     the full shadow as a variable declared on `:root`, the var() would
+     be substituted AT the `:root` element — baking the root value of
+     `--rstm-focus-ring-color` into the computed shadow and breaking
+     ancestor overrides of the color (consumers expect scoping via
+     e.g. `.dark-panel { --rstm-focus-ring-color: ... }` to work). */
+  box-shadow: inset 0 0 0 2px var(--rstm-focus-ring-color);
   outline: none;
 }
 
