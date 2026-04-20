@@ -409,28 +409,47 @@ body {
   --rstm-active-fg: #ffffff;
 }
 
-/* Hint strip under the live demo. Makes the click contract obvious —
-   otherwise first-time visitors click the label, see no expansion, and
-   assume the component is broken. Also doubles as a "Last clicked"
-   feedback line so the interaction is visibly confirmed. */
+/* Hint strip under the live demo. Teaches the click contract AND the
+   keyboard model so first-time visitors can discover both without
+   digging into the docs. Also doubles as a "Last clicked" feedback
+   line so every interaction is visibly confirmed. */
 .rstm-live-demo-hint {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  align-items: baseline;
-  gap: 0.5rem;
+  align-items: flex-start;
+  gap: 0.75rem;
   margin-top: 0.75rem;
   padding-top: 0.75rem;
   border-top: 1px solid var(--sl-color-hairline);
   font-size: 0.8125rem;
-  line-height: 1.4;
+  line-height: 1.55;
   color: var(--sl-color-gray-3);
+}
+
+.rstm-live-demo-tips {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
 }
 
 .rstm-live-demo-hint strong {
   color: var(--sl-color-text);
   font-weight: 600;
   margin-inline-end: 0.15rem;
+}
+
+/* Keyboard pill — small, monospaced, subtly accent-tinted so it's
+   clearly a key glyph rather than prose. */
+.rstm-live-demo-hint kbd {
+  font-family: var(--sl-font-system-mono);
+  font-size: 0.75em;
+  padding: 0.05rem 0.35rem;
+  border-radius: 0.25rem;
+  border: 1px solid var(--sl-color-hairline-light);
+  background: color-mix(in srgb, var(--sl-color-gray-6) 65%, transparent);
+  color: var(--sl-color-text);
+  line-height: 1;
 }
 
 .rstm-live-demo-last {

@@ -2,25 +2,15 @@
 // Hydrated with `client:only="react"` so the static Astro build doesn't try
 // to SSR the library.
 //
-// Interaction model for the demo:
-//   - `openNodes` stays UNCONTROLLED — the library owns its own state,
-//     so the disclosure triangle toggles natively (clicking ▸/▾ works
-//     regardless of any onClickItem logic).
-//   - A render-props wrapper decorates each item's onClick so clicking
-//     a branch label ALSO toggles the branch (file-explorer UX). The
-//     library ships with "label = activate" semantics by default; this
-//     demo layers "label also expands" on top without changing the
-//     library itself.
-//   - A small hint strip + aria-live "Last clicked" readout make the
-//     click contract visible to first-time visitors.
+// The demo is intentionally the same shape as the code snippet shown next
+// to it on the landing page: the default UI with `initialOpenNodes` +
+// `onClickItem`. Clicking a row activates it (fires onClickItem); clicking
+// the ▸ disclosure icon toggles the branch. The small hint strip + aria-
+// live "Last clicked" readout make that click contract visible to
+// first-time visitors.
 
 import { useState } from 'react';
-import TreeMenu, {
-  defaultChildren,
-  type Item,
-  type TreeMenuChildren,
-  type TreeMenuItem,
-} from 'react-simple-tree-menu';
+import TreeMenu, { type Item } from 'react-simple-tree-menu';
 import 'react-simple-tree-menu/styles';
 
 type Variant = 'default' | 'headless';
@@ -73,29 +63,6 @@ const headlessClasses = {
 export default function LiveTreeMenu({ variant = 'default' }: Props) {
   const [lastClicked, setLastClicked] = useState<string | null>(null);
 
-  // Render-props wrapper that:
-  //   1. Tracks label clicks for the "Last clicked" readout below.
-  //   2. Also calls `toggleNode()` on branches so a label click
-  //      expands / collapses (file-explorer UX). The native disclosure
-  //      icon still toggles via the library's default click handler —
-  //      the two paths do not conflict because `toggleNode` is
-  //      idempotent with respect to the item's current open state.
-  const renderWithClickToExpand: TreeMenuChildren = (props) => {
-    const decorated: TreeMenuItem[] = props.items.map((item) => {
-      const originalClick = item.onClick;
-      const toggle = item.toggleNode;
-      return {
-        ...item,
-        onClick: (e) => {
-          setLastClicked(item.key);
-          originalClick(e);
-          if (item.hasNodes && toggle) toggle();
-        },
-      };
-    });
-    return defaultChildren({ ...props, items: decorated });
-  };
-
   const commonProps = {
     data: sampleTree,
     initialOpenNodes: ['fruit'],
@@ -110,24 +77,29 @@ export default function LiveTreeMenu({ variant = 'default' }: Props) {
       {variant === 'headless' ? (
         <>
           <style>{headlessCss}</style>
-          <TreeMenu {...commonProps} classNames={headlessClasses}>
-            {renderWithClickToExpand}
-          </TreeMenu>
+          <TreeMenu {...commonProps} classNames={headlessClasses} />
         </>
       ) : (
-        <TreeMenu {...commonProps}>{renderWithClickToExpand}</TreeMenu>
+        <TreeMenu {...commonProps} />
       )}
       <div className="rstm-live-demo-hint">
-        <span>
-          <strong>Tip:</strong> click a branch to expand · click ▸ to toggle · click a leaf to select
-        </span>
+        <div className="rstm-live-demo-tips">
+          <span>
+            <strong>Mouse:</strong> click ▸ to expand · click a row to select
+          </span>
+          <span>
+            <strong>Keys:</strong> <kbd>Tab</kbd> focuses · <kbd>↑</kbd>{' '}
+            <kbd>↓</kbd> moves · <kbd>←</kbd> <kbd>→</kbd> collapse/expand ·{' '}
+            <kbd>Enter</kbd> selects
+          </span>
+        </div>
         <span className="rstm-live-demo-last" aria-live="polite">
           {lastClicked ? (
             <>
               Last clicked: <code>{lastClicked}</code>
             </>
           ) : (
-            <>Try clicking an item</>
+            <>Try clicking or tabbing into the tree</>
           )}
         </span>
       </div>
