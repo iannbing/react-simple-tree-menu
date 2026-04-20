@@ -3,8 +3,19 @@
 // to SSR the library (the internal `useDeferredValue` feature-detect runs
 // at module scope and is safe, but we still want to avoid the SSR pass
 // flicker on the static site).
+//
+// Interaction model for the demo (not the library default):
+//   - Clicking a branch row toggles it (file-explorer UX). First-time
+//     visitors expect click-to-expand and would otherwise think the
+//     component doesn't respond to the label.
+//   - Clicking a leaf fires `onClickItem` and updates a little
+//     "Last clicked" readout below the tree so the interaction is
+//     visibly confirmed.
+//   - The disclosure triangle still toggles the way the library ships
+//     by default.
 
-import TreeMenu from 'react-simple-tree-menu';
+import { useState } from 'react';
+import TreeMenu, { type Item } from 'react-simple-tree-menu';
 import 'react-simple-tree-menu/styles';
 
 type Variant = 'default' | 'headless';
@@ -14,7 +25,7 @@ interface Props {
 }
 
 const sampleTree = {
-  'fruit': {
+  fruit: {
     label: 'Fruits',
     nodes: {
       apple: { label: 'Apple' },
@@ -28,14 +39,14 @@ const sampleTree = {
       },
     },
   },
-  'vegetable': {
+  vegetable: {
     label: 'Vegetables',
     nodes: {
       carrot: { label: 'Carrot' },
       broccoli: { label: 'Broccoli' },
     },
   },
-  'grain': {
+  grain: {
     label: 'Grains',
     nodes: {
       rice: { label: 'Rice' },
@@ -44,8 +55,8 @@ const sampleTree = {
   },
 };
 
-// Minimal Tailwind-like utility classes that don't actually need Tailwind
-// installed — they're all wired via our docs.css + scoped plain CSS below.
+// Minimal utility classes for the headless variant — wired via scoped
+// plain CSS below so we don't need Tailwind installed in docs/.
 const headlessClasses = {
   group: 'demo-group',
   subgroup: 'demo-subgroup',
@@ -57,16 +68,56 @@ const headlessClasses = {
 };
 
 export default function LiveTreeMenu({ variant = 'default' }: Props) {
+  const [openNodes, setOpenNodes] = useState<string[]>(['fruit']);
+  const [lastClicked, setLastClicked] = useState<string | null>(null);
+
+  const handleClickItem = (item: Item) => {
+    setLastClicked(item.key);
+    if (item.hasNodes) {
+      setOpenNodes((prev) =>
+        prev.includes(item.key)
+          ? prev.filter((k) => k !== item.key)
+          : [...prev, item.key]
+      );
+    }
+  };
+
+  const tree =
+    variant === 'headless' ? (
+      <>
+        <style>{headlessCss}</style>
+        <TreeMenu
+          data={sampleTree}
+          classNames={headlessClasses}
+          openNodes={openNodes}
+          onClickItem={handleClickItem}
+        />
+      </>
+    ) : (
+      <TreeMenu
+        data={sampleTree}
+        openNodes={openNodes}
+        onClickItem={handleClickItem}
+      />
+    );
+
   return (
     <div className="rstm-live-demo">
-      {variant === 'headless' ? (
-        <>
-          <style>{headlessCss}</style>
-          <TreeMenu data={sampleTree} classNames={headlessClasses} />
-        </>
-      ) : (
-        <TreeMenu data={sampleTree} />
-      )}
+      {tree}
+      <div className="rstm-live-demo-hint">
+        <span>
+          <strong>Tip:</strong> click a branch to expand · click a leaf to select
+        </span>
+        <span className="rstm-live-demo-last" aria-live="polite">
+          {lastClicked ? (
+            <>
+              Last clicked: <code>{lastClicked}</code>
+            </>
+          ) : (
+            <>Try clicking an item</>
+          )}
+        </span>
+      </div>
     </div>
   );
 }

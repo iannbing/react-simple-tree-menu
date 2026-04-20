@@ -409,6 +409,43 @@ body {
   --rstm-active-fg: #ffffff;
 }
 
+/* Hint strip under the live demo. Makes the click contract obvious —
+   otherwise first-time visitors click the label, see no expansion, and
+   assume the component is broken. Also doubles as a "Last clicked"
+   feedback line so the interaction is visibly confirmed. */
+.rstm-live-demo-hint {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--sl-color-hairline);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--sl-color-gray-3);
+}
+
+.rstm-live-demo-hint strong {
+  color: var(--sl-color-text);
+  font-weight: 600;
+  margin-inline-end: 0.15rem;
+}
+
+.rstm-live-demo-last {
+  color: var(--sl-color-gray-2);
+}
+
+.rstm-live-demo-last code {
+  font-family: var(--sl-font-system-mono);
+  font-size: 0.85em;
+  padding: 0.1rem 0.35rem;
+  border-radius: 0.25rem;
+  background: color-mix(in srgb, var(--sl-color-accent) 15%, transparent);
+  color: var(--sl-color-accent);
+}
+
 /* ---------------------------------------------------------------------------
    Tables in markdown
    --------------------------------------------------------------------------- */
