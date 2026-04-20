@@ -32,8 +32,13 @@ with a single `npm install` and no code changes.
 - **Default toggle glyphs** changed from `"+" / "-"` to Unicode
   triangles `"▸" / "▾"`. Restore via `openedIcon` / `closedIcon`
   props on `ItemComponent` in a custom render-prop.
-- **Default active color** softened from `#179ed3` to indigo-500
-  (`#6366f1`). Override `--rstm-active-bg` for the old hue.
+- **Default palette** swapped from saturated blue (`#179ed3`) to
+  monochrome black-and-white — black active row on a white background
+  with a mid-grey focus ring, optimized for light backgrounds. Tailwind
+  v4 consumers' `--color-primary` still wins for active state when
+  present, so brand colors flow through automatically. Dark-bg
+  consumers override tokens on their own scope
+  (e.g. `:root.dark .my-panel { --rstm-text-color: ... }`).
 - **`TreeNode` and `TreeNodeInArray` types tightened.**
   `TreeNode` (object-form) now forbids `key` via `key?: never`, and
   `TreeNodeInArray` (array-form) forbids `index` via `index?: never`.

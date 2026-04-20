@@ -379,30 +379,31 @@
    Live TreeMenu demo card — flat, hairline, no shadow.
    --------------------------------------------------------------------------- */
 
-/* No card chrome, but a thin left accent rail anchors the demo so it
-   doesn't dissolve into the page, and reads as a distinct widget
-   rather than a peer of the fully-bordered code frames beside it.
-   The initial active row (set by the island's `initialActiveKey`) adds
-   a filled black/white block that gives the whole widget visual
-   weight on first paint. */
+/* No card chrome, just a thin accent left rail that anchors the demo
+   so it doesn't dissolve into the page nor read as a peer of the
+   fully-bordered code frames beside it. The demo renders the
+   library's built-in monochrome palette and 0.25rem row radius
+   untouched. */
 .rstm-live-demo {
   margin: 1.25rem 0 1.5rem;
   padding: 0 0 0 1rem;
   border: 0;
+  /* Rail uses the site's B/W accent — pure black on light, pure white
+     on dark — so it flips with Starlight's theme toggle and keeps the
+     monochrome palette consistent. */
   border-inline-start: 2px solid var(--sl-color-accent);
   border-radius: 0;
   background: transparent;
   max-width: 32rem;
+}
 
-  /* Route the library's tokens through the docs palette. The demo
-     follows the docs-site's square-corner language: `--rstm-radius: 0`
-     zeroes the tree-row radius inside the demo only, leaving the
-     library's 0.25rem default intact for consumers.
-
-     Active vs. focus split: the active (selected) row uses the full
-     accent color (pure black / white), while the focus ring uses a
-     muted mid-grey — so a focused-but-not-selected row reads
-     distinctly from a selected-but-not-focused row. */
+/* Dark-theme bridge. The library's defaults are light-optimized
+   (black text on a white body bg). Starlight's theme toggle switches
+   the docs page bg to near-black, so we flip the library's tokens
+   here — this is the same pattern a dark-themed app would use in
+   its own CSS (scoped `:root.dark` or `[data-theme='dark']`) and
+   doubles as live documentation of the override API. */
+:root[data-theme='dark'] .rstm-live-demo {
   --rstm-text-color: var(--sl-color-text);
   --rstm-muted-color: var(--sl-color-gray-3);
   --rstm-border-color: var(--sl-color-hairline-light);
@@ -410,12 +411,6 @@
   --rstm-active-bg: var(--sl-color-accent);
   --rstm-active-fg: var(--sl-color-text-invert);
   --rstm-focus-ring-color: var(--sl-color-gray-3);
-  --rstm-radius: 0;
-  --rstm-transition: 100ms ease-out;
-}
-
-:root[data-theme='light'] .rstm-live-demo {
-  --rstm-active-fg: #ffffff;
 }
 
 /* Hint strip below the demo. Minimal: no accent tints, just type
