@@ -3,10 +3,13 @@ title: react-simple-tree-menu
 description: Simple, data-driven, zero-dependency tree menu for React.
 template: splash
 hero:
-  tagline: A small, accessible, zero-dependency tree menu for React — 3 KB, headless-ready, works back to React 16.14.
+  tagline: A small, accessible, zero-dependency tree menu for React — 3 KB, drops into Tailwind v4 projects with zero config, works back to React 16.14.
   actions:
+    # Hero action links are NOT auto-prefixed with Astro's `base` like
+    # sidebar links are — they have to include the base path explicitly
+    # or they 404 on the deployed site.
     - text: Get started
-      link: /getting-started/
+      link: /react-simple-tree-menu/getting-started/
       icon: right-arrow
       variant: primary
     - text: View on GitHub
@@ -51,8 +54,8 @@ import 'react-simple-tree-menu/styles';
   <Card title="Theme with one variable" icon="sun">
     Every color, spacing, and font value is a `--rstm-*` CSS custom property. Override globally, per-theme, or per-panel.
   </Card>
-  <Card title="Tailwind-friendly" icon="puzzle">
-    Tailwind v4 theme variables auto-detected. Or go headless: pass `classNames` and skip the CSS import entirely.
+  <Card title="Drops into Tailwind v4 projects" icon="puzzle">
+    Your theme's `--color-*` and `--font-sans` tokens flow into the tree automatically — no preset to install, no `content` globs to add. Or go fully headless: pass `classNames` and skip our CSS import entirely.
   </Card>
   <Card title="Works with any React" icon="seti:react">
     Tested against React 16.14, 17, 18, and 19 on every commit. `useDeferredValue` is picked up automatically on 18+.
