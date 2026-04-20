@@ -23,7 +23,25 @@ import LiveTreeMenu from '../../components/LiveTreeMenu.tsx';
 
 <div class="rstm-hero-sample">
 
+<div class="rstm-live-demo-slot">
+
 <LiveTreeMenu client:only="react" />
+
+{/* Skeleton shown until the React island hydrates. Hidden via
+    `astro-island:has(*) + .rstm-skeleton { display: none }` in docs.css
+    — mirroring the hero tree's rows (search + 3 top-level with one
+    expanded group) so the layout doesn't jump on pop-in. */}
+<div class="rstm-skeleton" aria-hidden="true">
+  <div class="rstm-skeleton-row rstm-skeleton-search" />
+  <div class="rstm-skeleton-row" />
+  <div class="rstm-skeleton-row rstm-skeleton-row--indent" />
+  <div class="rstm-skeleton-row rstm-skeleton-row--indent" />
+  <div class="rstm-skeleton-row rstm-skeleton-row--indent" />
+  <div class="rstm-skeleton-row" />
+  <div class="rstm-skeleton-row" />
+</div>
+
+</div>
 
 <div class="rstm-hero-sample-code">
 

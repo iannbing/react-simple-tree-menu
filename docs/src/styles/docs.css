@@ -413,6 +413,89 @@
   --rstm-focus-ring-color: var(--sl-color-gray-3);
 }
 
+/* ---------------------------------------------------------------------------
+   Skeleton — shown until the React island hydrates, to prevent the
+   hero tree from popping in with a layout shift. Sibling of the
+   <astro-island>; `:has(*)` detects hydrated state and hides it.
+   --------------------------------------------------------------------------- */
+
+.rstm-live-demo-slot {
+  /* Wrapper owns the vertical space. Rail + padding live here so the
+     visual anchor is present during skeleton phase AND after mount —
+     the .rstm-live-demo inside the island doesn't need its own
+     rail. */
+  padding: 0 0 0 1rem;
+  border-inline-start: 2px solid var(--sl-color-accent);
+  margin: 1.25rem 0 1.5rem;
+  max-width: 32rem;
+}
+
+/* Cancel the double rail on the inner .rstm-live-demo since the
+   wrapper now carries it. */
+.rstm-live-demo-slot .rstm-live-demo {
+  padding: 0;
+  border: 0;
+  margin: 0;
+  max-width: none;
+}
+
+/* Skeleton wrapper mirrors the real ul.rstm-tree-item-group's side/
+   bottom padding so rows line up horizontally with the hydrated tree.
+   Top padding + margin are zeroed so the skeleton sits flush with the
+   slot's top edge. */
+.rstm-skeleton {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0 0.25rem 0.25rem;
+}
+
+/* Once the React island has any element child, it's hydrated. Hide
+   the sibling skeleton. `:has()` is supported in every browser this
+   docs site targets (Chrome 105+, Safari 15.4+, Firefox 121+). */
+astro-island:has(*) + .rstm-skeleton {
+  display: none;
+}
+
+/* Row height matches the hydrated .rstm-tree-item-row (0.5rem block
+   padding + ~1.25rem line-height). */
+.rstm-skeleton-row {
+  height: 2.25rem;
+  border-radius: 0.25rem;
+  background: linear-gradient(
+    90deg,
+    var(--sl-color-gray-6) 0%,
+    var(--sl-color-gray-5) 50%,
+    var(--sl-color-gray-6) 100%
+  );
+  background-size: 200% 100%;
+  animation: rstm-skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+/* Search input sits above the tree list with a small breather —
+   matches the real .rstm-search `margin-bottom: 0.25rem`. */
+.rstm-skeleton-search {
+  height: 2.5rem;
+  margin-bottom: 0.25rem;
+}
+
+/* Indent on nested rows; only the bar itself moves right so the row's
+   shimmer starts where a nested <li>'s visual row begins. */
+.rstm-skeleton-row--indent {
+  margin-inline-start: 1.75rem;
+}
+
+@keyframes rstm-skeleton-shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rstm-skeleton-row {
+    animation: none;
+  }
+}
+
 /* Hint strip below the demo. Minimal: no accent tints, just type
    hierarchy. */
 .rstm-live-demo-hint {
