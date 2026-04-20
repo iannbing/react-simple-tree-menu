@@ -167,7 +167,9 @@ describe('render-props contract', () => {
         )}
       </TreeMenu>
     );
-    await user.type(screen.getByTestId('custom-search'), 'a1');
+    // `delay: null` bypasses user-event's per-keystroke timer delay —
+    // see the note in characterization.test.tsx's equivalent test.
+    await user.type(screen.getByTestId('custom-search'), 'a1', { delay: null });
     await act(async () => {
       vi.advanceTimersByTime(50);
     });

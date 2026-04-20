@@ -8,12 +8,21 @@
 import { describe, it, expect } from 'vitest';
 import * as React from 'react';
 
+// React 16.14 / 17 don't ship `useDeferredValue` — the feature
+// detection's whole point is that the library runs on both sides.
+const hasUseDeferredValue =
+  typeof (React as unknown as { useDeferredValue?: unknown }).useDeferredValue ===
+  'function';
+
 describe('useDeferredValue feature detect', () => {
-  it('the dev-dep React exposes useDeferredValue (we target React 18+ in local tests)', () => {
-    expect(typeof (React as unknown as { useDeferredValue?: unknown }).useDeferredValue).toBe(
-      'function'
-    );
-  });
+  it.skipIf(!hasUseDeferredValue)(
+    'the dev-dep React exposes useDeferredValue on React 18+',
+    () => {
+      expect(
+        typeof (React as unknown as { useDeferredValue?: unknown }).useDeferredValue
+      ).toBe('function');
+    }
+  );
 
   it('falls through cleanly if useDeferredValue is absent', () => {
     // Simulate the identity-fallback branch from tree-menu.tsx.
