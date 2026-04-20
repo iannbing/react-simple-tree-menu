@@ -27,6 +27,20 @@ jobs:
         working-directory: docs
     steps:
       - uses: actions/checkout@v4
+
+      # The repo's Pages source used to be the `gh-pages` branch
+      # (legacy Storybook publish). `actions/deploy-pages` requires the
+      # source to be `workflow`, so idempotently flip it before we do
+      # anything else. The PUT is a no-op once the setting is already
+      # `workflow` — safe to run on every deploy.
+      - name: Ensure Pages is configured for Actions-based deploys
+        working-directory: .
+        run: |
+          gh api -X PUT "repos/${{ github.repository }}/pages" \
+            -F build_type=workflow
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
