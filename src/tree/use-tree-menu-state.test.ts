@@ -3,8 +3,40 @@
 // uncontrolled duality at the boundary. SPEC §4.
 
 import { describe, it, expect } from 'vitest';
-import { act, renderHook } from '@testing-library/react';
+import * as React from 'react';
+import { act, render } from '@testing-library/react';
 import { useTreeMenuState } from './use-tree-menu-state';
+
+// Local `renderHook` shim. `@testing-library/react`'s own `renderHook`
+// was added in RTL v13 — the CI matrix installs v12 for React 16.14 /
+// 17 peers, which only exports `render`. This shim exercises the hook
+// through a trivial component and surfaces its return value via a
+// ref-like object, so the test stays identical across every RTL
+// version in the matrix.
+function renderHook<P, R>(
+  callback: (props: P) => R,
+  options?: { initialProps?: P }
+): {
+  result: { current: R };
+  rerender: (newProps?: P) => void;
+  unmount: () => void;
+} {
+  const result = { current: undefined as unknown as R };
+  function TestHost(props: P): null {
+    result.current = callback(props);
+    return null;
+  }
+  const initialProps = (options?.initialProps ?? ({} as P)) as P & React.JSX.IntrinsicAttributes;
+  const utils = render(React.createElement(TestHost, initialProps));
+  return {
+    result,
+    rerender: (newProps?: P) => {
+      const next = (newProps ?? ({} as P)) as P & React.JSX.IntrinsicAttributes;
+      utils.rerender(React.createElement(TestHost, next));
+    },
+    unmount: () => utils.unmount(),
+  };
+}
 
 describe('useTreeMenuState — SPEC §4', () => {
   describe('initialization', () => {

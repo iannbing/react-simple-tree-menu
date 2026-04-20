@@ -2,8 +2,38 @@
 // Replaces the tiny-debounce runtime dep.
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { act, renderHook } from '@testing-library/react';
+import * as React from 'react';
+import { act, render } from '@testing-library/react';
 import { useDebouncedCallback } from './use-debounced-callback';
+
+// Local `renderHook` shim — see `use-tree-menu-state.test.ts` for the
+// rationale (RTL v12 shipped with the React 16/17 CI jobs doesn't
+// export renderHook; render() is stable across every RTL version in
+// our matrix).
+function renderHook<P, R>(
+  callback: (props: P) => R,
+  options?: { initialProps?: P }
+): {
+  result: { current: R };
+  rerender: (newProps?: P) => void;
+  unmount: () => void;
+} {
+  const result = { current: undefined as unknown as R };
+  function TestHost(props: P): null {
+    result.current = callback(props);
+    return null;
+  }
+  const initialProps = (options?.initialProps ?? ({} as P)) as P & React.JSX.IntrinsicAttributes;
+  const utils = render(React.createElement(TestHost, initialProps));
+  return {
+    result,
+    rerender: (newProps?: P) => {
+      const next = (newProps ?? ({} as P)) as P & React.JSX.IntrinsicAttributes;
+      utils.rerender(React.createElement(TestHost, next));
+    },
+    unmount: () => utils.unmount(),
+  };
+}
 
 describe('useDebouncedCallback — SPEC §6', () => {
   beforeEach(() => {
