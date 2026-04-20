@@ -25,17 +25,27 @@ import LiveTreeMenu from '../../components/LiveTreeMenu.tsx';
 
 <LiveTreeMenu client:only="react" />
 
+<div class="rstm-hero-sample-code">
+
+```bash title="Installation"
+npm install react-simple-tree-menu
+```
+
 ```tsx
 import TreeMenu from 'react-simple-tree-menu';
 import 'react-simple-tree-menu/styles';
 
 <TreeMenu
   data={tree}
+  initialOpenNodes={['fruit']}
+  initialActiveKey="fruit/apple"
   onClickItem={({ key }) => {
     console.log(key);
   }}
 />;
 ```
+
+</div>
 
 </div>
 

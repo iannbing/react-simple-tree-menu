@@ -66,6 +66,7 @@ export default function LiveTreeMenu({ variant = 'default' }: Props) {
   const commonProps = {
     data: sampleTree,
     initialOpenNodes: ['fruit'],
+    initialActiveKey: 'fruit/apple',
     onClickItem: (item: Item) => setLastClicked(item.key),
   };
 
