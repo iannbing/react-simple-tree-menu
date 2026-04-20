@@ -66,4 +66,71 @@ describe('KeyDown wrapper — SPEC §7 + §11', () => {
       expect(handler).not.toHaveBeenCalled();
     }
   });
+
+  it('calls preventDefault on matched keys so the page does not scroll', () => {
+    const h = makeHandlers();
+    render(
+      <KeyDown {...h}>
+        <span data-testid="child">x</span>
+      </KeyDown>
+    );
+    const wrapper = screen.getByTestId('child').parentElement!;
+    wrapper.focus();
+
+    for (const key of ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Enter']) {
+      const ev = new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true });
+      wrapper.dispatchEvent(ev);
+      expect(ev.defaultPrevented).toBe(true);
+    }
+  });
+
+  it('does NOT preventDefault for unmatched keys', () => {
+    const h = makeHandlers();
+    render(
+      <KeyDown {...h}>
+        <span data-testid="child">x</span>
+      </KeyDown>
+    );
+    const wrapper = screen.getByTestId('child').parentElement!;
+    wrapper.focus();
+
+    const ev = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true });
+    wrapper.dispatchEvent(ev);
+    expect(ev.defaultPrevented).toBe(false);
+  });
+
+  it('does NOT hijack arrow keys when focus is inside an <input>', async () => {
+    const h = makeHandlers();
+    const user = userEvent.setup();
+    render(
+      <KeyDown {...h}>
+        <input data-testid="search" />
+      </KeyDown>
+    );
+    const input = screen.getByTestId('search') as HTMLInputElement;
+    input.focus();
+    await user.keyboard('{ArrowUp}{ArrowDown}{ArrowLeft}{ArrowRight}');
+    for (const handler of Object.values(h)) {
+      expect(handler).not.toHaveBeenCalled();
+    }
+  });
+
+  it('does NOT hijack Enter when focus is inside an <input> (form submit still works)', () => {
+    const h = makeHandlers();
+    render(
+      <KeyDown {...h}>
+        <input data-testid="search" />
+      </KeyDown>
+    );
+    const input = screen.getByTestId('search') as HTMLInputElement;
+    input.focus();
+    const ev = new KeyboardEvent('keydown', {
+      key: 'Enter',
+      bubbles: true,
+      cancelable: true,
+    });
+    input.dispatchEvent(ev);
+    expect(h.enter).not.toHaveBeenCalled();
+    expect(ev.defaultPrevented).toBe(false);
+  });
 });

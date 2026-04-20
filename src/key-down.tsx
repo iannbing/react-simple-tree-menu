@@ -22,6 +22,21 @@ export function KeyDown({
   enter,
 }: KeyDownProps): ReactElement {
   const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    // Don't hijack the keys when focus is inside a text input (our own
+    // search box, or any consumer-supplied input) — arrow keys should
+    // still move the text cursor, Enter should still submit a form,
+    // etc. Only intercept when focus is on the tree itself or the
+    // wrapper.
+    const target = e.target as HTMLElement | null;
+    if (
+      target instanceof HTMLInputElement ||
+      target instanceof HTMLTextAreaElement ||
+      target instanceof HTMLSelectElement ||
+      target?.isContentEditable
+    ) {
+      return;
+    }
+
     switch (e.key) {
       case 'ArrowUp':
         up();
@@ -41,6 +56,12 @@ export function KeyDown({
       default:
         return;
     }
+
+    // Matched a tree-navigation key — stop the browser's default action
+    // (e.g. arrow keys scrolling the page, Enter inserting a newline in
+    // a containing textarea). Without this, the page and the tree both
+    // respond to the same keystroke.
+    e.preventDefault();
   };
 
   // The wrapping <div tabIndex={0}> is part of v1's public DOM shape —
