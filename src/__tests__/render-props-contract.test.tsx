@@ -149,7 +149,13 @@ describe('render-props contract', () => {
 
   it('search() passed to custom renderer still debounces + filters items', async () => {
     vi.useFakeTimers();
-    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    // `delay: null` avoids a React-19 + fake-timer + RTL-v16 deadlock
+    // in the per-keystroke timer queue — see the matching note in
+    // characterization.test.tsx's `setupWithFakeTimers` helper.
+    const user = userEvent.setup({
+      advanceTimers: vi.advanceTimersByTime,
+      delay: null,
+    });
     render(
       <TreeMenu data={data} debounceTime={0}>
         {({ items, search }) => (
@@ -167,9 +173,7 @@ describe('render-props contract', () => {
         )}
       </TreeMenu>
     );
-    // `delay: null` bypasses user-event's per-keystroke timer delay —
-    // see the note in characterization.test.tsx's equivalent test.
-    await user.type(screen.getByTestId('custom-search'), 'a1', { delay: null });
+    await user.type(screen.getByTestId('custom-search'), 'a1');
     await act(async () => {
       vi.advanceTimersByTime(50);
     });

@@ -10,7 +10,7 @@ import { useDebouncedCallback } from './use-debounced-callback';
 // rationale (RTL v12 shipped with the React 16/17 CI jobs doesn't
 // export renderHook; render() is stable across every RTL version in
 // our matrix).
-function renderHook<P, R>(
+function renderHook<P extends Record<string, unknown>, R>(
   callback: (props: P) => R,
   options?: { initialProps?: P }
 ): {
@@ -19,17 +19,16 @@ function renderHook<P, R>(
   unmount: () => void;
 } {
   const result = { current: undefined as unknown as R };
-  function TestHost(props: P): null {
+  const TestHost: React.FC<P> = (props) => {
     result.current = callback(props);
     return null;
-  }
-  const initialProps = (options?.initialProps ?? ({} as P)) as P & React.JSX.IntrinsicAttributes;
+  };
+  const initialProps = options?.initialProps ?? ({} as P);
   const utils = render(React.createElement(TestHost, initialProps));
   return {
     result,
     rerender: (newProps?: P) => {
-      const next = (newProps ?? ({} as P)) as P & React.JSX.IntrinsicAttributes;
-      utils.rerender(React.createElement(TestHost, next));
+      utils.rerender(React.createElement(TestHost, newProps ?? ({} as P)));
     },
     unmount: () => utils.unmount(),
   };

@@ -13,7 +13,7 @@ import { useTreeMenuState } from './use-tree-menu-state';
 // through a trivial component and surfaces its return value via a
 // ref-like object, so the test stays identical across every RTL
 // version in the matrix.
-function renderHook<P, R>(
+function renderHook<P extends Record<string, unknown>, R>(
   callback: (props: P) => R,
   options?: { initialProps?: P }
 ): {
@@ -22,17 +22,16 @@ function renderHook<P, R>(
   unmount: () => void;
 } {
   const result = { current: undefined as unknown as R };
-  function TestHost(props: P): null {
+  const TestHost: React.FC<P> = (props) => {
     result.current = callback(props);
     return null;
-  }
-  const initialProps = (options?.initialProps ?? ({} as P)) as P & React.JSX.IntrinsicAttributes;
+  };
+  const initialProps = options?.initialProps ?? ({} as P);
   const utils = render(React.createElement(TestHost, initialProps));
   return {
     result,
     rerender: (newProps?: P) => {
-      const next = (newProps ?? ({} as P)) as P & React.JSX.IntrinsicAttributes;
-      utils.rerender(React.createElement(TestHost, next));
+      utils.rerender(React.createElement(TestHost, newProps ?? ({} as P)));
     },
     unmount: () => utils.unmount(),
   };

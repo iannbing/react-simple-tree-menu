@@ -64,9 +64,19 @@ const itemOf = (label: string): HTMLElement => {
 };
 
 // Helper: timer-safe user-event setup for debounce tests.
+//
+// `delay: null` skips user-event's per-keystroke setTimeout. With fake
+// timers, user-event's keystroke-delay queue + React 19's scheduler +
+// RTL v16's async wrapper can deadlock, and the `user.type()` promise
+// never resolves. Disabling the per-keystroke delay sidesteps that;
+// the tests still drive the debounce window via
+// `vi.advanceTimersByTime`.
 const setupWithFakeTimers = () => {
   vi.useFakeTimers();
-  return userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+  return userEvent.setup({
+    advanceTimers: vi.advanceTimersByTime,
+    delay: null,
+  });
 };
 
 // ---------------------------------------------------------------------------
@@ -249,10 +259,7 @@ describe('search', () => {
   it('typing in the search box filters items after the debounce window', async () => {
     const user = setupWithFakeTimers();
     render(<TreeMenu data={arrayData} debounceTime={125} />);
-    // `delay: null` skips user-event's per-keystroke timer delay; the
-    // fake-timer + user-event + React 19 scheduler combo can deadlock
-    // otherwise (the per-keystroke awaits never resolve).
-    await user.type(screen.getByPlaceholderText('Search'), 'carrot', { delay: null });
+    await user.type(screen.getByPlaceholderText('Search'), 'carrot');
     await act(async () => {
       vi.advanceTimersByTime(200);
     });
@@ -263,7 +270,7 @@ describe('search', () => {
   it('auto-opens ancestors of matching items during search', async () => {
     const user = setupWithFakeTimers();
     render(<TreeMenu data={arrayData} debounceTime={0} />);
-    await user.type(screen.getByPlaceholderText('Search'), 'apple', { delay: null });
+    await user.type(screen.getByPlaceholderText('Search'), 'apple');
     // Advance the debounce AND flush React 18+'s deferred-value transition
     // that wraps `searchTerm` internally (see useDeferredValueSafe in
     // src/tree-menu.tsx). `await act(async ...)` runs microtasks / the
@@ -308,7 +315,7 @@ describe('locale + matchSearch', () => {
     render(
       <TreeMenu data={localData} matchSearch={matchSearch} debounceTime={0} />
     );
-    await user.type(screen.getByPlaceholderText('Search'), 'Fruits', { delay: null });
+    await user.type(screen.getByPlaceholderText('Search'), 'Fruits');
     // `await act(async ...)` flushes React 18's deferred-value transition
     // that wraps searchTerm internally — see useDeferredValueSafe in
     // src/tree-menu.tsx.
