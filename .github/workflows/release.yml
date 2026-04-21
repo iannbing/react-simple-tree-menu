@@ -84,17 +84,17 @@ jobs:
         with:
           node-version: 20
           cache: npm
-          # No `registry-url:` on purpose. Setting it makes setup-node
-          # write an `.npmrc` with `_authToken=${NODE_AUTH_TOKEN}` —
-          # and with Trusted Publishing we DON'T set NODE_AUTH_TOKEN,
-          # so that line expands to an empty token string. Some npm
-          # CLI versions treat an empty explicit token as "auth
-          # attempted and failed" and never fall through to OIDC,
-          # which surfaces as a 404 from the registry (npm hides
-          # auth failures behind 404). Leaving registry-url unset
-          # means no .npmrc, no stale token, and `npm publish
-          # --provenance` goes straight to the OIDC flow that the
-          # Trusted Publisher entry on npmjs.com is expecting.
+          # registry-url is required so `npm publish` targets
+          # registry.npmjs.org. The `.npmrc` setup-node writes
+          # references NODE_AUTH_TOKEN — we don't set it (no token),
+          # so `npm publish --provenance` falls through to OIDC using
+          # the Trusted Publisher entry on npmjs.com.
+          registry-url: 'https://registry.npmjs.org'
+
+      # Ensure we're on a recent-enough npm CLI for Trusted Publishing
+      # (seamless OIDC publish requires npm 11.5.1+; runners ship
+      # older minor versions by default).
+      - run: npm install -g npm@latest
 
       - run: npm ci
 
@@ -175,17 +175,17 @@ jobs:
         with:
           node-version: 20
           cache: npm
-          # No `registry-url:` on purpose. Setting it makes setup-node
-          # write an `.npmrc` with `_authToken=${NODE_AUTH_TOKEN}` —
-          # and with Trusted Publishing we DON'T set NODE_AUTH_TOKEN,
-          # so that line expands to an empty token string. Some npm
-          # CLI versions treat an empty explicit token as "auth
-          # attempted and failed" and never fall through to OIDC,
-          # which surfaces as a 404 from the registry (npm hides
-          # auth failures behind 404). Leaving registry-url unset
-          # means no .npmrc, no stale token, and `npm publish
-          # --provenance` goes straight to the OIDC flow that the
-          # Trusted Publisher entry on npmjs.com is expecting.
+          # registry-url is required so `npm publish` targets
+          # registry.npmjs.org. The `.npmrc` setup-node writes
+          # references NODE_AUTH_TOKEN — we don't set it (no token),
+          # so `npm publish --provenance` falls through to OIDC using
+          # the Trusted Publisher entry on npmjs.com.
+          registry-url: 'https://registry.npmjs.org'
+
+      # Ensure we're on a recent-enough npm CLI for Trusted Publishing
+      # (seamless OIDC publish requires npm 11.5.1+; runners ship
+      # older minor versions by default).
+      - run: npm install -g npm@latest
 
       - run: npm ci
 
