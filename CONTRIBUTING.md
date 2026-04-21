@@ -109,9 +109,14 @@ Two known caveats:
 
 ## Releasing (maintainer-only)
 
-- **RC** (release candidate): push to `release/v2`. `.github/workflows/release.yml` runs all gates, bumps the version via `npm-version-suffix` (`2.0.0` → `2.0.0-rc.N`), publishes to npm with the `next` dist-tag, and pushes the bump commit + tag.
-- **Stable**: Actions → Release → Run workflow (manual `workflow_dispatch`) with the target version. Publishes without a tag (becomes `latest`).
+Releases are branch-driven — the long-lived branch that receives the merge dictates what gets published.
+
+- **RC** (release candidate): every push to `development` triggers `.github/workflows/release.yml`'s `release-rc` job. It runs all gates, bumps the version via `npm-version-suffix` (`2.0.0` → `2.0.0-rc.N`), `npm publish --tag next --provenance`, then pushes the bump commit + tag back to `development`. Consumers `npm install react-simple-tree-menu@next` to try it.
+- **Stable**: every push to `master` triggers the `release-stable` job. It strips any `-rc.N` suffix that RC runs left on package.json, runs gates, and `npm publish --provenance` (no dist-tag → becomes `latest`). Idempotent: if the clean version is already on npm (e.g. master got a doc-only commit), the publish step skips cleanly. A manual `workflow_dispatch` on the same workflow takes a version input as an escape hatch for off-cycle / hot-fix publishes.
+- **Docs site**: a separate `docs.yml` workflow publishes the Starlight site to GitHub Pages only on push to `master` (path-filtered to `docs/**`, `src/**`, or the workflow file). Merging to `development` does not publish docs.
 - Requires the `NPM_TOKEN` repo secret (automation token with publish rights).
+
+**Starting a new minor/major cycle:** bump the base version manually in a PR to `development` (`npm version 2.1.0 --no-git-tag-version`) — the next merge triggers an RC on the new base (`2.1.0-rc.1`). Stable ships when that RC lands on master.
 
 ## Docs site
 
