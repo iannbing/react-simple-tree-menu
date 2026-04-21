@@ -3,12 +3,12 @@
 // with useMemo).
 
 import type {
-  TreeNode,
-  TreeNodeObject,
-  TreeNodeInArray,
+  Item,
   LocaleFunction,
   MatchSearchFunction,
-  Item,
+  TreeNode,
+  TreeNodeInArray,
+  TreeNodeObject,
 } from '../types';
 
 type Data = TreeNodeObject | TreeNodeInArray[] | null | undefined;
@@ -38,8 +38,7 @@ const makeDefaultMatcher = (searchTerm: string): MatchSearchFunction => {
   return ({ label }) => label.trim().toLowerCase().includes(lowerTerm);
 };
 
-const isNonEmptyArray = (v: unknown): v is unknown[] =>
-  Array.isArray(v) && v.length > 0;
+const isNonEmptyArray = (v: unknown): v is unknown[] => Array.isArray(v) && v.length > 0;
 
 const isNonEmptyObject = (v: unknown): v is Record<string, unknown> =>
   !!v && typeof v === 'object' && !Array.isArray(v) && Object.keys(v).length > 0;
@@ -58,8 +57,7 @@ export function walk(props: WalkProps): Item[] {
 
   const effectiveLocale = locale ?? defaultLocale;
   const effectiveMatch =
-    matchSearch ??
-    (searchTerm ? makeDefaultMatcher(searchTerm) : (() => true));
+    matchSearch ?? (searchTerm ? makeDefaultMatcher(searchTerm) : () => true);
   const hasSearch = searchTerm.length > 0;
   const sep = keySeparator || DEFAULT_KEY_SEPARATOR;
   const out: Item[] = [];
@@ -93,30 +91,21 @@ export function walk(props: WalkProps): Item[] {
       index: _discardIndex,
       key: _discardKey,
       ...custom
-    } = node as Record<string, unknown> & {
-      nodes?: TreeNodeObject | TreeNodeInArray[];
-      label?: string;
-      index?: number;
-      key?: string;
-    };
-    const key = parentKey
-      ? parentKey + sep + nodeKey
-      : nodeKey;
+    } = node;
+    const key = parentKey ? parentKey + sep + nodeKey : nodeKey;
 
     const label = effectiveLocale({ label: rawLabel, ...custom });
     const childrenPresent = isNonEmptyArray(nodes) || isNonEmptyObject(nodes);
     const isOpen = childrenPresent && (openNodes.includes(key) || hasSearch);
 
-    const visible =
-      !hasSearch ||
-      effectiveMatch({ label, searchTerm, ...(custom as Record<string, unknown>) });
+    const visible = !hasSearch || effectiveMatch({ label, searchTerm, ...custom });
 
     // Insert self first; children are appended in-place below so the output
     // array stays in depth-first order without ever concatenating.
     const selfIndex = out.length;
     if (visible) {
       out.push({
-        ...(custom as Record<string, unknown>),
+        ...custom,
         hasNodes: childrenPresent,
         isOpen,
         level,
@@ -150,7 +139,7 @@ export function walk(props: WalkProps): Item[] {
     // `selfIndex`, retroactively insert self at `selfIndex`.
     if (!visible && hasSearch && out.length > selfIndex) {
       out.splice(selfIndex, 0, {
-        ...(custom as Record<string, unknown>),
+        ...custom,
         hasNodes: childrenPresent,
         isOpen,
         level,
@@ -158,7 +147,7 @@ export function walk(props: WalkProps): Item[] {
         label,
         posInSet,
         setSize,
-      } as Item);
+      } satisfies Item);
     }
   };
 
