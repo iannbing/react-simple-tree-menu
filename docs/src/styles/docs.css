@@ -1,0 +1,633 @@
+/* Design tokens for the react-simple-tree-menu docs site.
+   Minimalist: flat colors, hairline borders, no ambient shadows, no
+   gradients. Typographic hierarchy does the work that decoration used
+   to do. Inter + JetBrains Mono, loaded via astro.config.mjs head tags. */
+
+/* ---------------------------------------------------------------------------
+   Fonts
+   --------------------------------------------------------------------------- */
+
+:root {
+  --sl-font:
+    'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  --sl-font-system-mono:
+    'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  letter-spacing: -0.005em;
+}
+
+.sl-markdown-content h1,
+.sl-markdown-content h2,
+.sl-markdown-content h3,
+.sl-markdown-content h4,
+.hero h1 {
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+
+.sl-markdown-content h1 {
+  font-size: 2rem;
+  line-height: 1.15;
+}
+
+/* Anchor-link jumps (#heading) land under Starlight's sticky top
+   nav without this; `scroll-margin-top` reserves enough clearance
+   so the heading isn't hidden on arrival. */
+.sl-markdown-content :is(h1, h2, h3, h4, h5, h6) {
+  scroll-margin-top: 5rem;
+}
+
+/* ---------------------------------------------------------------------------
+   Palette — monochrome. The "accent" slot maps to max-contrast fg
+   (white on dark, black on light), so Starlight's accent-tinted slots
+   (sidebar rail, primary button, card icons) render as pure B/W.
+   Greys are neutral, no warm/cool tint.
+   --------------------------------------------------------------------------- */
+
+:root,
+:root[data-theme='dark'] {
+  /* "Accent" = max-contrast foreground, used for active/selected
+     states (primary button, sidebar active row, tree active item).
+     Pure white on dark; the softer focus ring uses a mid-grey token
+     scoped at the demo level. */
+  --sl-color-accent-low: #1a1a1a;
+  --sl-color-accent: #ffffff;
+  --sl-color-accent-high: #fafafa;
+
+  --sl-color-bg: #0a0a0a;
+  --sl-color-bg-nav: #0a0a0a;
+  --sl-color-bg-sidebar: #0a0a0a;
+  --sl-color-bg-inline-code: #171717;
+  --sl-color-bg-accent: #262626;
+
+  --sl-color-gray-7: #0f0f0f;
+  --sl-color-gray-6: #141414;
+  --sl-color-gray-5: #1f1f1f;
+  --sl-color-gray-4: #2e2e2e;
+  --sl-color-gray-3: #737373;
+  --sl-color-gray-2: #a3a3a3;
+  --sl-color-gray-1: #e5e5e5;
+
+  --sl-color-text: #fafafa;
+  --sl-color-text-accent: #ffffff;
+  --sl-color-text-invert: #0a0a0a;
+  --sl-color-hairline: #1f1f1f;
+  --sl-color-hairline-light: #2a2a2a;
+
+  /* Neutralize Starlight's blue/green/yellow/orange/red/purple color
+     ramps — used by asides, icons, and various UI tints. Mapped to
+     the grey scale so the whole docs chrome stays monochrome. Code
+     blocks stay colored via Expressive Code's own theme; these
+     overrides don't reach inside a `.expressive-code` block. */
+  --sl-color-blue-low: #1a1a1a;
+  --sl-color-blue: #737373;
+  --sl-color-blue-high: #e5e5e5;
+  --sl-color-green-low: #1a1a1a;
+  --sl-color-green: #737373;
+  --sl-color-green-high: #e5e5e5;
+  --sl-color-orange-low: #1a1a1a;
+  --sl-color-orange: #737373;
+  --sl-color-orange-high: #e5e5e5;
+  --sl-color-red-low: #1a1a1a;
+  --sl-color-red: #737373;
+  --sl-color-red-high: #e5e5e5;
+  --sl-color-purple-low: #1a1a1a;
+  --sl-color-purple: #737373;
+  --sl-color-purple-high: #e5e5e5;
+  --sl-color-yellow-low: #1a1a1a;
+  --sl-color-yellow: #737373;
+  --sl-color-yellow-high: #e5e5e5;
+}
+
+:root[data-theme='light'] {
+  --sl-color-accent-low: #f5f5f5;
+  --sl-color-accent: #0a0a0a;
+  --sl-color-accent-high: #000000;
+
+  --sl-color-bg: #ffffff;
+  --sl-color-bg-nav: #ffffff;
+  --sl-color-bg-sidebar: #ffffff;
+  --sl-color-bg-inline-code: #f5f5f5;
+
+  --sl-color-gray-7: #ffffff;
+  --sl-color-gray-6: #fafafa;
+  --sl-color-gray-5: #f0f0f0;
+  --sl-color-gray-4: #d4d4d4;
+  --sl-color-gray-3: #737373;
+  --sl-color-gray-2: #404040;
+  --sl-color-gray-1: #171717;
+
+  --sl-color-text: #0a0a0a;
+  --sl-color-text-accent: #0a0a0a;
+  --sl-color-text-invert: #ffffff;
+  --sl-color-hairline: #ebebeb;
+  --sl-color-hairline-light: #f0f0f0;
+
+  /* Greyscale aliases — see dark-theme block for the why. Light-theme
+     polarity: `-high` is dark (readable text), `-low` is pale (tint
+     background). */
+  --sl-color-blue-high: #171717;
+  --sl-color-blue: #737373;
+  --sl-color-blue-low: #f5f5f5;
+  --sl-color-green-high: #171717;
+  --sl-color-green: #737373;
+  --sl-color-green-low: #f5f5f5;
+  --sl-color-orange-high: #171717;
+  --sl-color-orange: #737373;
+  --sl-color-orange-low: #f5f5f5;
+  --sl-color-red-high: #171717;
+  --sl-color-red: #737373;
+  --sl-color-red-low: #f5f5f5;
+  --sl-color-purple-high: #171717;
+  --sl-color-purple: #737373;
+  --sl-color-purple-low: #f5f5f5;
+  --sl-color-yellow-high: #171717;
+  --sl-color-yellow: #737373;
+  --sl-color-yellow-low: #f5f5f5;
+}
+
+/* ---------------------------------------------------------------------------
+   Splash hero — tight, flat, single accent.
+   --------------------------------------------------------------------------- */
+
+.hero {
+  padding-block: 1.5rem 0.25rem;
+  align-items: center;
+}
+
+.hero > h1 {
+  font-size: clamp(2.1rem, 4.2vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: var(--sl-color-text);
+  margin-block-end: 0.75rem;
+}
+
+.hero .tagline {
+  font-size: clamp(1rem, 1.4vw, 1.125rem);
+  line-height: 1.5;
+  color: var(--sl-color-gray-2);
+  max-width: 52ch;
+  margin-block: 0.25rem 0.75rem;
+}
+
+.hero .actions {
+  margin-top: 1rem;
+}
+
+/* Breathing room before the first content row. */
+.hero + .sl-markdown-content {
+  margin-top: 2rem;
+}
+
+.hero + .sl-markdown-content > .rstm-hero-sample:first-child {
+  margin-top: 0;
+}
+
+/* Flat action buttons. Starlight renders hero actions as
+   `.sl-link-button` (LinkButton user component), not `.action`, and
+   its base rule lives inside `@layer starlight.components`. Unlayered
+   CSS (this file) wins over any layered rule, so minimal specificity
+   here is enough. Square corners, no pill. */
+.hero .actions .sl-link-button {
+  border-radius: 0;
+  font-weight: 500;
+  padding: 0.55rem 0.95rem;
+  border: 1px solid transparent;
+  transition:
+    background-color 100ms ease,
+    border-color 100ms ease,
+    color 100ms ease;
+}
+
+.hero .actions .sl-link-button.primary {
+  background: var(--sl-color-accent);
+  color: var(--sl-color-text-invert);
+  border-color: var(--sl-color-accent);
+}
+
+.hero .actions .sl-link-button.primary:hover {
+  background: var(--sl-color-accent-high);
+  border-color: var(--sl-color-accent-high);
+  color: var(--sl-color-text-invert);
+}
+
+.hero .actions .sl-link-button.minimal {
+  color: var(--sl-color-text);
+  border-color: var(--sl-color-hairline);
+  background: transparent;
+}
+
+.hero .actions .sl-link-button.minimal:hover {
+  border-color: var(--sl-color-gray-3);
+  background: transparent;
+}
+
+/* Keyboard focus ring. Starlight's default lives in a layered rule
+   and can be overridden by the unlayered `.sl-link-button` rules
+   above; redeclare here so keyboard users always get a visible
+   indicator on the hero CTAs (WCAG focus-visible). */
+.hero .actions .sl-link-button:focus-visible {
+  outline: 2px solid var(--sl-color-accent);
+  outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------------------
+   Card grids — flat, hairline border, hover = border color shift only.
+   --------------------------------------------------------------------------- */
+
+.sl-markdown-content .card {
+  border: 1px solid var(--sl-color-hairline);
+  background: transparent;
+  border-radius: 0;
+  padding: 1.25rem;
+  /* Don't animate `transform` — Starlight's CardGrid `stagger` mode
+     transforms the even column, and our hover would overwrite it. */
+  transition: border-color 120ms ease;
+}
+
+.sl-markdown-content .card:hover {
+  border-color: var(--sl-color-gray-4);
+}
+
+.sl-markdown-content .card h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  margin-top: 0.5rem;
+}
+
+/* Card icons — full foreground contrast (black in light, white in
+   dark) so they read at the same visual weight as the card title.
+   Muted grey was too faint at the scale Starlight renders these. */
+.sl-markdown-content .card .icon {
+  color: var(--sl-color-text);
+}
+
+/* ---------------------------------------------------------------------------
+   Sidebar — active row: flat accent-tinted background + left rail only.
+   --------------------------------------------------------------------------- */
+
+.sidebar-content a {
+  border-radius: 0;
+  transition:
+    background 100ms ease,
+    color 100ms ease;
+}
+
+.sidebar-content a[aria-current='page'] {
+  background: var(--sl-color-accent-low);
+  color: var(--sl-color-text-accent);
+  font-weight: 500;
+  border-inline-start: 2px solid var(--sl-color-accent);
+}
+
+/* ---------------------------------------------------------------------------
+   In-prose links — thin flat underline in text color; accent only on hover.
+   --------------------------------------------------------------------------- */
+
+.sl-markdown-content a:not(.card):not(.sl-link-button) {
+  color: var(--sl-color-text);
+  text-decoration: underline;
+  text-decoration-color: var(--sl-color-gray-4);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition: text-decoration-color 100ms ease;
+}
+
+.sl-markdown-content a:not(.card):not(.sl-link-button):hover {
+  text-decoration-color: var(--sl-color-text);
+}
+
+/* ---------------------------------------------------------------------------
+   Inline + block code — flat, hairline border.
+   --------------------------------------------------------------------------- */
+
+.sl-markdown-content :not(pre) > code {
+  font-family: var(--sl-font-system-mono);
+  font-size: 0.9em;
+  padding: 0.1rem 0.35rem;
+  border-radius: 0;
+  border: 1px solid var(--sl-color-hairline);
+  background: var(--sl-color-bg-inline-code);
+  color: var(--sl-color-text);
+}
+
+.sl-markdown-content pre {
+  border: 1px solid var(--sl-color-hairline);
+  border-radius: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Hero sample — live demo + code block side-by-side at wider viewports.
+   --------------------------------------------------------------------------- */
+
+.rstm-hero-sample {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  margin: 1rem 0 1.5rem;
+}
+
+/* Descendant (not `>`) because Astro wraps the React island in an
+   <astro-island> with display:contents. */
+.rstm-hero-sample .rstm-live-demo {
+  margin: 0;
+  max-width: none;
+  align-self: start;
+}
+
+.rstm-hero-sample > .expressive-code,
+.rstm-hero-sample > pre,
+.rstm-hero-sample > astro-island,
+.rstm-hero-sample > .rstm-hero-sample-code {
+  margin: 1.2rem 0 0 0;
+  align-self: start;
+}
+
+/* Second grid column: stack the bash install + the TSX usage snippet
+   vertically so both live in the same column as a visually-grouped
+   unit (install above, use below). The `margin-top` offsets the
+   Installation frame down so its title bar aligns visually with the
+   tree menu's search row in the left column. */
+.rstm-hero-sample-code {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.rstm-hero-sample-code > .expressive-code,
+.rstm-hero-sample > .expressive-code {
+  border: 1px solid var(--sl-color-hairline);
+  border-radius: 0;
+  overflow: hidden;
+}
+
+.rstm-hero-sample-code > .expressive-code pre,
+.rstm-hero-sample-code > .expressive-code figure,
+.rstm-hero-sample > .expressive-code pre,
+.rstm-hero-sample > .expressive-code figure {
+  border: none;
+  border-radius: 0;
+  margin: 0;
+}
+
+/* Expressive Code's terminal frame centers the title and shows a
+   three-dots macOS glyph at the left. For the minimalism theme we
+   hide the decorative dots and left-align the title so it sits flush
+   with the code's own inline padding below it. */
+.expressive-code .frame.is-terminal.has-title .header {
+  justify-content: flex-start;
+}
+
+.expressive-code .frame.is-terminal.has-title .header::before {
+  display: none;
+}
+
+.expressive-code .frame.is-terminal.has-title .header .title {
+  padding-inline-start: var(--ec-codePadInl, 1.35rem);
+}
+
+@media (min-width: 56rem) {
+  .rstm-hero-sample {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Live TreeMenu demo card — flat, hairline, no shadow.
+   --------------------------------------------------------------------------- */
+
+/* No card chrome, just a thin accent left rail that anchors the demo
+   so it doesn't dissolve into the page nor read as a peer of the
+   fully-bordered code frames beside it. The demo renders the
+   library's built-in monochrome palette and 0.25rem row radius
+   untouched. */
+.rstm-live-demo {
+  margin: 1.25rem 0 1.5rem;
+  padding: 0 0 0 1rem;
+  border: 0;
+  /* Rail uses the site's B/W accent — pure black on light, pure white
+     on dark — so it flips with Starlight's theme toggle and keeps the
+     monochrome palette consistent. */
+  border-inline-start: 2px solid var(--sl-color-accent);
+  border-radius: 0;
+  background: transparent;
+  max-width: 32rem;
+}
+
+/* Dark-theme bridge. The library's defaults are light-optimized
+   (black text on a white body bg). Starlight's theme toggle switches
+   the docs page bg to near-black, so we flip the library's tokens
+   here — this is the same pattern a dark-themed app would use in
+   its own CSS (scoped `:root.dark` or `[data-theme='dark']`) and
+   doubles as live documentation of the override API. */
+:root[data-theme='dark'] .rstm-live-demo {
+  --rstm-text-color: var(--sl-color-text);
+  --rstm-muted-color: var(--sl-color-gray-3);
+  --rstm-border-color: var(--sl-color-hairline-light);
+  --rstm-hover-bg: var(--sl-color-gray-5);
+  --rstm-active-bg: var(--sl-color-accent);
+  --rstm-active-fg: var(--sl-color-text-invert);
+  --rstm-focus-ring-color: var(--sl-color-gray-3);
+}
+
+/* ---------------------------------------------------------------------------
+   Skeleton — shown until the React island hydrates, to prevent the
+   hero tree from popping in with a layout shift. Sibling of the
+   <astro-island>; `:has(*)` detects hydrated state and hides it.
+   --------------------------------------------------------------------------- */
+
+.rstm-live-demo-slot {
+  /* Wrapper owns the vertical space. Rail + padding live here so the
+     visual anchor is present during skeleton phase AND after mount —
+     the .rstm-live-demo inside the island doesn't need its own
+     rail. */
+  padding: 0 0 0 1rem;
+  border-inline-start: 2px solid var(--sl-color-accent);
+  margin: 1.25rem 0 1.5rem;
+  max-width: 32rem;
+}
+
+/* Cancel the double rail on the inner .rstm-live-demo since the
+   wrapper now carries it. */
+.rstm-live-demo-slot .rstm-live-demo {
+  padding: 0;
+  border: 0;
+  margin: 0;
+  max-width: none;
+}
+
+/* Skeleton wrapper mirrors the real ul.rstm-tree-item-group's side/
+   bottom padding so rows line up horizontally with the hydrated tree.
+   Top padding + margin are zeroed so the skeleton sits flush with the
+   slot's top edge. */
+.rstm-skeleton {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0 0.25rem 0.25rem;
+}
+
+/* Once the React island has any element child, it's hydrated. Hide
+   the sibling skeleton. `:has()` is supported in every browser this
+   docs site targets (Chrome 105+, Safari 15.4+, Firefox 121+). */
+astro-island:has(*) + .rstm-skeleton {
+  display: none;
+}
+
+/* Row height matches the hydrated .rstm-tree-item-row (0.5rem block
+   padding + ~1.25rem line-height). */
+.rstm-skeleton-row {
+  height: 2.25rem;
+  border-radius: 0.25rem;
+  background: linear-gradient(
+    90deg,
+    var(--sl-color-gray-6) 0%,
+    var(--sl-color-gray-5) 50%,
+    var(--sl-color-gray-6) 100%
+  );
+  background-size: 200% 100%;
+  animation: rstm-skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+/* Search input sits above the tree list with a small breather —
+   matches the real .rstm-search `margin-bottom: 0.25rem`. */
+.rstm-skeleton-search {
+  height: 2.5rem;
+  margin-bottom: 0.25rem;
+}
+
+/* Indent on nested rows; only the bar itself moves right so the row's
+   shimmer starts where a nested <li>'s visual row begins. */
+.rstm-skeleton-row--indent {
+  margin-inline-start: 1.75rem;
+}
+
+@keyframes rstm-skeleton-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rstm-skeleton-row {
+    animation: none;
+  }
+}
+
+/* Hint strip below the demo. Minimal: no accent tints, just type
+   hierarchy. */
+.rstm-live-demo-hint {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--sl-color-hairline);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: var(--sl-color-gray-3);
+}
+
+.rstm-live-demo-tips {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.rstm-live-demo-hint strong {
+  color: var(--sl-color-text);
+  font-weight: 500;
+  margin-inline-end: 0.15rem;
+}
+
+.rstm-live-demo-hint kbd {
+  font-family: var(--sl-font-system-mono);
+  font-size: 0.75em;
+  padding: 0.05rem 0.3rem;
+  border-radius: 0;
+  border: 1px solid var(--sl-color-hairline-light);
+  background: transparent;
+  color: var(--sl-color-text);
+  line-height: 1;
+}
+
+.rstm-live-demo-last {
+  color: var(--sl-color-gray-2);
+}
+
+.rstm-live-demo-last code {
+  font-family: var(--sl-font-system-mono);
+  font-size: 0.85em;
+  padding: 0.1rem 0.3rem;
+  border-radius: 0;
+  background: transparent;
+  border: 1px solid var(--sl-color-hairline);
+  color: var(--sl-color-text);
+}
+
+/* ---------------------------------------------------------------------------
+   Tables in markdown — minimal: no rounded container, just hairlines.
+   --------------------------------------------------------------------------- */
+
+.sl-markdown-content table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  border-top: 1px solid var(--sl-color-hairline);
+  border-bottom: 1px solid var(--sl-color-hairline);
+}
+
+.sl-markdown-content th {
+  background: transparent;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  border-bottom: 1px solid var(--sl-color-hairline);
+}
+
+.sl-markdown-content td,
+.sl-markdown-content th {
+  border-inline-end: 0;
+  border-bottom: 1px solid var(--sl-color-hairline-light);
+}
+
+.sl-markdown-content tr:last-child td {
+  border-bottom: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Callouts / asides (:::note, :::tip, etc.)
+   --------------------------------------------------------------------------- */
+
+.sl-markdown-content .starlight-aside {
+  border-radius: 0;
+  border-inline-start-width: 2px;
+  background: transparent;
+}
+
+/* ---------------------------------------------------------------------------
+   Accessibility — global reduced-motion gate
+   --------------------------------------------------------------------------- */
+
+/* Respect the OS-level preference. Everything in this file is a
+   100–300ms tweak and none of it conveys meaning by motion alone, so
+   a blanket kill-switch is the right trade-off. Scoped via `:where()`
+   to keep specificity at 0 so component-level rules can re-enable if
+   they ever need to. */
+@media (prefers-reduced-motion: reduce) {
+  :where(*, *::before, *::after) {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

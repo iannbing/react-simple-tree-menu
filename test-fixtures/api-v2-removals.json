@@ -1,0 +1,47 @@
+{
+  "$comment": "Allowlist of intentional API changes from v1 → v2. The API-contract diff test at build time treats differences listed here as expected and fails on any other divergence. Adding to this list requires an approved design decision in CHANGELOG.md.",
+  "removedProps": {
+    "TreeMenuProps": [
+      {
+        "name": "cacheSearch",
+        "reason": "Leaky abstraction tied to fast-memoize arg-identity caching. Replaced internally by useMemo keyed on real dependencies — correct by default, no user-facing knob.",
+        "decidedIn": "PLAN.md M2/M3 discussion"
+      }
+    ]
+  },
+  "removedExports": [],
+  "renamedExports": [],
+  "addedExports": [
+    {
+      "name": "TreeMenuHandle",
+      "reason": "Imperative handle type for the `useImperativeHandle` ref shape. Additive — consumers who don't use refs aren't affected."
+    },
+    {
+      "name": "TreeMenuClassNames",
+      "reason": "Per-slot CSS class names appended to the default `rstm-*` anchors. Enables headless Tailwind-style usage without importing the default CSS."
+    },
+    {
+      "name": "TreeMenuLabels",
+      "reason": "i18n-friendly label overrides for the default UI (search placeholder / aria-label)."
+    },
+    {
+      "name": "unflatten",
+      "reason": "Public helper to rebuild a nested-tree shape from the flat Item[] that walk() emits. Extracted from an internal default-children utility so custom render-props consumers can do nested-DOM rendering without re-implementing the slash-path grouping. Generic over { key: string } — works with Item, TreeMenuItem, or any consumer shape."
+    },
+    {
+      "name": "UnflattenResult",
+      "reason": "Return type of `unflatten`: `{ roots: T[]; childrenByParent: Map<string, T[]> }`."
+    },
+    {
+      "name": "collectBranchKeys",
+      "reason": "Public helper to enumerate every branch key in a tree. Backs the imperative `expandAll()` handle, and lets consumers using controlled `openNodes` implement their own expand-all without reimplementing the path-join algorithm."
+    }
+  ],
+  "addedProps": {
+    "TreeMenuProps": {
+      "classNames": "Optional per-slot class names appended to the default `rstm-*` anchors (M4.5c).",
+      "labels": "Optional i18n-friendly copy overrides for default UI strings (M4.5d).",
+      "keySeparator": "Optional delimiter that joins node keys into paths (default `/`). Lets consumers whose own keys contain `/` (URLs, filesystem paths) pick a different delimiter without loss of functionality."
+    }
+  }
+}

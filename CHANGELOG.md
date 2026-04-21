@@ -1,0 +1,161 @@
+# Changelog
+
+Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+Versioning follows [SemVer](https://semver.org/).
+
+## [2.0.0] — unreleased
+
+Full ground-up rewrite. Public API preserved byte-for-byte modulo the
+specific removals called out in **Breaking changes** — consumers who
+aren't using `cacheSearch` and are already on React ≥ 16.14 upgrade
+with a single `npm install` and no code changes.
+
+### Breaking changes
+
+- **React peer floor raised** from `>=16.6.3` to `>=16.14`.
+  16.14 (Oct 2020) is the first version that exposes
+  `react/jsx-runtime`, which the new bundler relies on. The 16.6–16.13
+  slice is a narrow window of React history; any consumer on 16.14+,
+  17, 18, or 19 is unaffected.
+- **`cacheSearch` prop removed.** It was a leaky abstraction tied to
+  `fast-memoize`'s stringified-arg cache, which silently returned
+  stale results when `locale` or `matchSearch` changed. Internal
+  memoization is now plain `useMemo` keyed on real dependencies —
+  correct by default, no user-facing knob. Delete the prop from any
+  call site.
+- **Default `onClickItem`** is now a no-op. v1 defaulted to
+  `console.log`, which was never intended as shipped behavior.
+  Supply your own handler if you need click feedback.
+- **Default search placeholder + aria-label** changed from
+  `"Type and search"` to `"Search"`. Restore via
+  `labels={{ searchPlaceholder: 'Type and search', searchAriaLabel: 'Type and search' }}`.
+- **Default toggle glyphs** changed from `"+" / "-"` to Unicode
+  triangles `"▸" / "▾"`. Restore via `openedIcon` / `closedIcon`
+  props on `ItemComponent` in a custom render-prop.
+- **Default palette** swapped from saturated blue (`#179ed3`) to
+  monochrome black-and-white — black active row on a white background
+  with a mid-grey focus ring, optimized for light backgrounds. Tailwind
+  v4 consumers' `--color-primary` still wins for active state when
+  present, so brand colors flow through automatically. Dark-bg
+  consumers override tokens on their own scope
+  (e.g. `:root.dark .my-panel { --rstm-text-color: ... }`).
+- **`TreeNode` and `TreeNodeInArray` types tightened.**
+  `TreeNode` (object-form) now forbids `key` via `key?: never`, and
+  `TreeNodeInArray` (array-form) forbids `index` via `index?: never`.
+  Under v1 both fields were silently accepted on the wrong shape via
+  the open index signature. v2 rejects the mismatch at compile time —
+  correctly typed v1 code is unaffected; code that accidentally set
+  both now gets a clear TS error pointing at the one that's ignored.
+
+None of the above changes the public `.d.ts` export shape for
+symbols or props that remained.
+
+### Added
+
+- **WAI-ARIA tree pattern** on rendered DOM: `role="tree"` on the
+  container, `role="treeitem"` on each item, plus `aria-expanded`,
+  `aria-level`, `aria-selected`, `aria-setsize`, `aria-posinset`.
+  Roving tabindex (focused item `tabIndex=0`, others `-1`).
+- **Arrow-key navigation matches WAI-ARIA tree pattern.** `→` on an
+  open branch now moves focus to the first child (previously a no-op).
+  Closed branch / leaf behavior unchanged. Matches VS Code, Finder,
+  GitHub file tree muscle memory.
+- **`classNames` prop** (`TreeMenuClassNames` type). Per-slot
+  strings appended to the `rstm-*` anchor classes — Tailwind /
+  utility-class users can skip the default CSS import and style
+  with their framework while the anchor classes remain as inert
+  strings for backward-compat CSS overrides.
+- **`labels` prop** (`TreeMenuLabels` type). i18n-friendly overrides
+  for default UI copy: `searchPlaceholder`, `searchAriaLabel`.
+- **`TreeMenuHandle` ref shape.** `useImperativeHandle` exposes
+  `resetOpenNodes`, plus `expandAll()` and `collapseAll()` for
+  one-call expansion state changes. `expandAll()` does one O(N) walk
+  of the data tree (microseconds even on 100k nodes) to collect every
+  branch key, then dispatches a single state update; `collapseAll()`
+  is a no-arg reset to zero open branches. Both preserve the user's
+  current active/focus/search state (unlike `resetOpenNodes`). Under
+  controlled `openNodes` they're no-ops — the parent owns the slot.
+- **`collectBranchKeys(data, keySeparator?)` helper.** Public export
+  of the traversal that `expandAll()` uses internally. Controlled-
+  `openNodes` consumers can build their own expand-all:
+  `setOpen(collectBranchKeys(data))` without re-implementing the
+  path-join walk.
+- **`keySeparator` prop.** Customize the character that joins node
+  keys into paths (default `"/"`). Useful when node keys themselves
+  contain `/` (URLs, filesystem paths) — pass e.g. `"."` and the
+  library uses that everywhere: emitted `Item.key` paths,
+  `openNodes` lookups, LEFT-arrow parent-focus navigation, and
+  `unflatten(items, keySeparator)` for custom render-props.
+  `unflatten()` gains a matching optional second argument.
+- **`unflatten` helper + `UnflattenResult<T>` type.** Public export of
+  the grouping function `defaultChildren` uses internally — reconstructs
+  a nested tree from the flat `items[]` via slash-joined key paths.
+  Generic over `T extends { key: string }`. Custom render-props that
+  want to emit a nested `<ul>/<li>/<ul>` DOM can now call one library
+  function instead of copy-pasting the algorithm.
+- **Tailwind v4 theming out of the box.** Every color/typography
+  CSS custom property resolves via a `var()` chain that prefers
+  Tailwind v4's auto-exposed theme variables (`--color-primary`,
+  `--font-sans`, `--color-gray-*`). Tailwind v4 users' brands flow
+  through with zero config.
+- **CSS subpath export.** Import styles via
+  `react-simple-tree-menu/styles`. The legacy
+  `react-simple-tree-menu/dist/main.css` deep-import path from v1 is
+  **removed** — update to the subpath export above (same byte
+  content, ergonomic import).
+- **WAI-ARIA tree pattern** on rendered DOM: see above.
+- **Zero-dep bundle.** `dependencies: {}`. The library ships no
+  transitive npm packages — consumers install 0 packages beyond
+  React itself.
+- **Posinset / setsize** now present on every `Item` for consumers
+  who want ARIA sibling coordinates in custom render-props.
+- Modern default stylesheet: rounded corners, subtle hover, inset
+  focus ring. All values themable via CSS custom properties.
+
+### Removed (internals)
+
+- `classnames` runtime dependency.
+- `fast-memoize` runtime dependency.
+- `is-empty` runtime dependency.
+- `tiny-debounce` runtime dependency.
+
+Consumers don't need to uninstall — these were transitive.
+
+### Changed (internals)
+
+- Class component → function component with `useReducer`
+  + `useImperativeHandle`. Behavior preserved; tested under a
+  dual-entry characterization suite during the strangulation
+  window.
+- Tree flattening (`walk`) rewritten for the closed-branch
+  short-circuit: walking a 100k-node fully-collapsed tree runs in
+  microseconds.
+- `ItemComponent` is now `React.memo`-wrapped.
+
+### Infrastructure
+
+- ESM-first published package with proper `exports` field.
+- Types ship alongside: `dist/index.d.ts`.
+- CI: GitHub Actions matrix on Node 20 × React 16.14, 17, 18, 19.
+- Test stack: Vitest + React Testing Library (replaces Jest + Enzyme).
+- Build: tsup (replaces Rollup 1).
+- Lint: ESLint 9 flat config.
+- Bundle size: **3.01 KB** minified + brotli
+  (enforced via `size-limit` in CI, 3.5 KB budget).
+
+### Fixed
+
+- Search input is now **controlled** internally — clearing
+  `searchTerm` via `resetOpenNodes` visibly empties the input,
+  fixing a v1 bug where reset left stale text in the box.
+- Object-format `TreeNode`'s sort `index` no longer leaks onto
+  emitted `Item` objects.
+- `ItemComponent` no longer spreads arbitrary user props onto the
+  rendered `<li>` as HTML attributes (React's `key` warning,
+  invalid data-like attributes).
+
+---
+
+## [1.1.18] and earlier
+
+See git history before commit `44c0de3`.

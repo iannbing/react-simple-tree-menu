@@ -1,0 +1,226 @@
+name: Release
+
+# Two-path release pipeline, keyed on the long-lived branch that got pushed:
+#
+# 1. push to `development`  → release-rc job
+#      Every integration merge auto-publishes a new release candidate.
+#      Reads the current base version from package.json, queries npm for
+#      the highest existing `-rc.N` on that base, bumps to `-rc.N+1` via
+#      `npm-version-suffix`, runs all gates, then `npm publish --tag next`
+#      (so `npm install <pkg>@latest` stays on the stable release). After
+#      a successful publish, commits the package.json bump, creates an
+#      annotated `v<version>` tag, and pushes both back to development.
+#
+# 2. push to `master`        → release-stable job
+#      A merge to master is a ship signal. Strips any `-rc.N` suffix that
+#      RC runs left on package.json, runs gates, and `npm publish`
+#      (no tag, so it becomes `latest`). Idempotent: if the clean version
+#      is already on npm (e.g. master got a non-version-bumping commit),
+#      the job skips the publish instead of failing loudly. Otherwise,
+#      it commits, tags `v<version>`, and pushes. Manual
+#      `workflow_dispatch` is preserved as an escape hatch for off-cycle
+#      patches / re-publishes.
+#
+# Every successful publish leaves a matching annotated git tag as the
+# authoritative reference — the tag points at the exact commit whose
+# contents produced the npm artifact.
+#
+# Prerequisites (one-time, repo-owner does this):
+#   - On npmjs.com: add a Trusted Publisher entry for this repo
+#     (GitHub Actions, workflow filename `release.yml`, environment
+#     blank). `npm publish --provenance` then authenticates via OIDC
+#     using the job's `id-token: write` permission — no NPM_TOKEN
+#     secret needed.
+#   - On npmjs.com: set "Publishing access" → "Require 2FA and
+#     disallow tokens" so the only publish path is through this
+#     workflow's trusted OIDC exchange.
+#   - On GitHub: Settings → Actions → General → Workflow permissions
+#     → "Read and write permissions" (so the workflow can push back
+#     the version bump commit + annotated tag).
+
+on:
+  push:
+    branches: [development, master]
+    # Only fire when the push actually changes something that ships.
+    # Docs site, examples, README/CHANGELOG, CI config, test-fixtures,
+    # Storybook, and in-source tests/benches/stories don't affect the
+    # published artifact, so they shouldn't mint a new RC or stable.
+    paths:
+      - 'src/**'
+      - '!src/__tests__/**'
+      - '!src/**/*.test.ts'
+      - '!src/**/*.test.tsx'
+      - '!src/**/*.bench.ts'
+      - '!src/**/*.stories.tsx'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'tsup.config.ts'
+      - 'postcss.config.js'
+      - 'tsconfig.json'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Override: publish this exact version to `latest` (e.g. 2.0.1). Runs the stable job.'
+        required: true
+        type: string
+
+jobs:
+  # --------------------------------------------------------------------
+  # RC publish — every push to development produces a new -rc.N on npm
+  # --------------------------------------------------------------------
+  release-rc:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/development'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # push version bump + tag
+      id-token: write   # npm provenance (OIDC)
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          registry-url: 'https://registry.npmjs.org'
+
+      - run: npm ci
+
+      - name: Gate — lint + typecheck
+        run: |
+          npm run lint
+          npm run typecheck
+
+      - name: Gate — test (one React peer here; the matrix runs on CI)
+        run: npm test
+
+      - name: Gate — build
+        run: npm run build
+
+      - name: Gate — API contract
+        run: npm run check:api
+
+      - name: Gate — bundle size
+        run: npm run check:size
+
+      - name: Bump RC version (reads `npm view` for latest -rc.N and +1)
+        # The package has no CLI binary — invoke the script directly.
+        # Starts at -rc.1 if no previous RC exists for this base version.
+        # Base version comes from package.json's current "version" field;
+        # maintainers bump that manually when starting a new minor/major
+        # track (e.g. `npm version 2.1.0 --no-git-tag-version`) and push
+        # the bump to development as the first commit of the new cycle.
+        run: node ./node_modules/npm-version-suffix/run-add-suffix.js
+
+      - name: Sync package-lock.json with the new version
+        # `npm-version-suffix` only touches package.json; bring the lock
+        # file to match so the committed state isn't half-bumped.
+        run: npm install --package-lock-only --ignore-scripts
+
+      - name: Read new version
+        id: rc_version
+        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
+      - name: Publish to npm (next dist-tag)
+        # Authenticates via OIDC against the Trusted Publisher entry on
+        # npmjs.com — no NPM_TOKEN secret needed. `--provenance` attests
+        # the artifact's origin (which workflow run built it from which
+        # commit) on npm's sigstore-backed transparency log.
+        run: npm publish --tag next --provenance
+
+      - name: Tag + push bump commit
+        # Runs only after npm publish succeeded — so the tag is always a
+        # reference to a shipped version. Annotated tag carries a release
+        # message visible in `git show v<version>` and `git describe`.
+        run: |
+          VERSION="${{ steps.rc_version.outputs.version }}"
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add package.json package-lock.json
+          git commit -m "chore(release): $VERSION"
+          git tag -a "v$VERSION" -m "Release candidate $VERSION"
+          git push --follow-tags
+
+  # --------------------------------------------------------------------
+  # Stable publish — auto on push to master, plus workflow_dispatch escape
+  # --------------------------------------------------------------------
+  release-stable:
+    if: |
+      (github.event_name == 'push' && github.ref == 'refs/heads/master') ||
+      github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          registry-url: 'https://registry.npmjs.org'
+
+      - run: npm ci
+
+      - name: Gates
+        run: |
+          npm run lint
+          npm run typecheck
+          npm test
+          npm run build
+          npm run check:api
+          npm run check:size
+
+      - name: Set target version
+        # workflow_dispatch path: caller provided an explicit version.
+        # push path: whatever is in package.json after stripping `-rc.N`
+        # (development's RC job committed that back; merging development →
+        # master brings the suffix along). `run-remove-suffix` is a no-op
+        # if the version is already clean.
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            npm version "${{ inputs.version }}" --no-git-tag-version --allow-same-version
+          else
+            node ./node_modules/npm-version-suffix/run-remove-suffix.js || true
+          fi
+
+      - name: Sync package-lock.json with the new version
+        run: npm install --package-lock-only --ignore-scripts
+
+      - name: Check if this version is already on npm
+        id: check
+        # Idempotent guard: if a commit to master doesn't actually advance
+        # the version (e.g. typo fix, doc tweak), don't re-publish — just
+        # exit successfully.
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          if npm view "react-simple-tree-menu@$VERSION" version > /dev/null 2>&1; then
+            echo "already_published=true" >> $GITHUB_OUTPUT
+            echo "Version $VERSION is already on npm — skipping publish."
+          else
+            echo "already_published=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Publish to npm (latest)
+        # Same OIDC + provenance flow as the RC path — see the matching
+        # note above.
+        if: steps.check.outputs.already_published == 'false'
+        run: npm publish --provenance
+
+      - name: Tag + push bump commit
+        if: steps.check.outputs.already_published == 'false'
+        run: |
+          VERSION="${{ steps.check.outputs.version }}"
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add package.json package-lock.json
+          git diff --cached --quiet || git commit -m "chore(release): $VERSION"
+          git tag -a "v$VERSION" -m "Release $VERSION"
+          git push --follow-tags

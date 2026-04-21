@@ -1,0 +1,73 @@
+---
+title: Search
+description: Built-in search with debounce, locale, and custom matchers.
+---
+
+Search is included by default. The built-in `<input>` shows up above the
+tree and filters items as the user types.
+
+## Debounce
+
+`debounceTime` (milliseconds, default `125`) controls the delay between
+the last keystroke and the filter. Setting it to `0` filters immediately.
+
+```tsx
+<TreeMenu data={data} debounceTime={250} />
+```
+
+## Auto-expand matches
+
+When a search term has any match, every **ancestor** of each matching node
+is forced open for the duration of the search. Clearing the search restores
+the previous open-state.
+
+## locale(label)
+
+Transform a label before search (and before render, if you use the default
+UI). Common use: normalize accents for diacritic-insensitive search.
+
+```tsx
+const stripAccents = (s: string) =>
+  s.normalize('NFD').replace(/\p{Diacritic}/gu, '');
+
+<TreeMenu data={data} locale={stripAccents} />
+```
+
+## matchSearch(config)
+
+Replace the default substring match with your own.
+
+```tsx
+<TreeMenu
+  data={data}
+  matchSearch={({ label, searchTerm }) =>
+    label.toLowerCase().startsWith(searchTerm.toLowerCase())
+  }
+/>
+```
+
+The config argument is `{ label, searchTerm }`. `label` is the raw label —
+`locale` is **not** applied when you pass your own `matchSearch`, so you
+can normalize however you like.
+
+## Skip the default search UI
+
+Pass a function child and call `search` yourself:
+
+```tsx
+<TreeMenu data={data}>
+  {({ items, search }) => (
+    <div>
+      <input onChange={(e) => search?.(e.target.value)} placeholder="Find..." />
+      <ul>
+        {items.map((item) => (
+          <li key={item.key}>{item.label}</li>
+        ))}
+      </ul>
+    </div>
+  )}
+</TreeMenu>
+```
+
+Set `hasSearch={false}` to skip calling `search` entirely and disable search
+wiring (useful for small trees where the feature isn't needed).

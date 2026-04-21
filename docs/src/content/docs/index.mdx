@@ -1,0 +1,91 @@
+---
+title: react-simple-tree-menu
+description: Simple, data-driven, zero-dependency tree menu for React.
+template: splash
+hero:
+  tagline: A small, accessible, zero-dependency tree menu for React — 3 KB, drops into Tailwind v4 projects with zero config, works back to React 16.14.
+  actions:
+    # Hero action links are NOT auto-prefixed with Astro's `base` like
+    # sidebar links are — they have to include the base path explicitly
+    # or they 404 on the deployed site.
+    - text: Get started
+      link: /react-simple-tree-menu/getting-started/
+      icon: right-arrow
+      variant: primary
+    - text: View on GitHub
+      link: https://github.com/iannbing/react-simple-tree-menu
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+import LiveTreeMenu from '../../components/LiveTreeMenu.tsx';
+
+<div class="rstm-hero-sample">
+
+<div class="rstm-live-demo-slot">
+
+<LiveTreeMenu client:only="react" autoFocus />
+
+{/* Skeleton shown until the React island hydrates. Hidden via
+    `astro-island:has(*) + .rstm-skeleton { display: none }` in docs.css
+    — mirroring the hero tree's rows (search + 3 top-level with one
+    expanded group) so the layout doesn't jump on pop-in. */}
+<div class="rstm-skeleton" aria-hidden="true">
+  <div class="rstm-skeleton-row rstm-skeleton-search" />
+  <div class="rstm-skeleton-row" />
+  <div class="rstm-skeleton-row rstm-skeleton-row--indent" />
+  <div class="rstm-skeleton-row rstm-skeleton-row--indent" />
+  <div class="rstm-skeleton-row rstm-skeleton-row--indent" />
+  <div class="rstm-skeleton-row" />
+  <div class="rstm-skeleton-row" />
+</div>
+
+</div>
+
+<div class="rstm-hero-sample-code">
+
+```bash title="Installation"
+npm install react-simple-tree-menu
+```
+
+```tsx
+import TreeMenu from 'react-simple-tree-menu';
+import 'react-simple-tree-menu/styles';
+
+<TreeMenu
+  data={tree}
+  initialOpenNodes={['fruit']}
+  initialActiveKey="fruit/apple"
+  onClickItem={({ key }) => {
+    console.log(key);
+  }}
+/>;
+```
+
+</div>
+
+</div>
+
+## Why this library
+
+<CardGrid stagger>
+  <Card title="3 KB, zero runtime deps" icon="rocket">
+    Minified + brotli bundle under 3.5 KB. React is the only peer dependency.
+  </Card>
+  <Card title="Accessibility, done" icon="approve-check">
+    WAI-ARIA tree pattern, roving tabindex, programmatic focus movement, full keyboard nav out of the box.
+  </Card>
+  <Card title="Render-props escape hatch" icon="setting">
+    Use the default UI, or pass a function child and render whatever you want — flat, nested, or virtualized.
+  </Card>
+  <Card title="Theme with one variable" icon="sun">
+    Every color, spacing, and font value is a `--rstm-*` CSS custom property. Override globally, per-theme, or per-panel.
+  </Card>
+  <Card title="Drops into Tailwind v4 projects" icon="puzzle">
+    Your theme's `--color-*` and `--font-sans` tokens flow into the tree automatically — no preset to install, no `content` globs to add. Or go fully headless: pass `classNames` and skip our CSS import entirely.
+  </Card>
+  <Card title="Works with any React" icon="seti:react">
+    Tested against React 16.14, 17, 18, and 19 on every commit. `useDeferredValue` is picked up automatically on 18+.
+  </Card>
+</CardGrid>

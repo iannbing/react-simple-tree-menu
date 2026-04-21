@@ -1,0 +1,150 @@
+---
+title: Custom render-props
+description: Render the tree yourself — flat or nested — without losing accessibility.
+---
+
+`TreeMenu` accepts a function child (render-props). The function receives
+the flattened, search-aware `items[]`, a `search` callback, a
+`resetOpenNodes` handle, and the current `searchTerm`.
+
+The `items` array is **always flat**. What varies is how you render it.
+
+## When to reach for render-props
+
+- You want to swap the outer layout (e.g., put search and the list in
+  separate sides of a split panel).
+- You're virtualizing — see the [Virtualization guide](/guides/virtualization/).
+- You need domain-specific markup per item (anchor tags for routes,
+  badges, drag handles).
+
+If none of the above apply, stick with the default UI — it emits the
+canonical nested `<ul>`/`<li>`/`<ul>` structure with full ARIA support
+and is 100% covered by accessibility tests.
+
+## Pattern A — Flat list
+
+Simplest path. One `<ul>` with `paddingLeft` driven by `item.level`.
+
+```tsx
+<TreeMenu data={data}>
+  {({ search, items }) => (
+    <>
+      <input onChange={(e) => search?.(e.target.value)} />
+      <ul role="tree">
+        {items.map((item) => (
+          <li
+            key={item.key}
+            role="treeitem"
+            aria-level={item.level + 1}
+            aria-selected={!!item.active}
+            aria-expanded={item.hasNodes ? item.isOpen : undefined}
+            tabIndex={item.focused ? 0 : -1}
+            style={{ paddingLeft: 8 + item.level * 16 }}
+            onClick={item.onClick}
+          >
+            {item.label}
+          </li>
+        ))}
+      </ul>
+    </>
+  )}
+</TreeMenu>
+```
+
+### Accessibility notes (flat)
+
+The WAI-ARIA tree pattern allows children to be associated with their
+parent two ways: DOM nesting (`role="group"` inside the parent) **or**
+`aria-owns` listing child IDs. A flat list has neither by default, so
+strictly speaking you're relying on the `aria-level` + `aria-setsize` +
+`aria-posinset` attributes to convey structure.
+
+In practice:
+
+- **Screen readers** (NVDA, JAWS, VoiceOver) announce level from
+  `aria-level` correctly.
+- **Expand / collapse** state is announced from `aria-expanded`.
+- **Position in siblings** comes from `aria-posinset` / `aria-setsize` —
+  the library already computes these; pass them through.
+
+What you lose vs. nested DOM: nothing the spec requires, but some
+assistive tech uses the physical nesting as a redundant hint. If you
+need full canonical compliance, use Pattern B or add `aria-owns`.
+
+## Pattern B — Nested DOM (canonical)
+
+Reconstruct hierarchy from the slash-joined `key`. The library exposes
+`unflatten` — the same helper `defaultChildren` uses internally — so you
+don't need to re-implement the grouping:
+
+```tsx
+import TreeMenu, { unflatten } from 'react-simple-tree-menu';
+import type { ReactElement } from 'react';
+import type { TreeMenuItem } from 'react-simple-tree-menu';
+
+function renderNode(
+  item: TreeMenuItem,
+  byParent: Map<string, TreeMenuItem[]>
+): ReactElement {
+  const children = byParent.get(item.key);
+  return (
+    <li
+      key={item.key}
+      role="treeitem"
+      aria-level={item.level + 1}
+      aria-selected={!!item.active}
+      aria-expanded={item.hasNodes ? item.isOpen : undefined}
+      tabIndex={item.focused ? 0 : -1}
+    >
+      <div onClick={item.onClick}>{item.label}</div>
+      {children && (
+        <ul role="group">
+          {children.map((c) => renderNode(c, byParent))}
+        </ul>
+      )}
+    </li>
+  );
+}
+
+<TreeMenu data={data}>
+  {({ items }) => {
+    const { roots, childrenByParent } = unflatten(items);
+    return (
+      <ul role="tree">
+        {roots.map((r) => renderNode(r, childrenByParent))}
+      </ul>
+    );
+  }}
+</TreeMenu>
+```
+
+`unflatten` is generic — it works with any `{ key: string }` shape, so
+your own projected item type (e.g., after `items.map(...)`) works too.
+
+### Accessibility notes (nested)
+
+- Canonical WAI-ARIA tree shape — children live inside
+  `<ul role="group">` inside the parent `<li role="treeitem">`.
+- `aria-expanded` announces correctly on every parent treeitem.
+- Screen readers can walk the subtree with ↓ and jump back to the parent
+  with ←, matching expected tree widget behavior.
+
+This is what the default UI ships by default. If you're rendering
+hand-written nested markup that matches the structure above, you get the
+same a11y characteristics.
+
+## A note on keyboard
+
+The library's default `KeyDown` wrapper handles Up/Down/Left/Right/Enter
+by inspecting focused DOM elements with `role="treeitem"`. Both patterns
+above preserve that contract — the wrapper finds your treeitems
+regardless of whether they're siblings or nested, as long as the roles
+and `tabIndex` values are in place.
+
+If you pass `disableKeyboard`, you own the key model yourself.
+
+## Live examples
+
+Both patterns are committed as Storybook stories in the library
+repository (`src/tree-menu.render-props.stories.tsx`) and are part of
+the CI build — regressions surface before they ship.

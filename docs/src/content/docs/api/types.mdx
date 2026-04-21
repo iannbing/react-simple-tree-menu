@@ -1,0 +1,125 @@
+---
+title: Types
+description: TypeScript type definitions exported by the library.
+---
+
+All types are exported from `react-simple-tree-menu`.
+
+```ts
+import type {
+  TreeMenuProps,
+  TreeMenuHandle,
+  TreeMenuItem,
+  TreeMenuChildren,
+  TreeMenuClassNames,
+  TreeMenuLabels,
+  TreeNode,
+  TreeNodeObject,
+  TreeNodeInArray,
+  LocaleFunction,
+  MatchSearchFunction,
+  Item,
+  UnflattenResult,
+} from 'react-simple-tree-menu';
+```
+
+## `LocaleFunctionProps`
+
+Argument to [`LocaleFunction`](#localefunction). The open index signature
+is how arbitrary user-attached fields (`url`, `icon`, …) flow through.
+
+```ts
+interface LocaleFunctionProps {
+  label: string;
+  [name: string]: unknown;
+}
+```
+
+## `TreeNode`
+
+Object-format node. The enclosing object's property name is the key;
+`index` orders siblings inside walk(). `key` is forbidden here (lives on
+the outer object). Extends `LocaleFunctionProps` so custom fields pass
+through.
+
+```ts
+interface TreeNode extends LocaleFunctionProps {
+  index: number;
+  key?: never;
+  nodes?: TreeNodeObject;
+}
+```
+
+## `TreeNodeObject`
+
+Object data format. Keys become node `key`s.
+
+```ts
+interface TreeNodeObject {
+  [name: string]: TreeNode;
+}
+```
+
+## `TreeNodeInArray`
+
+Array-format node. Ordered by array position, so `index` is forbidden.
+Extends `LocaleFunctionProps`.
+
+```ts
+interface TreeNodeInArray extends LocaleFunctionProps {
+  key: string;
+  index?: never;
+  nodes?: TreeNodeInArray[];
+}
+```
+
+## `Item`
+
+See [`Item` under TreeMenu](/api/tree-menu/#item).
+
+## `TreeMenuClassNames`
+
+See [the `classNames` slot table](/guides/theming/#full-classnames-shape).
+
+## `TreeMenuLabels`
+
+```ts
+interface TreeMenuLabels {
+  searchPlaceholder?: string;
+  searchAriaLabel?: string;
+}
+```
+
+## `LocaleFunction`
+
+```ts
+type LocaleFunction = (props: LocaleFunctionProps) => string;
+```
+
+Receives the **entire node** (not just the label) so a transformer can
+branch on custom fields. Pass a **stable reference** — the internal
+walk memo keys on identity.
+
+## `MatchSearchFunction`
+
+```ts
+interface MatchSearchFunctionProps extends LocaleFunctionProps {
+  searchTerm: string;
+}
+
+type MatchSearchFunction = (props: MatchSearchFunctionProps) => boolean;
+```
+
+Same shape as the locale argument with `searchTerm` added. Also should
+be a stable reference.
+
+## `UnflattenResult<T>`
+
+Return type of [`unflatten`](/api/tree-menu/#unflatten):
+
+```ts
+interface UnflattenResult<T> {
+  roots: T[];
+  childrenByParent: Map<string, T[]>;
+}
+```

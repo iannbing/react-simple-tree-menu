@@ -1,18 +1,24 @@
-import TreeMenu from './TreeMenu';
+// Public entry point — v2 implementation.
 
-// export components
-export default TreeMenu;
-export { defaultChildren, ItemComponent } from './TreeMenu/renderProps';
+export { TreeMenu as default } from './tree-menu';
+export { ItemComponent } from './item-component';
+export { defaultChildren } from './default-children';
+export { KeyDown } from './key-down';
+export { unflatten } from './tree/unflatten';
+export { collectBranchKeys } from './tree/collect-branch-keys';
 
-// export definitions
-export { TreeMenuProps } from './TreeMenu';
-export { TreeMenuItem, TreeMenuChildren } from './TreeMenu/renderProps';
-export {
-  TreeNodeObject,
+// Types
+export type { TreeMenuProps, TreeMenuHandle } from './tree-menu';
+export type { UnflattenResult } from './tree/unflatten';
+export type {
+  TreeMenuItem,
+  TreeMenuChildren,
+  TreeMenuClassNames,
+  TreeMenuLabels,
   TreeNode,
+  TreeNodeObject,
   TreeNodeInArray,
   LocaleFunction,
   MatchSearchFunction,
   Item,
-} from './TreeMenu/walk';
-export { default as KeyDown } from './KeyDown';
+} from './types';
