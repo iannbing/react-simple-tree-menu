@@ -25,12 +25,18 @@ name: Release
 # authoritative reference — the tag points at the exact commit whose
 # contents produced the npm artifact.
 #
-# Prerequisites (one-time, repo-owner does this in GitHub settings):
-#   - Secrets → Actions → new secret `NPM_TOKEN`, value is an npm
-#     automation token with publish rights for the package.
-#   - Settings → Actions → General → Workflow permissions → "Read and
-#     write permissions" (so the workflow can push back the version
-#     bump commit + tag).
+# Prerequisites (one-time, repo-owner does this):
+#   - On npmjs.com: add a Trusted Publisher entry for this repo
+#     (GitHub Actions, workflow filename `release.yml`, environment
+#     blank). `npm publish --provenance` then authenticates via OIDC
+#     using the job's `id-token: write` permission — no NPM_TOKEN
+#     secret needed.
+#   - On npmjs.com: set "Publishing access" → "Require 2FA and
+#     disallow tokens" so the only publish path is through this
+#     workflow's trusted OIDC exchange.
+#   - On GitHub: Settings → Actions → General → Workflow permissions
+#     → "Read and write permissions" (so the workflow can push back
+#     the version bump commit + annotated tag).
 
 on:
   push:
@@ -118,9 +124,11 @@ jobs:
         run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
 
       - name: Publish to npm (next dist-tag)
+        # Authenticates via OIDC against the Trusted Publisher entry on
+        # npmjs.com — no NPM_TOKEN secret needed. `--provenance` attests
+        # the artifact's origin (which workflow run built it from which
+        # commit) on npm's sigstore-backed transparency log.
         run: npm publish --tag next --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Tag + push bump commit
         # Runs only after npm publish succeeded — so the tag is always a
@@ -201,10 +209,10 @@ jobs:
           fi
 
       - name: Publish to npm (latest)
+        # Same OIDC + provenance flow as the RC path — see the matching
+        # note above.
         if: steps.check.outputs.already_published == 'false'
         run: npm publish --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Tag + push bump commit
         if: steps.check.outputs.already_published == 'false'
