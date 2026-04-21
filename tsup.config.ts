@@ -1,7 +1,8 @@
 // Bundler config: emits ESM + CJS + `.d.ts`. Sourcemaps ship to npm
-// for library debuggability; consumer prod bundlers strip them.
-// React / react-dom are marked `external` so they never land in the
-// published bundle — consumers supply their own peer.
+// for library debuggability; consumer prod bundlers strip them in
+// their production bundles. React / react-dom are marked `external`
+// so they never land in the published bundle — consumers supply
+// their own peer.
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
