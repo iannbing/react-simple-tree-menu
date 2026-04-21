@@ -141,18 +141,26 @@ jobs:
         # and avoids an implicit-scope detection quirk.
         run: npm publish --tag next --provenance --access public
 
-      - name: Tag + push bump commit
-        # Runs only after npm publish succeeded — so the tag is always a
-        # reference to a shipped version. Annotated tag carries a release
-        # message visible in `git show v<version>` and `git describe`.
+      - name: Tag the shipped commit
+        # Runs only after npm publish succeeded — the tag is always a
+        # reference to a shipped version. We DON'T try to push a
+        # version-bump commit back to development: branch protection
+        # rules block non-PR pushes, and the bump is only needed on
+        # the runner so npm publish sees the -rc.N version. The tag
+        # points at the workflow-triggering commit (HEAD of
+        # development); `git describe` and the npm provenance both
+        # reference the same SHA, so consumers can always trace a
+        # published version back to its source.
         run: |
           VERSION="${{ steps.rc_version.outputs.version }}"
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
-          git add package.json package-lock.json
-          git commit -m "chore(release): $VERSION"
+          # Reset any in-runner bump commits so the tag lands on the
+          # actual development HEAD (stashing the staged bump keeps
+          # the runner workspace clean for post-step cleanup).
+          git reset --hard HEAD
           git tag -a "v$VERSION" -m "Release candidate $VERSION"
-          git push --follow-tags
+          git push origin "v$VERSION"
 
   # --------------------------------------------------------------------
   # Stable publish — auto on push to master, plus workflow_dispatch escape
@@ -235,13 +243,15 @@ jobs:
         if: steps.check.outputs.already_published == 'false'
         run: npm publish --provenance --access public
 
-      - name: Tag + push bump commit
+      - name: Tag the shipped commit
+        # Same pattern as the RC path — see the matching note above.
+        # We tag the workflow-triggering commit on master; no
+        # version-bump commit is pushed back.
         if: steps.check.outputs.already_published == 'false'
         run: |
           VERSION="${{ steps.check.outputs.version }}"
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
-          git add package.json package-lock.json
-          git diff --cached --quiet || git commit -m "chore(release): $VERSION"
+          git reset --hard HEAD
           git tag -a "v$VERSION" -m "Release $VERSION"
-          git push --follow-tags
+          git push origin "v$VERSION"
