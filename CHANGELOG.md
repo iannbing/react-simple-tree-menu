@@ -99,9 +99,10 @@ symbols or props that remained.
   `--font-sans`, `--color-gray-*`). Tailwind v4 users' brands flow
   through with zero config.
 - **CSS subpath export.** Import styles via
-  `react-simple-tree-menu/styles` (the legacy
-  `react-simple-tree-menu/dist/main.css` path still resolves as
-  an alias).
+  `react-simple-tree-menu/styles`. The legacy
+  `react-simple-tree-menu/dist/main.css` deep-import path from v1 is
+  **removed** — update to the subpath export above (same byte
+  content, ergonomic import).
 - **WAI-ARIA tree pattern** on rendered DOM: see above.
 - **Zero-dep bundle.** `dependencies: {}`. The library ships no
   transitive npm packages — consumers install 0 packages beyond

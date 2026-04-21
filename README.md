@@ -266,7 +266,7 @@ support — prefer it unless you need to swap the outer layout.
 
 - **React peer floor:** raised from `>=16.6.3` to `>=16.14`. Anyone on React 16.14+, 17, 18, 19 is already good.
 - **Removed prop:** `cacheSearch` — internal memoization now keyed on `useMemo` dependencies; no user-facing knob. Delete the prop from any call site.
-- **CSS import path:** preferred is `react-simple-tree-menu/styles`. The old `react-simple-tree-menu/dist/main.css` still resolves (aliased) but will be dropped in a future minor.
+- **CSS import path:** use `react-simple-tree-menu/styles`. The v1 `react-simple-tree-menu/dist/main.css` deep-import no longer resolves — swap it for the subpath export (same byte content).
 - **Default search copy:** `"Type and search"` → `"Search"`. Pass `labels={{ searchPlaceholder: 'Type and search' }}` to restore.
 - **Toggle glyph:** `"+" / "-"` → `"▸" / "▾"`. Pass `openedIcon`/`closedIcon` to `ItemComponent` (via custom render-props) to restore.
 - **Default active color:** saturated blue → indigo. Override `--rstm-active-bg` for the old look.

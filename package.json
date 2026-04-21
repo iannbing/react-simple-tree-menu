@@ -48,7 +48,7 @@
     "build": "tsup && npm run build:css",
     "check:api": "node scripts/check-api-contract.mjs",
     "check:size": "size-limit",
-    "build:css": "postcss src/styles.css -o dist/styles.css && cp dist/styles.css dist/main.css",
+    "build:css": "postcss src/styles.css -o dist/styles.css",
     "storybook": "storybook dev -p 9001",
     "build-storybook": "storybook build",
     "docs:dev": "npm --prefix docs run dev",

@@ -42,15 +42,16 @@ also just drop the prop — there's nothing to disable anymore.
 ## 3. CSS subpath
 
 v1: `import 'react-simple-tree-menu/dist/main.css';`
-v2 (recommended): `import 'react-simple-tree-menu/styles';`
+v2: `import 'react-simple-tree-menu/styles';`
 
 ```diff
 -import 'react-simple-tree-menu/dist/main.css';
 +import 'react-simple-tree-menu/styles';
 ```
 
-The old path (`dist/main.css`) still works — we ship it as an alias for one
-minor release — but it's documented-deprecated.
+The v1 deep-import path (`dist/main.css`) is **not published** in v2 —
+the swap is mandatory. Byte content is identical, so no visual or
+behavioral change in the rendered tree.
 
 ### Semantics: built-in CSS is hand-written, not Sass
 
