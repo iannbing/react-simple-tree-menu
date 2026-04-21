@@ -28,18 +28,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # The repo's Pages source used to be the `gh-pages` branch
-      # (legacy Storybook publish). `actions/deploy-pages` requires the
-      # source to be `workflow`, so idempotently flip it before we do
-      # anything else. The PUT is a no-op once the setting is already
-      # `workflow` — safe to run on every deploy.
-      - name: Ensure Pages is configured for Actions-based deploys
-        working-directory: .
-        run: |
-          gh api -X PUT "repos/${{ github.repository }}/pages" \
-            -F build_type=workflow
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Pages `build_type` must be `workflow` for `actions/deploy-pages`
+      # to accept artifacts. That setting is flipped via the repo
+      # owner once (Settings → Pages → Source: GitHub Actions) or with
+      # `gh api -X PUT repos/<owner>/<repo>/pages -F build_type=workflow`
+      # from an admin-authed gh CLI. The workflow can't flip it itself:
+      # `GITHUB_TOKEN` with `pages: write` is enough to DEPLOY, but the
+      # Pages admin API (PUT /pages) requires repo-admin scope, which
+      # the workflow token doesn't carry.
 
       - uses: actions/setup-node@v4
         with:
