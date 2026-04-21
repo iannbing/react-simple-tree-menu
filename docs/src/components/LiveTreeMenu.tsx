@@ -17,6 +17,13 @@ type Variant = 'default' | 'headless';
 
 interface Props {
   variant?: Variant;
+  /**
+   * Focus the tree's initial active item on mount. Lets keyboard users
+   * arrow-navigate the demo immediately without having to Tab in.
+   * Only opt-in — pages where the demo is below the fold shouldn't
+   * enable this since the browser will auto-scroll to the focused item.
+   */
+  autoFocus?: boolean;
 }
 
 const sampleTree = {
@@ -60,13 +67,20 @@ const headlessClasses = {
   toggleIcon: 'demo-toggle',
 };
 
-export default function LiveTreeMenu({ variant = 'default' }: Props) {
+export default function LiveTreeMenu({
+  variant = 'default',
+  autoFocus = false,
+}: Props) {
   const [lastClicked, setLastClicked] = useState<string | null>(null);
 
+  // `initialFocusKey` drives the library's auto-focus useEffect in
+  // ItemComponent: setting it means the matching <li> calls
+  // `el.focus()` on mount, so arrow keys work without a prior Tab.
   const commonProps = {
     data: sampleTree,
     initialOpenNodes: ['fruit'],
     initialActiveKey: 'fruit/apple',
+    ...(autoFocus ? { initialFocusKey: 'fruit/apple' } : {}),
     onClickItem: (item: Item) => setLastClicked(item.key),
   };
 

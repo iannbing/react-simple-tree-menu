@@ -31,6 +31,13 @@
   line-height: 1.15;
 }
 
+/* Anchor-link jumps (#heading) land under Starlight's sticky top
+   nav without this; `scroll-margin-top` reserves enough clearance
+   so the heading isn't hidden on arrival. */
+.sl-markdown-content :is(h1, h2, h3, h4, h5, h6) {
+  scroll-margin-top: 5rem;
+}
+
 /* ---------------------------------------------------------------------------
    Palette — monochrome. The "accent" slot maps to max-contrast fg
    (white on dark, black on light), so Starlight's accent-tinted slots
@@ -150,19 +157,19 @@
 }
 
 .hero > h1 {
-  font-size: clamp(1.9rem, 3.2vw, 2.4rem);
+  font-size: clamp(2.1rem, 4.2vw, 3rem);
   font-weight: 700;
-  letter-spacing: -0.025em;
-  line-height: 1.1;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
   color: var(--sl-color-text);
-  margin-block-end: 0.5rem;
+  margin-block-end: 0.75rem;
 }
 
 .hero .tagline {
-  font-size: 1rem;
-  line-height: 1.55;
+  font-size: clamp(1rem, 1.4vw, 1.125rem);
+  line-height: 1.5;
   color: var(--sl-color-gray-2);
-  max-width: 46ch;
+  max-width: 52ch;
   margin-block: 0.25rem 0.75rem;
 }
 
@@ -189,7 +196,10 @@
   font-weight: 500;
   padding: 0.55rem 0.95rem;
   border: 1px solid transparent;
-  transition: background-color 100ms ease, border-color 100ms ease, color 100ms ease;
+  transition:
+    background-color 100ms ease,
+    border-color 100ms ease,
+    color 100ms ease;
 }
 
 .hero .actions .sl-link-button.primary {
@@ -213,6 +223,15 @@
 .hero .actions .sl-link-button.minimal:hover {
   border-color: var(--sl-color-gray-3);
   background: transparent;
+}
+
+/* Keyboard focus ring. Starlight's default lives in a layered rule
+   and can be overridden by the unlayered `.sl-link-button` rules
+   above; redeclare here so keyboard users always get a visible
+   indicator on the hero CTAs (WCAG focus-visible). */
+.hero .actions .sl-link-button:focus-visible {
+  outline: 2px solid var(--sl-color-accent);
+  outline-offset: 2px;
 }
 
 /* ---------------------------------------------------------------------------
@@ -253,7 +272,9 @@
 
 .sidebar-content a {
   border-radius: 0;
-  transition: background 100ms ease, color 100ms ease;
+  transition:
+    background 100ms ease,
+    color 100ms ease;
 }
 
 .sidebar-content a[aria-current='page'] {
@@ -323,13 +344,15 @@
 .rstm-hero-sample > pre,
 .rstm-hero-sample > astro-island,
 .rstm-hero-sample > .rstm-hero-sample-code {
-  margin: 0;
+  margin: 1.2rem 0 0 0;
   align-self: start;
 }
 
 /* Second grid column: stack the bash install + the TSX usage snippet
    vertically so both live in the same column as a visually-grouped
-   unit (install above, use below). */
+   unit (install above, use below). The `margin-top` offsets the
+   Installation frame down so its title bar aligns visually with the
+   tree menu's search row in the left column. */
 .rstm-hero-sample-code {
   display: flex;
   flex-direction: column;
@@ -486,8 +509,12 @@ astro-island:has(*) + .rstm-skeleton {
 }
 
 @keyframes rstm-skeleton-shimmer {
-  0% { background-position: 100% 0; }
-  100% { background-position: -100% 0; }
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -585,4 +612,22 @@ astro-island:has(*) + .rstm-skeleton {
   border-radius: 0;
   border-inline-start-width: 2px;
   background: transparent;
+}
+
+/* ---------------------------------------------------------------------------
+   Accessibility — global reduced-motion gate
+   --------------------------------------------------------------------------- */
+
+/* Respect the OS-level preference. Everything in this file is a
+   100–300ms tweak and none of it conveys meaning by motion alone, so
+   a blanket kill-switch is the right trade-off. Scoped via `:where()`
+   to keep specificity at 0 so component-level rules can re-enable if
+   they ever need to. */
+@media (prefers-reduced-motion: reduce) {
+  :where(*, *::before, *::after) {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
