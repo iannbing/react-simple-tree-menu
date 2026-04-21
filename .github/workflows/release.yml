@@ -35,6 +35,22 @@ name: Release
 on:
   push:
     branches: [development, master]
+    # Only fire when the push actually changes something that ships.
+    # Docs site, examples, README/CHANGELOG, CI config, test-fixtures,
+    # Storybook, and in-source tests/benches/stories don't affect the
+    # published artifact, so they shouldn't mint a new RC or stable.
+    paths:
+      - 'src/**'
+      - '!src/__tests__/**'
+      - '!src/**/*.test.ts'
+      - '!src/**/*.test.tsx'
+      - '!src/**/*.bench.ts'
+      - '!src/**/*.stories.tsx'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'tsup.config.ts'
+      - 'postcss.config.js'
+      - 'tsconfig.json'
   workflow_dispatch:
     inputs:
       version:
