@@ -84,7 +84,17 @@ jobs:
         with:
           node-version: 20
           cache: npm
-          registry-url: 'https://registry.npmjs.org'
+          # No `registry-url:` on purpose. Setting it makes setup-node
+          # write an `.npmrc` with `_authToken=${NODE_AUTH_TOKEN}` —
+          # and with Trusted Publishing we DON'T set NODE_AUTH_TOKEN,
+          # so that line expands to an empty token string. Some npm
+          # CLI versions treat an empty explicit token as "auth
+          # attempted and failed" and never fall through to OIDC,
+          # which surfaces as a 404 from the registry (npm hides
+          # auth failures behind 404). Leaving registry-url unset
+          # means no .npmrc, no stale token, and `npm publish
+          # --provenance` goes straight to the OIDC flow that the
+          # Trusted Publisher entry on npmjs.com is expecting.
 
       - run: npm ci
 
@@ -126,9 +136,10 @@ jobs:
       - name: Publish to npm (next dist-tag)
         # Authenticates via OIDC against the Trusted Publisher entry on
         # npmjs.com — no NPM_TOKEN secret needed. `--provenance` attests
-        # the artifact's origin (which workflow run built it from which
-        # commit) on npm's sigstore-backed transparency log.
-        run: npm publish --tag next --provenance
+        # the artifact's origin on npm's sigstore-backed transparency
+        # log. `--access public` matches npm's documented TP example
+        # and avoids an implicit-scope detection quirk.
+        run: npm publish --tag next --provenance --access public
 
       - name: Tag + push bump commit
         # Runs only after npm publish succeeded — so the tag is always a
@@ -164,7 +175,17 @@ jobs:
         with:
           node-version: 20
           cache: npm
-          registry-url: 'https://registry.npmjs.org'
+          # No `registry-url:` on purpose. Setting it makes setup-node
+          # write an `.npmrc` with `_authToken=${NODE_AUTH_TOKEN}` —
+          # and with Trusted Publishing we DON'T set NODE_AUTH_TOKEN,
+          # so that line expands to an empty token string. Some npm
+          # CLI versions treat an empty explicit token as "auth
+          # attempted and failed" and never fall through to OIDC,
+          # which surfaces as a 404 from the registry (npm hides
+          # auth failures behind 404). Leaving registry-url unset
+          # means no .npmrc, no stale token, and `npm publish
+          # --provenance` goes straight to the OIDC flow that the
+          # Trusted Publisher entry on npmjs.com is expecting.
 
       - run: npm ci
 
@@ -212,7 +233,7 @@ jobs:
         # Same OIDC + provenance flow as the RC path — see the matching
         # note above.
         if: steps.check.outputs.already_published == 'false'
-        run: npm publish --provenance
+        run: npm publish --provenance --access public
 
       - name: Tag + push bump commit
         if: steps.check.outputs.already_published == 'false'
