@@ -1,0 +1,60 @@
+---
+title: Next.js App Router
+description: Use react-simple-tree-menu in a React Server Components app.
+---
+
+`TreeMenu` is a Client Component — it manages state and responds to user
+input. In a Next.js App Router project, mark any file that imports it with
+`"use client"`:
+
+```tsx
+// app/sidebar.tsx
+'use client';
+
+import TreeMenu from 'react-simple-tree-menu';
+import 'react-simple-tree-menu/styles';
+
+export function Sidebar({ items }: { items: Record<string, unknown> }) {
+  return <TreeMenu data={items} />;
+}
+```
+
+Then embed it in a Server Component as usual:
+
+```tsx
+// app/layout.tsx
+import { Sidebar } from './sidebar';
+
+const items = {
+  fruit: { label: 'Fruits' },
+  vegetable: { label: 'Vegetables' },
+};
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex">
+      <aside className="w-72 border-r">
+        <Sidebar items={items} />
+      </aside>
+      <main className="flex-1">{children}</main>
+    </div>
+  );
+}
+```
+
+## Common gotchas
+
+- **Serializability.** Data passed from a Server Component to a Client
+  Component must be serializable. That means `locale` and `matchSearch` —
+  which are functions — have to be defined **inside** the Client Component,
+  not passed in as props from a Server Component.
+- **Per-request data.** Fetch your tree data on the server, then pass it to
+  the Client wrapper as a plain JSON object.
+- **App Router is React 18+.** Everything here works, including the
+  built-in `useDeferredValue` optimization for large trees under search.
+
+## Where to put "use client"
+
+The `"use client"` directive only needs to be at the **top of the leaf
+file** that imports the library. Re-exporting through a barrel file works,
+but the component actually rendering the tree is where the directive lives.

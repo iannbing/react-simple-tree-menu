@@ -1,0 +1,151 @@
+---
+title: Theming
+description: Style the tree with CSS custom properties, Tailwind v4, or your own class names.
+---
+
+import LiveTreeMenu from '../../../components/LiveTreeMenu.tsx';
+
+You have three ways to style the tree, in order of cost:
+
+1. **Use the defaults.** Import `react-simple-tree-menu/styles`. Done.
+2. **Override CSS custom properties.** Change colors, radius, font without touching our CSS.
+3. **Go headless.** Skip our CSS entirely and pass `classNames`.
+
+## 1. Defaults
+
+```tsx
+import TreeMenu from 'react-simple-tree-menu';
+import 'react-simple-tree-menu/styles';
+```
+
+That's it. The library ships a hand-written, zero-preprocessor CSS file
+(~1 KB) that looks good out of the box.
+
+<LiveTreeMenu client:only="react" />
+
+## 2. CSS custom properties
+
+Every color, spacing, and typography value is a `--rstm-*` custom property.
+Defaults are declared on `:root` with zero specificity, so they inherit
+naturally into the tree — you can override them on **any ancestor**
+(global, per-theme, per-panel) and the change cascades down.
+
+### Global override
+
+```css
+:root {
+  --rstm-active-bg: #e11d48;
+  --rstm-radius: 0.5rem;
+  --rstm-transition: 120ms ease-out;
+  --rstm-font-family: 'Inter', system-ui, sans-serif;
+}
+```
+
+### Per-theme override (light / dark via a data attribute)
+
+```css
+:root[data-theme='dark'] {
+  --rstm-text-color: #f3f4f6;
+  --rstm-hover-bg: #1f2937;
+  --rstm-active-bg: #60a5fa;
+}
+```
+
+### Per-panel override (two trees, two palettes)
+
+```html
+<div class="light-panel"><TreeMenu ... /></div>
+<div class="dark-panel"><TreeMenu ... /></div>
+```
+
+```css
+.dark-panel {
+  --rstm-text-color: #f3f4f6;
+  --rstm-hover-bg: #1f2937;
+  --rstm-active-bg: #60a5fa;
+}
+```
+
+The inner `.rstm-tree-item-group` has no declaration of its own, so it
+inherits from the closest ancestor — `.dark-panel` for that subtree,
+`:root` everywhere else.
+
+### Full token list
+
+| Token                       | Default                | What it styles                |
+| --------------------------- | ---------------------- | ----------------------------- |
+| `--rstm-font-family`        | `var(--font-sans, …)`  | All text                      |
+| `--rstm-text-color`         | `#1f2937`              | Item label color              |
+| `--rstm-muted-color`        | `#6b7280`              | Toggle icon, placeholder text |
+| `--rstm-border-color`       | `#e5e7eb`              | Search input border           |
+| `--rstm-hover-bg`           | `#f3f4f6`              | Item background on hover      |
+| `--rstm-active-bg`          | `#6366f1`              | Active item background        |
+| `--rstm-active-fg`          | `#fff`                 | Active item text              |
+| `--rstm-focus-ring-color`   | `#818cf8`              | Focus ring                    |
+| `--rstm-radius`             | `0.25rem`              | Item + search corner radius   |
+| `--rstm-icon-size`          | `1rem`                 | Toggle icon size              |
+| `--rstm-transition`         | `0ms`                  | Hover/active transition time  |
+
+## 3. Tailwind v4
+
+Tailwind v4's auto-exposed theme variables (`--color-primary`,
+`--color-gray-800`, `--font-sans`, etc.) are **detected automatically** by
+our CSS. You get brand-aligned colors with zero extra config:
+
+```ts
+// tailwind.config.js — v4
+export default {
+  theme: {
+    extend: {
+      colors: {
+        primary: '#0ea5e9', // tree picks this up as --rstm-active-bg
+      },
+    },
+  },
+};
+```
+
+```tsx
+import TreeMenu from 'react-simple-tree-menu';
+import 'react-simple-tree-menu/styles';
+import './globals.css'; // with @import 'tailwindcss';
+```
+
+No extra import. No preset to register. It just works.
+
+## 4. Headless (skip our CSS)
+
+For full control, skip `react-simple-tree-menu/styles` and pass utility
+classes via the `classNames` prop:
+
+```tsx
+<TreeMenu
+  data={data}
+  classNames={{
+    group: 'space-y-1',
+    item: 'px-3 py-2 rounded-md hover:bg-blue-50 cursor-pointer',
+    active: 'bg-blue-500 text-white',
+    focused: 'ring-2 ring-blue-400',
+    search:
+      'w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none',
+  }}
+/>
+```
+
+<LiveTreeMenu variant="headless" client:only="react" />
+
+### Full `classNames` shape
+
+| Slot              | Applied to                                  |
+| ----------------- | ------------------------------------------- |
+| `group`           | `<ul role="tree">` container                 |
+| `subgroup`        | nested `<ul role="group">`                   |
+| `item`            | each row `<div>`                             |
+| `active`          | row when selected                           |
+| `focused`         | row when focused                            |
+| `search`          | search `<input>`                            |
+| `toggleIcon`      | triangle toggle container                   |
+| `toggleIconSymbol`| inner triangle glyph                        |
+
+Classes are **appended** to the `rstm-*` anchors — we never remove those,
+so any CSS you've already written to target them still applies.

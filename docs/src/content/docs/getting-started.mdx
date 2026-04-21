@@ -1,0 +1,110 @@
+---
+title: Getting Started
+description: Install react-simple-tree-menu and render your first tree.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import LiveTreeMenu from '../../components/LiveTreeMenu.tsx';
+
+## Install
+
+<Tabs>
+  <TabItem label="npm">
+    ```bash
+    npm install react-simple-tree-menu
+    ```
+  </TabItem>
+  <TabItem label="pnpm">
+    ```bash
+    pnpm add react-simple-tree-menu
+    ```
+  </TabItem>
+  <TabItem label="yarn">
+    ```bash
+    yarn add react-simple-tree-menu
+    ```
+  </TabItem>
+</Tabs>
+
+React is the only peer dependency. The library works on **React 16.14 and up**.
+
+## Your first tree
+
+```tsx
+import TreeMenu from 'react-simple-tree-menu';
+import 'react-simple-tree-menu/styles';
+
+const data = {
+  fruit: {
+    label: 'Fruits',
+    nodes: {
+      apple: { label: 'Apple' },
+      banana: { label: 'Banana' },
+    },
+  },
+  vegetable: {
+    label: 'Vegetables',
+    nodes: {
+      carrot: { label: 'Carrot' },
+    },
+  },
+};
+
+export default function App() {
+  return <TreeMenu data={data} />;
+}
+```
+
+<LiveTreeMenu client:only="react" />
+
+## Two data formats
+
+`data` can be either an **object** (recommended for readability) or an **array**
+(recommended when order matters and you're iterating from a DB/API result).
+
+### Object form
+
+```ts
+const data = {
+  fruit: {
+    label: 'Fruits',
+    nodes: {
+      apple: { label: 'Apple' },
+    },
+  },
+};
+```
+
+Keys become the node `key`. Iteration order follows the object's property order.
+
+### Array form
+
+```ts
+const data = [
+  {
+    key: 'fruit',
+    label: 'Fruits',
+    nodes: [{ key: 'apple', label: 'Apple' }],
+  },
+];
+```
+
+Every node must supply a unique `key` within its sibling group.
+
+## Skip our CSS
+
+Prefer your own styles? Pass `classNames` and don't import `react-simple-tree-menu/styles`.
+
+```tsx
+<TreeMenu
+  data={data}
+  classNames={{
+    item: 'my-item',
+    active: 'my-item-active',
+    focused: 'my-item-focused',
+    search: 'my-search',
+  }}
+/>
+```
+
+See the [Theming guide](/guides/theming/) for the full list of slots.

@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  push:
+    branches: [master, development, 'feat/**']
+  pull_request:
+
+jobs:
+  lint:
+    name: Lint + typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+
+  test:
+    name: Test (React ${{ matrix.react }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        react: ['16.14.0', '17.0.2', '18.3.1', '19.0.0']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Install React ${{ matrix.react }}
+        # RTL version matrix:
+        # - React 16.14 / 17 → RTL v12 (last version with those peers).
+        #   Tests use a local renderHook shim built on render() so the
+        #   missing @testing-library/react.renderHook export is OK.
+        # - React 18 → RTL v14.
+        # - React 19 → RTL v16 (first version with React 19 in its peer
+        #   range; v14 pins to react@^18 and rejects @19.0.0 install).
+        run: |
+          if [[ "${{ matrix.react }}" == 16.* || "${{ matrix.react }}" == 17.* ]]; then
+            npm install --no-save \
+              react@${{ matrix.react }} \
+              react-dom@${{ matrix.react }} \
+              "@testing-library/react@^12"
+          elif [[ "${{ matrix.react }}" == 18.* ]]; then
+            npm install --no-save \
+              react@${{ matrix.react }} \
+              react-dom@${{ matrix.react }} \
+              "@testing-library/react@^14"
+          else
+            npm install --no-save \
+              react@${{ matrix.react }} \
+              react-dom@${{ matrix.react }} \
+              "@testing-library/react@^16"
+          fi
+      - run: npm test
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Upload dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 7

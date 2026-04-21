@@ -1,0 +1,228 @@
+/* react-simple-tree-menu default styles. Single hand-written file — no
+   preprocessor, no runtime dep.
+
+   Theming model (SPEC §15):
+   - Every color / typography / spacing value is a CSS custom property
+     declared on `:root` with zero specificity (`:where(:root)`).
+   - Each default resolves via a `var()` chain that reads Tailwind v4's
+     auto-exposed theme variables when present, then falls back to the
+     library's own palette.
+   - Tailwind v4 users therefore get brand-aligned colors with zero
+     config beyond `import 'react-simple-tree-menu/styles'`.
+   - Everyone else gets sensible, modern defaults; override any token
+     in their own CSS — either globally (`:root { --rstm-*: ... }`) or
+     scoped to any ancestor (`.my-panel { --rstm-*: ... }`), and the
+     token inherits down to the tree naturally.
+
+   Why `:where(:root)` and not `:where(.rstm-tree-item-group, .rstm-search)`?
+   Custom-property inheritance loses to an element's own declaration
+   regardless of specificity. If tokens were declared on the inner
+   elements, an ancestor wrapper's override would be silently ignored
+   because the tree's own declaration would mask it. Putting defaults on
+   `:root` keeps them as inherited fallbacks, so any closer ancestor's
+   override takes over via normal inheritance. */
+:where(:root) {
+  /* Scale & spacing */
+  --rstm-icon-size: 1.375rem;
+  --rstm-radius: 0.25rem;
+  /* Instant state flips by default. Consumers can opt into animation by
+     overriding this token (e.g. `80ms ease-out` for a subtle fade). */
+  --rstm-transition: 0ms;
+
+  /* Typography — default to the consumer's body font when available
+     (Tailwind v4 exposes this), else the system sans-serif stack. */
+  --rstm-font-family: var(
+    --font-sans,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    sans-serif
+  );
+
+  /* Colors — monochrome defaults (black active on white, mid-grey
+     focus). Tailwind v4 consumers' `--color-primary` still wins for
+     active state if present, so brand color flows through. Focus
+     stays a neutral grey regardless of brand, so a focused-but-not-
+     selected row reads visually distinct from a selected row.
+     Dark-background consumers override these tokens on their own
+     scope (e.g. `:root.dark .my-panel { --rstm-text-color: ... }`) —
+     a `prefers-color-scheme` media query was considered but dropped
+     because it disagrees with explicit app theme toggles. */
+  --rstm-text-color: var(--color-gray-900, #0a0a0a);
+  --rstm-muted-color: var(--color-gray-500, #737373);
+  --rstm-border-color: var(--color-gray-300, #e5e5e5);
+  --rstm-hover-bg: var(--color-gray-100, #f5f5f5);
+  --rstm-active-bg: var(--color-primary, #0a0a0a);
+  --rstm-active-fg: var(--color-white, #ffffff);
+  --rstm-focus-ring-color: var(--color-gray-500, #737373);
+}
+
+.rstm-tree-item-group {
+  font-family: var(--rstm-font-family);
+  color: var(--rstm-text-color);
+  list-style: none;
+  margin: 0;
+  padding: 0.25rem;
+  text-align: left;
+}
+
+/* Nested subgroup inside an expanded .rstm-tree-item. Indentation still
+   comes from the inline paddingLeft on each .rstm-tree-item so that hover
+   / active backgrounds extend to the container's left edge (standard
+   list-row UX). The subgroup itself is a layout container only. */
+.rstm-tree-item-subgroup {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* The <li> is a layout container only — no background, no padding, no
+   radius — so the visual row's styling can't bleed over nested subgroups
+   inside the same <li>. */
+.rstm-tree-item {
+  /* Structural only. Consumers' own `.rstm-tree-item { ... }` overrides
+     will still match the <li>, but the visible row is now .rstm-tree-item-row.
+     See SPEC.md §11 for the migration note. */
+}
+
+/* Suppress the browser's default focus outline on the <li>. tabIndex
+   lives on the <li> (required for the roving-tabindex keyboard model),
+   so the browser otherwise paints a ring around the li's full box —
+   which includes the nested subgroup <ul>. Our own focus indicator is
+   the inset box-shadow on `.rstm-tree-item--focused` (row-level), which
+   meets WCAG 2.1 focus-visible requirements. */
+.rstm-tree-item:focus,
+.rstm-tree-item:focus-visible {
+  outline: none;
+}
+
+/* The visual row — one per tree item. Hover, active, focus, and the
+   inline paddingLeft (for depth) all live here. */
+.rstm-tree-item-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  border-radius: var(--rstm-radius);
+  user-select: none;
+  transition:
+    background-color var(--rstm-transition),
+    color var(--rstm-transition),
+    box-shadow var(--rstm-transition);
+}
+
+.rstm-tree-item-row:hover {
+  background-color: var(--rstm-hover-bg);
+}
+
+/* State modifiers live on the row (not the <li>). Naming stays the same
+   as v1 so consumer CSS rules like `.rstm-tree-item--active { ... }`
+   still match visually — the class is on the row now. */
+.rstm-tree-item--active,
+.rstm-tree-item--active:hover {
+  color: var(--rstm-active-fg);
+  background-color: var(--rstm-active-bg);
+}
+
+.rstm-tree-item--focused {
+  /* Inline the `var(--rstm-focus-ring-color)` rather than composing it
+     through an intermediate `--rstm-focus-shadow` token. If we stored
+     the full shadow as a variable declared on `:root`, the var() would
+     be substituted AT the `:root` element — baking the root value of
+     `--rstm-focus-ring-color` into the computed shadow and breaking
+     ancestor overrides of the color (consumers expect scoping via
+     e.g. `.dark-panel { --rstm-focus-ring-color: ... }` to work). */
+  box-shadow: inset 0 0 0 1px var(--rstm-focus-ring-color);
+  outline: none;
+}
+
+/* Toggle icon — the disclosure control. Sized bigger than the label
+   height so it reads as a distinct affordance (not just a decorative
+   glyph). Hover darkens the color and adds a subtle background pill so
+   keyboard/mouse users get a clear "clickable" cue on the control. */
+.rstm-toggle-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--rstm-icon-size);
+  height: var(--rstm-icon-size);
+  color: var(--rstm-muted-color);
+  border-radius: var(--rstm-radius);
+  cursor: pointer;
+  transition:
+    background-color var(--rstm-transition),
+    color var(--rstm-transition),
+    transform var(--rstm-transition);
+}
+
+.rstm-toggle-icon:hover {
+  background-color: color-mix(
+    in srgb,
+    currentColor 15%,
+    transparent
+  );
+  color: var(--rstm-text-color);
+}
+
+.rstm-tree-item--active .rstm-toggle-icon {
+  color: currentColor;
+}
+
+.rstm-tree-item--active .rstm-toggle-icon:hover {
+  background-color: color-mix(
+    in srgb,
+    var(--rstm-active-fg) 22%,
+    transparent
+  );
+}
+
+.rstm-toggle-icon-symbol {
+  /* A tight flex row so the SVG / consumer glyph centers on both axes
+     inside the toggle's hover pill. `line-height: 1` keeps a string
+     default (e.g. legacy consumers passing "+" / "-") from adding a
+     phantom descender. */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.rstm-search {
+  width: 100%;
+  /* Match .rstm-tree-item's padding exactly so the search box aligns
+     visually with the tree items it sits above. */
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.25rem;
+  border: 1px solid var(--rstm-border-color);
+  border-radius: var(--rstm-radius);
+  background: transparent;
+  /* Explicit typography — the <input> is a sibling of .rstm-tree-item-group
+     in the defaultChildren fragment, so `font: inherit` alone inherits
+     from whatever ancestor the consumer placed us in (browser serif
+     default in a bare host). Pull the tokens directly from the library so
+     the search always matches the tree list regardless of host font. */
+  color: var(--rstm-text-color);
+  font-family: var(--rstm-font-family);
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  transition:
+    border-color var(--rstm-transition),
+    box-shadow var(--rstm-transition);
+}
+
+.rstm-search:focus {
+  outline: none;
+  border-color: var(--rstm-focus-ring-color);
+  box-shadow: 0 0 0 3px rgb(from var(--rstm-focus-ring-color) r g b / 0.2);
+}
+
+.rstm-search::placeholder {
+  color: var(--rstm-muted-color);
+}
