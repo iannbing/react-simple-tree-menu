@@ -1,3 +1,5 @@
+// Bundler config: emits ESM + CJS + `.d.ts`. Sourcemaps ship to npm
+// for library debuggability; consumer prod bundlers strip them.
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
