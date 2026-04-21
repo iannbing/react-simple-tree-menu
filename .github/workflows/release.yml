@@ -244,14 +244,16 @@ jobs:
         run: npm publish --provenance --access public
 
       - name: Tag the shipped commit
-        # Same pattern as the RC path — see the matching note above.
-        # We tag the workflow-triggering commit on master; no
-        # version-bump commit is pushed back.
+        # Same pattern as the RC path — tag the workflow-triggering
+        # commit on master; no version-bump commit is pushed back.
+        # `-f` on tag + `--force` on push so a republish (e.g. after
+        # an unpublish / clean-history reset) overwrites the stale
+        # tag instead of exiting non-zero on "tag already exists."
         if: steps.check.outputs.already_published == 'false'
         run: |
           VERSION="${{ steps.check.outputs.version }}"
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
           git reset --hard HEAD
-          git tag -a "v$VERSION" -m "Release $VERSION"
-          git push origin "v$VERSION"
+          git tag -f -a "v$VERSION" -m "Release $VERSION"
+          git push --force origin "v$VERSION"
