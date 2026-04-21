@@ -2,6 +2,8 @@
 
 [![npm](https://img.shields.io/npm/v/react-simple-tree-menu.svg)](https://www.npmjs.com/package/react-simple-tree-menu)
 
+**📘 [Documentation & live demo](https://iannbing.github.io/react-simple-tree-menu/)** · [Getting started](https://iannbing.github.io/react-simple-tree-menu/getting-started/) · [Guides](https://iannbing.github.io/react-simple-tree-menu/guides/controlled/) · [API reference](https://iannbing.github.io/react-simple-tree-menu/api/tree-menu/) · [Migration from v1](https://iannbing.github.io/react-simple-tree-menu/migration/v1-to-v2/)
+
 A simple, data-driven, **zero-runtime-dependency** React tree menu with:
 
 - Full keyboard navigation (WAI-ARIA tree pattern)
