@@ -75,7 +75,7 @@
     "@eslint/js": "^9.14.0",
     "@size-limit/preset-small-lib": "^11.1.6",
     "@storybook/addon-essentials": "^8.4.0",
-    "@storybook/react-vite": "^8.4.0",
+    "@storybook/react-vite": "^10.4.6",
     "@testing-library/jest-dom": "^6.5.0",
     "@testing-library/react": "^14.3.1",
     "@testing-library/user-event": "^14.5.2",
@@ -85,7 +85,7 @@
     "@types/react-window": "^1.8.8",
     "@typescript-eslint/eslint-plugin": "^8.13.0",
     "@typescript-eslint/parser": "^8.13.0",
-    "@vitejs/plugin-react": "^4.3.3",
+    "@vitejs/plugin-react": "^6.0.3",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.14.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
@@ -104,8 +104,8 @@
     "storybook": "^8.4.0",
     "tsup": "^8.3.5",
     "typescript": "^5.6.3",
-    "vite": "^5.4.10",
-    "vitest": "^2.1.4"
+    "vite": "^8.1.0",
+    "vitest": "^4.1.9"
   },
   "size-limit": [
     {
